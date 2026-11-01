@@ -1,0 +1,5 @@
+# Dependencies (dev only — the site loads jsPDF from the CDN)
+node_modules/
+
+# Files generated on demand by the app/tests
+*.pdf

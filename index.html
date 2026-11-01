@@ -1,0 +1,848 @@
+<!DOCTYPE html>
+<html lang="en" data-theme="light">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <meta name="description" content="Morning Routine Tracker — ADHD Awareness, Screening &amp; Morning Routine Tool for children. An INSPIRE MANAK project by Amrita Vidyalayam, Thuckalay.">
+  <meta name="theme-color" content="#1a56db">
+  <meta property="og:title" content="Morning Routine Tracker — ADHD Awareness">
+  <meta property="og:description" content="Free ADHD screening awareness tool with morning routine tracker for children. INSPIRE MANAK project.">
+  <meta property="og:type" content="website">
+  <title>Morning Routine Tracker — ADHD Awareness | INSPIRE MANAK</title>
+  <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/css/bootstrap.min.css" rel="stylesheet">
+  <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;500;600;700;800&display=swap" rel="stylesheet">
+  <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.1/css/all.min.css" rel="stylesheet">
+  <link href="https://cdn.jsdelivr.net/npm/aos@2.3.4/dist/aos.css" rel="stylesheet">
+  <link href="css/styles.css" rel="stylesheet">
+</head>
+<body>
+
+  <!-- Skip to content (accessibility) -->
+  <a href="#main-content" class="skip-link">Skip to main content</a>
+
+  <!-- Awareness Ribbon -->
+  <div class="awareness-ribbon" role="banner" aria-label="ADHD Awareness message">
+    <span class="ribbon-icon">🎗️</span>
+    <strong>ADHD Awareness</strong> — Early identification and structured routines can transform a child's life.
+    <span class="ribbon-icon">🧠</span>
+    <span class="d-none d-sm-inline">This tool is for educational awareness only — not a clinical diagnosis.</span>
+  </div>
+
+  <!-- Loading Screen -->
+  <div id="loading-screen" role="status" aria-label="Loading application">
+    <div class="loader-brain" aria-hidden="true">🧠</div>
+    <p class="loader-text">Morning Routine Tracker</p>
+    <p class="loader-subtext">ADHD Awareness &amp; Screening Tool</p>
+    <div class="loader-bar"><div class="loader-bar-fill"></div></div>
+  </div>
+
+  <!-- Navigation -->
+  <nav class="navbar navbar-expand-lg navbar-custom sticky-top" aria-label="Main navigation">
+    <div class="container">
+      <a class="navbar-brand" href="#" data-section="home" aria-label="Morning Routine Tracker Home">
+        <span class="brand-emoji">🧠</span>
+        <span>Morning Routine Tracker</span>
+      </a>
+      <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarNav"
+        aria-controls="navbarNav" aria-expanded="false" aria-label="Toggle navigation">
+        <span class="navbar-toggler-icon"></span>
+      </button>
+      <div class="collapse navbar-collapse" id="navbarNav">
+        <ul class="navbar-nav ms-auto align-items-lg-center gap-lg-1">
+          <li class="nav-item"><a class="nav-link active" href="#" data-section="home"><i class="fas fa-home me-1"></i>Home</a></li>
+          <li class="nav-item"><a class="nav-link" href="overview.html"><i class="fas fa-microchip me-1"></i>Overview</a></li>
+          <li class="nav-item"><a class="nav-link" href="#" data-section="about"><i class="fas fa-brain me-1"></i>About ADHD</a></li>
+          <li class="nav-item"><a class="nav-link" href="#" data-section="statistics"><i class="fas fa-chart-bar me-1"></i>Statistics</a></li>
+          <li class="nav-item"><a class="nav-link" href="#" data-section="assessment"><i class="fas fa-clipboard-check me-1"></i>Assessment</a></li>
+          <li class="nav-item"><a class="nav-link" href="#" data-section="results"><i class="fas fa-chart-line me-1"></i>Results</a></li>
+          <li class="nav-item"><a class="nav-link" href="#" data-section="recommendations"><i class="fas fa-lightbulb me-1"></i>Tips</a></li>
+          <li class="nav-item"><a class="nav-link" href="#" data-section="tracker"><i class="fas fa-list-check me-1"></i>Tracker</a></li>
+          <li class="nav-item"><a class="nav-link" href="#" data-section="references"><i class="fas fa-book me-1"></i>References</a></li>
+        </ul>
+      </div>
+    </div>
+  </nav>
+
+  <main id="main-content">
+
+    <!-- ----------- HOME ----------- -->
+    <section id="home" class="page-section active" aria-label="Home">
+      <div class="hero-section">
+        <div class="container">
+          <div class="row align-items-center">
+            <div class="col-lg-6 hero-content" data-aos="fade-right">
+              <span class="hero-badge">INSPIRE MANAK</span>
+              <h1 class="hero-title">Morning Routine<br><span>Tracker</span></h1>
+              <p class="hero-subtitle">Empowering children with ADHD through structured routines.</p>
+              <div class="hero-presented">
+                <strong>Presented by</strong><br>
+                <span data-student-name></span><br>
+                <span data-school></span>
+              </div>
+              <div class="hero-buttons">
+                <button id="btn-start-assessment" class="btn btn-hero-primary">
+                  <i class="fas fa-clipboard-check me-2"></i>Start Screening
+                </button>
+                <button id="btn-open-tracker" class="btn btn-hero-outline">
+                  <i class="fas fa-list-check me-2"></i>Task Tracker
+                </button>
+                <button id="btn-learn-adhd" class="btn btn-hero-outline">
+                  <i class="fas fa-book-open me-2"></i>Learn About ADHD
+                </button>
+              </div>
+            </div>
+            <div class="col-lg-6 mt-4 mt-lg-0" data-aos="fade-left" data-aos-delay="100">
+              <img src="images/adhd.jpeg" class="hero-image img-fluid" alt="ADHD Awareness — supporting children with structured routines">
+            </div>
+          </div>
+        </div>
+        <button id="scroll-indicator" class="scroll-indicator" aria-label="Scroll down to learn more">
+          <i class="fas fa-chevron-down"></i>
+        </button>
+      </div>
+
+      <!-- Impact Stats Bar -->
+      <div class="impact-bar">
+        <div class="container">
+          <div class="row g-0 justify-content-center align-items-center text-center">
+            <div class="col-6 col-sm-3">
+              <div class="impact-item">
+                <div class="impact-number">~8&ndash;11%</div>
+                <div class="impact-label">Children affected in Tamil Nadu</div>
+              </div>
+            </div>
+            <div class="col-auto d-none d-sm-flex impact-divider"></div>
+            <div class="col-6 col-sm-3">
+              <div class="impact-item">
+                <div class="impact-number">3 in 30</div>
+                <div class="impact-label">Students per average classroom</div>
+              </div>
+            </div>
+            <div class="col-auto d-none d-sm-flex impact-divider"></div>
+            <div class="col-6 col-sm-3">
+              <div class="impact-item">
+                <div class="impact-number">18</div>
+                <div class="impact-label">Screening questions in this tool</div>
+              </div>
+            </div>
+            <div class="col-auto d-none d-sm-flex impact-divider"></div>
+            <div class="col-6 col-sm-3">
+              <div class="impact-item">
+                <div class="impact-number">100%</div>
+                <div class="impact-label">Free &amp; privacy-safe tool</div>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <!-- Disclaimer Banner -->
+      <div class="disclaimer-banner" role="note" aria-label="Disclaimer">
+        <i class="fas fa-shield-alt me-2" aria-hidden="true"></i>
+        <span data-disclaimer></span>
+      </div>
+
+    </section>
+
+    <!-- ----------- ABOUT ADHD ----------- -->
+    <section id="about" class="page-section" aria-label="About ADHD">
+      <div class="container">
+        <div data-aos="fade-up">
+          <span class="section-eyebrow"><i class="fas fa-brain me-1"></i> Understanding ADHD</span>
+          <h2 class="section-title">About ADHD</h2>
+        </div>
+        <p class="section-subtitle" data-aos="fade-up" data-aos-delay="50">
+          Understanding Attention-Deficit/Hyperactivity Disorder helps families, teachers, and students support one another with empathy and evidence-based strategies.
+        </p>
+        <div class="row g-4 mb-5">
+          <div class="col-lg-12" data-aos="fade-up">
+            <div class="glass-card">
+              <h3 class="h5 fw-bold text-primary mb-3"><i class="fas fa-info-circle me-2"></i>What is ADHD?</h3>
+              <p class="mb-0 text-muted">
+                ADHD (Attention-Deficit/Hyperactivity Disorder) is a neurodevelopmental condition characterised by persistent patterns of inattention, hyperactivity, and impulsivity that interfere with functioning or development. It affects how the brain manages attention, activity, and self-control — not a lack of intelligence or effort.
+              </p>
+            </div>
+          </div>
+        </div>
+        <h3 class="h5 fw-bold text-primary mb-3" data-aos="fade-up">Three Core Symptom Domains</h3>
+        <div class="row g-4 mb-5">
+          <div class="col-md-4" data-aos="fade-up" data-aos-delay="0">
+            <div class="glass-card about-card h-100">
+              <div class="card-icon"><i class="fas fa-eye-slash"></i></div>
+              <h4>Inattention</h4>
+              <p>Difficulty sustaining focus, following through on tasks, organising activities, and being easily distracted. May appear as careless mistakes or "daydreaming."</p>
+            </div>
+          </div>
+          <div class="col-md-4" data-aos="fade-up" data-aos-delay="100">
+            <div class="glass-card about-card h-100">
+              <div class="card-icon"><i class="fas fa-bolt"></i></div>
+              <h4>Hyperactivity</h4>
+              <p>Excessive movement, fidgeting, difficulty staying seated, and feeling constantly "on the go." More visible in younger children but persists in subtler forms in teens.</p>
+            </div>
+          </div>
+          <div class="col-md-4" data-aos="fade-up" data-aos-delay="200">
+            <div class="glass-card about-card h-100">
+              <div class="card-icon"><i class="fas fa-comment-dots"></i></div>
+              <h4>Impulsivity</h4>
+              <p>Acting without thinking — blurting answers, interrupting, difficulty waiting turns. Can lead to social challenges and impulsive decisions.</p>
+            </div>
+          </div>
+        </div>
+
+        <h3 class="h5 fw-bold text-primary mb-3" data-aos="fade-up">Executive Functions</h3>
+        <p class="text-muted mb-4" data-aos="fade-up">ADHD significantly affects executive functions — the brain's "management system":</p>
+        <div class="row g-3 mb-5">
+          <div class="col-md-6 col-lg-3" data-aos="fade-up" data-aos-delay="0">
+            <div class="glass-card exec-card h-100">
+              <div class="exec-icon"><i class="fas fa-list-ol"></i></div>
+              <div><h5>Planning</h5><p>Breaking tasks into steps and anticipating what's needed ahead of time.</p></div>
+            </div>
+          </div>
+          <div class="col-md-6 col-lg-3" data-aos="fade-up" data-aos-delay="80">
+            <div class="glass-card exec-card h-100">
+              <div class="exec-icon"><i class="fas fa-memory"></i></div>
+              <div><h5>Working Memory</h5><p>Holding information in mind while completing multi-step activities.</p></div>
+            </div>
+          </div>
+          <div class="col-md-6 col-lg-3" data-aos="fade-up" data-aos-delay="160">
+            <div class="glass-card exec-card h-100">
+              <div class="exec-icon"><i class="fas fa-play"></i></div>
+              <div><h5>Task Initiation</h5><p>Getting started on tasks without excessive procrastination or avoidance.</p></div>
+            </div>
+          </div>
+          <div class="col-md-6 col-lg-3" data-aos="fade-up" data-aos-delay="240">
+            <div class="glass-card exec-card h-100">
+              <div class="exec-icon"><i class="fas fa-clock"></i></div>
+              <div><h5>Time Management</h5><p>Estimating how long tasks take and meeting deadlines consistently.</p></div>
+            </div>
+          </div>
+        </div>
+        <div class="row g-4">
+          <div class="col-lg-12" data-aos="fade-up">
+            <div class="glass-card awareness-callout" style="border-left: 4px solid var(--cause-teal);">
+              <h4 class="fw-bold text-primary mb-2"><i class="fas fa-sun me-2"></i>Morning Routine Challenges</h4>
+              <p class="text-muted mb-0">
+                Many children with ADHD struggle with morning routines due to difficulty with task initiation, time blindness, and working memory. Simple tools like visual checklists, preparing the night before, and consistent wake-up routines can make a significant difference.
+                <a href="#" class="fw-semibold text-primary ms-1" data-section="tracker" id="link-to-tracker">Try our interactive Task Tracker →</a>
+              </p>
+            </div>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <!-- ----------- STATISTICS ----------- -->
+    <section id="statistics" class="page-section" aria-label="ADHD Statistics">
+      <div class="container">
+        <div data-aos="fade-up">
+          <span class="section-eyebrow"><i class="fas fa-chart-bar me-1"></i> Evidence-Based Data</span>
+          <h2 class="section-title">ADHD in India — Research Findings</h2>
+        </div>
+        <p class="section-subtitle" data-aos="fade-up" data-aos-delay="50">
+          Peer-reviewed studies from Indian schools and universities reveal significant prevalence of ADHD symptoms across different states and age groups.
+        </p>
+
+        <!-- -- Section 2: Tamil Nadu -- -->
+        <h3 class="h4 fw-bold text-primary mb-2 mt-2" data-aos="fade-up">
+          <i class="fas fa-map-marker-alt me-2" aria-hidden="true"></i>ADHD Studies from Tamil Nadu
+        </h3>
+        <p class="text-muted mb-4" data-aos="fade-up" data-aos-delay="50">
+          Multiple school-based studies conducted in Tamil Nadu provide district-level prevalence data using validated diagnostic instruments.
+        </p>
+
+        <div class="row g-4 mb-5">
+
+          <!-- TN Card 1: Kancheepuram -->
+          <div class="col-lg-6" data-aos="fade-up" data-aos-delay="0">
+            <div class="glass-card h-100">
+              <div class="d-flex align-items-center mb-3">
+                <span class="stat-district-badge me-3">Kancheepuram</span>
+                <span class="stat-number mb-0" style="font-size:2.2rem;">8.8%</span>
+              </div>
+              <div class="row g-2 mb-3">
+                <div class="col-6">
+                  <div class="stat-detail-pill">
+                    <i class="fas fa-users me-1" aria-hidden="true"></i>
+                    <strong>3,253</strong> school children
+                  </div>
+                </div>
+                <div class="col-6">
+                  <div class="stat-detail-pill">
+                    <i class="fas fa-child me-1" aria-hidden="true"></i>
+                    Age <strong>8–11</strong> years
+                  </div>
+                </div>
+                <div class="col-12">
+                  <div class="stat-detail-pill">
+                    <i class="fas fa-clipboard-check me-1" aria-hidden="true"></i>
+                    Conners' Teacher–Parent Rating Scale — DSM-5
+                  </div>
+                </div>
+              </div>
+              <p class="fw-600 text-primary mb-2" style="font-size:0.9rem;">Subtype distribution</p>
+              <div class="row g-2 mb-3">
+                <div class="col-4 text-center">
+                  <div class="stat-subtype-card">
+                    <div class="stat-subtype-pct">43.3%</div>
+                    <div class="stat-subtype-lbl">Inattentive</div>
+                  </div>
+                </div>
+                <div class="col-4 text-center">
+                  <div class="stat-subtype-card">
+                    <div class="stat-subtype-pct">43.3%</div>
+                    <div class="stat-subtype-lbl">Hyperactive</div>
+                  </div>
+                </div>
+                <div class="col-4 text-center">
+                  <div class="stat-subtype-card">
+                    <div class="stat-subtype-pct">13.2%</div>
+                    <div class="stat-subtype-lbl">Combined</div>
+                  </div>
+                </div>
+              </div>
+              <p class="stat-source mb-1">
+                <a href="https://pmc.ncbi.nlm.nih.gov/articles/PMC6532466/"
+                   target="_blank" rel="noopener noreferrer"
+                   aria-label="Source: Catherine AV et al. Indian Journal of Psychiatry 2019 (opens in new tab)">
+                  <i class="fas fa-external-link-alt stat-source-icon" aria-hidden="true"></i>
+                  Catherine AV et al. <em>Indian Journal of Psychiatry</em> (2019)
+                </a>
+              </p>
+              <p class="stat-source">
+                <a href="https://doi.org/10.4103/psychiatry.IndianJPsychiatry_333_17"
+                   target="_blank" rel="noopener noreferrer"
+                   aria-label="DOI link for Catherine et al. 2019 (opens in new tab)">
+                  <i class="fas fa-external-link-alt stat-source-icon" aria-hidden="true"></i>
+                  DOI: 10.4103/psychiatry.IndianJPsychiatry_333_17
+                </a>
+              </p>
+            </div>
+          </div>
+
+          <!-- TN Card 2: Coimbatore -->
+          <div class="col-lg-6" data-aos="fade-up" data-aos-delay="100">
+            <div class="glass-card h-100">
+              <div class="d-flex align-items-center mb-3">
+                <span class="stat-district-badge me-3">Coimbatore</span>
+                <span class="stat-number mb-0" style="font-size:2.2rem;">11.32%</span>
+              </div>
+              <div class="row g-2 mb-3">
+                <div class="col-6">
+                  <div class="stat-detail-pill">
+                    <i class="fas fa-users me-1" aria-hidden="true"></i>
+                    <strong>770</strong> school children
+                  </div>
+                </div>
+                <div class="col-6">
+                  <div class="stat-detail-pill">
+                    <i class="fas fa-child me-1" aria-hidden="true"></i>
+                    Age <strong>6–11</strong> years
+                  </div>
+                </div>
+                <div class="col-12">
+                  <div class="stat-detail-pill">
+                    <i class="fas fa-clipboard-check me-1" aria-hidden="true"></i>
+                    Conners' Abbreviated Rating Scale (CARS)
+                  </div>
+                </div>
+              </div>
+              <p class="fw-600 text-primary mb-2" style="font-size:0.9rem;">Additional findings</p>
+              <div class="row g-2 mb-3">
+                <div class="col-4 text-center">
+                  <div class="stat-subtype-card">
+                    <div class="stat-subtype-pct">66.7%</div>
+                    <div class="stat-subtype-lbl">Boys</div>
+                  </div>
+                </div>
+                <div class="col-4 text-center">
+                  <div class="stat-subtype-card">
+                    <div class="stat-subtype-pct">33.3%</div>
+                    <div class="stat-subtype-lbl">Girls</div>
+                  </div>
+                </div>
+                <div class="col-4 text-center">
+                  <div class="stat-subtype-card">
+                    <div class="stat-subtype-pct">9–10 yrs</div>
+                    <div class="stat-subtype-lbl">Peak age</div>
+                  </div>
+                </div>
+              </div>
+              <p class="text-muted mb-3" style="font-size:0.85rem;">
+                <i class="fas fa-info-circle me-1 text-primary" aria-hidden="true"></i>
+                Higher prevalence observed among children from lower socioeconomic backgrounds.
+              </p>
+              <p class="stat-source mb-1">
+                <a href="https://pmc.ncbi.nlm.nih.gov/articles/PMC3890923/"
+                   target="_blank" rel="noopener noreferrer"
+                   aria-label="Source: Venkata JA, Panicker AS. Indian Journal of Psychological Medicine 2013 (opens in new tab)">
+                  <i class="fas fa-external-link-alt stat-source-icon" aria-hidden="true"></i>
+                  Venkata JA &amp; Panicker AS. <em>Indian Journal of Psychological Medicine</em> (2013)
+                </a>
+              </p>
+              <p class="stat-source">
+                <a href="https://doi.org/10.4103/0019-5545.120544"
+                   target="_blank" rel="noopener noreferrer"
+                   aria-label="DOI link for Venkata and Panicker 2013 (opens in new tab)">
+                  <i class="fas fa-external-link-alt stat-source-icon" aria-hidden="true"></i>
+                  DOI: 10.4103/0019-5545.120544
+                </a>
+              </p>
+            </div>
+          </div>
+        </div>
+        <!-- -- Section 3: Delhi Young Adults -- -->
+        <h3 class="h4 fw-bold text-primary mb-2 mt-2" data-aos="fade-up">
+          <i class="fas fa-city me-2" aria-hidden="true"></i>Young Adult ADHD Screening — Delhi
+        </h3>
+        <div class="row g-4 mb-5" data-aos="fade-up" data-aos-delay="50">
+          <div class="col-lg-6">
+            <div class="glass-card h-100">
+              <div class="stat-number" style="font-size:3rem;">14%</div>
+              <div class="stat-label mb-2">Screened positive for ADHD symptoms</div>
+              <p class="stat-desc">A screening study among young adults in Delhi found approximately 14% screened positive for ADHD symptoms.</p>
+              <div class="stat-info-badge mb-3" role="note" aria-label="Important note about screening data">
+                <i class="fas fa-circle-info me-2" aria-hidden="true"></i>
+                This represents screening results and should not be interpreted as the national prevalence of adult ADHD.
+              </div>
+              <p class="stat-source">
+                <a href="https://pmc.ncbi.nlm.nih.gov/articles/PMC13314613/"
+                   target="_blank" rel="noopener noreferrer"
+                   aria-label="Source: PMC article on young adult ADHD screening in Delhi (opens in new tab)">
+                  <i class="fas fa-external-link-alt stat-source-icon" aria-hidden="true"></i>
+                  <em>PubMed Central</em> — Young Adult ADHD Screening, Delhi
+                </a>
+              </p>
+            </div>
+          </div>
+          <div class="col-lg-6">
+            <!-- -- Section 4: Why estimates vary -- -->
+            <div class="glass-card h-100 stat-why-vary" role="note" aria-label="Explanation of why prevalence estimates vary">
+              <h4 class="fw-bold text-primary mb-3">
+                <i class="fas fa-circle-question me-2" aria-hidden="true"></i>Why do prevalence estimates vary?
+              </h4>
+              <p class="text-muted mb-0">
+                ADHD prevalence varies across studies because researchers use different <strong>diagnostic criteria</strong>, <strong>age groups</strong>, <strong>sample sizes</strong>, <strong>geographic regions</strong>, and <strong>screening instruments</strong>. Therefore, no single percentage represents the entire Indian population.
+              </p>
+            </div>
+          </div>
+        </div>
+
+        <!-- -- Section 5: Research References -- -->
+        <h3 class="h4 fw-bold text-primary mb-3 mt-2" data-aos="fade-up">
+          <i class="fas fa-book-open me-2" aria-hidden="true"></i>Research References
+        </h3>
+
+        <!-- Search box -->
+        <div class="mb-4" data-aos="fade-up" data-aos-delay="50">
+          <div class="stat-ref-search-wrap">
+            <i class="fas fa-search stat-ref-search-icon" aria-hidden="true"></i>
+            <input
+              type="search"
+              id="ref-search"
+              class="stat-ref-search"
+              placeholder="Search references…"
+              aria-label="Search research references"
+              autocomplete="off"
+            >
+          </div>
+        </div>
+
+        <ol class="stat-ref-list" id="stat-ref-list" aria-label="Research references list">
+
+          <!-- Ref 1 -->
+          <li class="stat-ref-item" data-ref-text="gore morgan india adhd diagnosis training sage 2024 ijpsym">
+            <p class="stat-ref-title">Children with Attention Deficit Hyperactivity Disorder in India: Strengthening Diagnosis, Support, Training and Research</p>
+            <p class="stat-ref-meta">Gore M, Morgan J. <em>Indian Journal of Psychological Medicine</em> (SAGE). 2024.</p>
+            <div class="stat-ref-links">
+              <a href="https://journals.sagepub.com/doi/10.1177/09731342241310558"
+                 target="_blank" rel="noopener noreferrer"
+                 class="stat-ref-doi"
+                 aria-label="DOI link for Gore and Morgan 2024 (opens in new tab)">
+                <i class="fas fa-external-link-alt me-1" aria-hidden="true"></i>
+                DOI: 10.1177/09731342241310558
+              </a>
+            </div>
+          </li>
+
+          <!-- Ref 2 -->
+          <li class="stat-ref-item" data-ref-text="catherine kancheepuram tamil nadu prevalence schoolchildren dsm-5 2019 psychiatry">
+            <p class="stat-ref-title">Assessment of Prevalence of Attention Deficit Hyperactivity Disorder Among Schoolchildren in Selected Schools</p>
+            <p class="stat-ref-meta">Catherine AV, Geetha P, Akila R, Saravanan M, Uma A. <em>Indian Journal of Psychiatry</em>. 2019; 61(Suppl 2):S271–S275.</p>
+            <div class="stat-ref-links">
+              <a href="https://doi.org/10.4103/psychiatry.IndianJPsychiatry_333_17"
+                 target="_blank" rel="noopener noreferrer"
+                 class="stat-ref-doi"
+                 aria-label="DOI link for Catherine et al. 2019 (opens in new tab)">
+                <i class="fas fa-external-link-alt me-1" aria-hidden="true"></i>
+                DOI: 10.4103/psychiatry.IndianJPsychiatry_333_17
+              </a>
+              <a href="https://pmc.ncbi.nlm.nih.gov/articles/PMC6532466/"
+                 target="_blank" rel="noopener noreferrer"
+                 class="stat-ref-pmc"
+                 aria-label="PubMed Central open access link for Catherine et al. 2019 (opens in new tab)">
+                <i class="fas fa-external-link-alt me-1" aria-hidden="true"></i>
+                PMC Free Full Text
+              </a>
+            </div>
+          </li>
+
+          <!-- Ref 3 -->
+          <li class="stat-ref-item" data-ref-text="venkata panicker coimbatore primary school children prevalence 2013 ijpsym">
+            <p class="stat-ref-title">Prevalence of Attention Deficit Hyperactivity Disorder in Primary School Children</p>
+            <p class="stat-ref-meta">Venkata JA, Panicker AS. <em>Indian Journal of Psychological Medicine</em>. 2013; 35(4):387–390.</p>
+            <div class="stat-ref-links">
+              <a href="https://doi.org/10.4103/0019-5545.120544"
+                 target="_blank" rel="noopener noreferrer"
+                 class="stat-ref-doi"
+                 aria-label="DOI link for Venkata and Panicker 2013 (opens in new tab)">
+                <i class="fas fa-external-link-alt me-1" aria-hidden="true"></i>
+                DOI: 10.4103/0019-5545.120544
+              </a>
+              <a href="https://pmc.ncbi.nlm.nih.gov/articles/PMC3890923/"
+                 target="_blank" rel="noopener noreferrer"
+                 class="stat-ref-pmc"
+                 aria-label="PubMed Central open access link for Venkata and Panicker 2013 (opens in new tab)">
+                <i class="fas fa-external-link-alt me-1" aria-hidden="true"></i>
+                PMC Free Full Text
+              </a>
+            </div>
+          </li>
+
+          <!-- Ref 4 -->
+          <li class="stat-ref-item" data-ref-text="frontiers psychiatry india epidemiology diagnostic inequities treatment gaps public mental health 2026">
+            <p class="stat-ref-title">Attention-Deficit/Hyperactivity Disorder in India: Epidemiology, Diagnostic Inequities, Treatment Gaps, and Public Mental Health Implications</p>
+            <p class="stat-ref-meta">Authors as listed. <em>Frontiers in Psychiatry</em>. 2026.</p>
+            <div class="stat-ref-links">
+              <a href="https://www.frontiersin.org/journals/psychiatry/articles/10.3389/fpsyt.2026.1860515/full"
+                 target="_blank" rel="noopener noreferrer"
+                 class="stat-ref-doi"
+                 aria-label="Full text link for Frontiers in Psychiatry 2026 article (opens in new tab)">
+                <i class="fas fa-external-link-alt me-1" aria-hidden="true"></i>
+                10.3389/fpsyt.2026.1860515 — Full Text
+              </a>
+            </div>
+          </li>
+
+        </ol>
+
+      </div>
+    </section>
+
+    <!-- ----------- ASSESSMENT ----------- -->
+    <section id="assessment" class="page-section" aria-label="ADHD Screening Assessment">
+      <div class="container">
+        <div data-aos="fade-up">
+          <span class="section-eyebrow"><i class="fas fa-clipboard-check me-1"></i> Awareness Screening</span>
+          <h2 class="section-title">Screening Assessment</h2>
+        </div>
+        <p class="section-subtitle" data-aos="fade-up" data-aos-delay="50">
+          Answer each question honestly based on behaviour observed over the past 6 months. This is for awareness only — not a diagnosis.
+        </p>
+        <div class="text-center mb-4" data-aos="fade-up" data-aos-delay="50">
+          <button id="btn-download-offline" class="btn btn-assess btn-assess-outline btn-sm">
+            <i class="fas fa-file-pdf me-2"></i>Download Printable Form (PDF)
+          </button>
+        </div>
+
+        <!-- Pre-assessment "Additional Information": child's age -->
+        <div id="assessment-setup" data-aos="fade-up">
+          <div class="glass-card assessment-setup-card">
+            <h3 class="setup-title"><i class="fas fa-user me-2"></i>Additional Information</h3>
+            <p class="text-muted mb-4">Before you begin, please enter your child&rsquo;s age. This helps provide a clearer summary of the responses.</p>
+            <div class="setup-form">
+              <label for="child-age" class="setup-label">Child&rsquo;s age (6 years or above)</label>
+              <input type="number" id="child-age" class="tracker-input setup-input" min="6" max="100" inputmode="numeric" placeholder="e.g. 9" aria-label="Child's age in years (6 or above)" />
+            </div>
+            <div class="text-center mt-4">
+              <button id="btn-begin-assessment" class="btn btn-assess btn-assess-primary px-5">
+                <i class="fas fa-play me-2"></i>Begin Assessment
+              </button>
+            </div>
+            <p class="setup-note mt-3"><i class="fas fa-shield-alt me-1"></i>Stored only on this device. This is an awareness tool, not a diagnosis.</p>
+          </div>
+        </div>
+
+        <!-- Question flow (hidden until the child's age is entered) -->
+        <div id="assessment-flow" class="d-none">
+          <div class="assessment-header" data-aos="fade-up">
+            <div class="d-flex justify-content-between align-items-center mb-2">
+              <span id="section-label" class="section-badge">Section A: Inattention</span>
+              <span id="question-counter" class="text-muted fw-500">Question 1 of 18</span>
+            </div>
+            <div class="progress-wrapper" role="progressbar" aria-valuemin="0" aria-valuemax="100" aria-valuenow="0">
+              <div id="assessment-progress" class="progress-fill"></div>
+            </div>
+            <p id="section-description" class="section-description"></p>
+          </div>
+          <div id="question-container"></div>
+          <div class="assessment-nav">
+            <button id="btn-prev" class="btn btn-assess btn-assess-outline" disabled>
+              <i class="fas fa-arrow-left me-1"></i> Previous
+            </button>
+            <button id="btn-next" class="btn btn-assess btn-assess-primary">
+              Next <i class="fas fa-arrow-right ms-1"></i>
+            </button>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <!-- ----------- RESULTS ----------- -->
+    <section id="results" class="page-section" aria-label="Assessment Results">
+      <div class="container">
+        <div data-aos="fade-up">
+          <span class="section-eyebrow"><i class="fas fa-chart-line me-1"></i> Assessment Summary</span>
+          <h2 class="section-title">Your Results</h2>
+        </div>
+        <p class="section-subtitle" data-aos="fade-up" data-aos-delay="50">
+          Review your responses below. Remember — this is an awareness tool, not a clinical diagnosis.
+        </p>
+        <div id="results-empty" class="text-center py-5">
+          <div class="glass-card d-inline-block px-5 py-4">
+            <i class="fas fa-clipboard-list fa-3x text-primary mb-3"></i>
+            <h4 class="fw-bold">No Results Yet</h4>
+            <p class="text-muted mb-3">Complete the screening assessment to view your results summary.</p>
+            <button id="btn-go-assessment" class="btn btn-assess btn-assess-primary">Take Assessment</button>
+          </div>
+        </div>
+        <div id="results-dashboard" class="d-none">
+          <div id="results-content"></div>
+          <div class="text-center d-flex flex-wrap justify-content-center gap-3 mt-4">
+            <button id="btn-download-pdf" class="btn btn-assess btn-assess-primary">
+              <i class="fas fa-file-pdf me-2"></i>Download PDF Report
+            </button>
+            <button id="btn-reset" class="btn btn-assess btn-assess-outline">
+              <i class="fas fa-redo me-2"></i>Retake Assessment
+            </button>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <!-- ----------- RECOMMENDATIONS ----------- -->
+    <section id="recommendations" class="page-section" aria-label="Recommendations and Tips">
+      <div class="container">
+        <div data-aos="fade-up">
+          <span class="section-eyebrow"><i class="fas fa-lightbulb me-1"></i> Practical Strategies</span>
+          <h2 class="section-title">Recommendations &amp; Tips</h2>
+        </div>
+        <p class="section-subtitle" data-aos="fade-up" data-aos-delay="50">
+          Practical, evidence-informed strategies for parents, teachers, and children.
+        </p>
+        <div id="recommendations-list" class="row g-4 mb-5"></div>
+
+        <!-- Parent Tips -->
+        <h3 class="h5 fw-bold text-primary mb-3" data-aos="fade-up">
+          <i class="fas fa-users me-2"></i>Parent Tips
+        </h3>
+        <div class="glass-card tip-carousel mb-5" data-aos="fade-up">
+          <div id="parent-tip-card"></div>
+          <div class="tip-nav">
+            <button id="parent-prev" class="tip-nav-btn" aria-label="Previous parent tip"><i class="fas fa-chevron-left"></i></button>
+            <div id="parent-tip-dots" class="tip-dots"></div>
+            <button id="parent-next" class="tip-nav-btn" aria-label="Next parent tip"><i class="fas fa-chevron-right"></i></button>
+          </div>
+        </div>
+
+        <!-- Teacher Tips -->
+        <h3 class="h5 fw-bold text-primary mb-3" data-aos="fade-up">
+          <i class="fas fa-chalkboard-teacher me-2"></i>Teacher Tips
+        </h3>
+        <div class="glass-card tip-carousel mb-5" data-aos="fade-up">
+          <div id="teacher-tip-card"></div>
+          <div class="tip-nav">
+            <button id="teacher-prev" class="tip-nav-btn" aria-label="Previous teacher tip"><i class="fas fa-chevron-left"></i></button>
+            <div id="teacher-tip-dots" class="tip-dots"></div>
+            <button id="teacher-next" class="tip-nav-btn" aria-label="Next teacher tip"><i class="fas fa-chevron-right"></i></button>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <!-- ----------- TASK TRACKER ----------- -->
+    <section id="tracker" class="page-section" aria-label="Morning Task Tracker">
+      <div class="container">
+        <div data-aos="fade-up">
+          <span class="section-eyebrow"><i class="fas fa-list-check me-1"></i> Daily Routine Tool</span>
+          <h2 class="section-title">Morning Task Tracker</h2>
+        </div>
+        <p class="section-subtitle" data-aos="fade-up" data-aos-delay="50">
+          Build your personalised morning routine. Add tasks, record voice reminders, then track your progress step by step.
+        </p>
+
+        <!-- Setup View -->
+        <div id="tracker-setup" data-aos="fade-up">
+          <div class="row g-4">
+            <div class="col-lg-6">
+              <div class="glass-card tracker-card">
+                <h3 class="tracker-section-title"><i class="fas fa-user me-2"></i>Child's Name</h3>
+                <div class="form-group mb-0">
+                  <input type="text" id="tracker-username" class="tracker-input" placeholder="Enter your child's name…" maxlength="30" aria-label="Child's name">
+                </div>
+              </div>
+            </div>
+            <div class="col-lg-6">
+              <div class="glass-card tracker-card">
+                <h3 class="tracker-section-title"><i class="fas fa-plus-circle me-2"></i>Add Tasks</h3>
+                <div class="tracker-input-row">
+                  <input type="text" id="tracker-task-input" class="tracker-input" placeholder="Enter a task…" maxlength="100" aria-label="New task name">
+                  <button class="btn btn-assess btn-assess-primary" id="tracker-add-btn">+ Add</button>
+                </div>
+                <div id="tracker-empty-state" class="tracker-empty">No tasks yet. Add one above.</div>
+                <ul class="tracker-task-list" id="tracker-task-list"></ul>
+              </div>
+            </div>
+          </div>
+          <div class="text-center mt-4">
+            <button class="btn btn-assess btn-assess-primary px-5" id="tracker-save-btn">
+              <i class="fas fa-check me-2"></i>Save &amp; Start Tracking
+            </button>
+          </div>
+        </div>
+
+        <!-- Progress View -->
+        <div id="tracker-progress" class="d-none" data-aos="fade-up">
+          <div class="glass-card tracker-card mb-4">
+            <div class="tracker-welcome-header">
+              <div class="tracker-greeting">Hello, <span id="tracker-username-display" class="tracker-greeting-name">User</span>!</div>
+              <button class="btn btn-assess btn-assess-outline btn-sm" id="tracker-edit-btn">
+                <i class="fas fa-pen me-1"></i>Edit Tasks
+              </button>
+            </div>
+            <p class="text-muted mb-3" id="tracker-progress-text">Track your progress below.</p>
+            <div class="d-flex justify-content-between align-items-center mb-1">
+              <span class="fw-600 text-muted" style="font-size:0.9rem;">Progress</span>
+              <span class="fw-600 text-muted" id="tracker-progress-percent" style="font-size:0.9rem;">0%</span>
+            </div>
+            <div class="progress-wrapper" style="height: 12px;">
+              <div class="progress-fill tracker-progress-fill" id="tracker-progress-fill" style="width:0%"></div>
+            </div>
+          </div>
+
+          <div id="tracker-cards-container"></div>
+
+          <div class="glass-card tracker-card text-center py-5 d-none" id="tracker-congrats">
+            <div style="font-size:3.5rem; margin-bottom:1rem;">🎉</div>
+            <h3 class="fw-bold text-primary mb-2">Congratulations!</h3>
+            <p class="text-muted mb-3">You've completed all your tasks. Great job!</p>
+
+            <!-- Bluetooth print sticker -->
+            <div class="mb-4">
+              <button id="btn-print-sticker" class="btn btn-assess btn-print-sticker">
+                <i class="fas fa-print me-2"></i>Print Sticker
+              </button>
+              <p class="print-sticker-hint mt-2 mb-0">
+                <i class="fas fa-bluetooth me-1" style="color:#0d6efd;"></i>
+                Prints your name &amp; a motivational message via Bluetooth (Chrome/Edge only).
+              </p>
+            </div>
+
+            <button class="btn btn-assess btn-assess-outline" id="tracker-reset-btn">
+              <i class="fas fa-redo me-2"></i>Reset Progress
+            </button>
+          </div>
+        </div>
+
+      </div>
+    </section>
+
+    <!-- ----------- REFERENCES ----------- -->
+    <section id="references" class="page-section" aria-label="References and Resources">
+      <div class="container">
+        <div data-aos="fade-up">
+          <span class="section-eyebrow"><i class="fas fa-book me-1"></i> Further Reading</span>
+          <h2 class="section-title">References &amp; Resources</h2>
+        </div>
+        <p class="section-subtitle" data-aos="fade-up" data-aos-delay="50">
+          Explore trusted sources for further learning about ADHD awareness, research, and support.
+        </p>
+        <div id="references-grid" class="row g-4"></div>
+      </div>
+    </section>
+
+  </main>
+
+  <!-- ----------- FOOTER ----------- -->
+  <footer class="site-footer" aria-label="Site footer">
+    <div class="container">
+      <div class="row g-4">
+        <!-- Brand column -->
+        <div class="col-lg-4 col-md-6">
+          <div class="footer-brand">🧠 Morning Routine Tracker</div>
+          <p class="footer-tagline mt-1 mb-3">An ADHD awareness &amp; morning routine tool for children.</p>
+          <span class="footer-badge">
+            <i class="fas fa-award me-1"></i> INSPIRE MANAK Project
+          </span>
+        </div>
+        <!-- Quick links -->
+        <div class="col-lg-2 col-md-6 col-6">
+          <h6>Quick Links</h6>
+          <a href="#" class="footer-link" data-section="home">Home</a>
+          <a href="#" class="footer-link" data-section="about">About ADHD</a>
+          <a href="#" class="footer-link" data-section="statistics">Statistics</a>
+          <a href="#" class="footer-link" data-section="assessment">Assessment</a>
+        </div>
+        <!-- Tools -->
+        <div class="col-lg-2 col-md-6 col-6">
+          <h6>Tools</h6>
+          <a href="#" class="footer-link" data-section="results">Results</a>
+          <a href="#" class="footer-link" data-section="recommendations">Tips</a>
+          <a href="#" class="footer-link" data-section="tracker">Task Tracker</a>
+          <a href="#" class="footer-link" data-section="references">References</a>
+        </div>
+        <!-- About project -->
+        <div class="col-lg-4 col-md-6">
+          <h6>About This Project</h6>
+          <p style="font-size:0.83rem; opacity:0.75; line-height:1.65;">
+            Created as part of the <strong style="color:#a5f3fc;">INSPIRE MANAK</strong> initiative. This tool is for educational awareness only and does not replace professional medical advice.
+          </p>
+        </div>
+      </div>
+      <hr class="footer-divider">
+      <div class="row align-items-center">
+        <div class="col-md-8">
+          <p class="footer-bottom mb-0" style="opacity:0.5;">
+            <i class="fas fa-shield-alt me-1"></i>All data stored locally on your device. No information is sent to any server.
+          </p>
+        </div>
+        <div class="col-md-4 text-md-end mt-2 mt-md-0">
+          <button class="footer-link btn btn-link p-0" data-section="home" style="font-size:0.8rem; opacity:0.6; text-decoration:none;">
+            <i class="fas fa-arrow-up me-1"></i>Back to top
+          </button>
+        </div>
+      </div>
+    </div>
+  </footer>
+
+  <!-- Toast -->
+  <div class="toast-container position-fixed bottom-0 end-0 p-3" style="z-index: 9990;">
+    <div id="app-toast" class="toast align-items-center text-bg-primary border-0" role="alert" aria-live="assertive" aria-atomic="true">
+      <div class="d-flex">
+        <div id="toast-message" class="toast-body"></div>
+        <button type="button" class="btn-close btn-close-white me-2 m-auto" data-bs-dismiss="toast" aria-label="Close"></button>
+      </div>
+    </div>
+  </div>
+
+  <!-- Scripts -->
+  <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/js/bootstrap.bundle.min.js"></script>
+  <script src="https://cdn.jsdelivr.net/npm/aos@2.3.4/dist/aos.js"></script>
+  <script src="https://cdn.jsdelivr.net/npm/chart.js@4.4.1/dist/chart.umd.min.js"></script>
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/jspdf/2.5.1/jspdf.umd.min.js"></script>
+  <!-- MorningRoutineTracker JS -->
+  <script src="js/config.js"></script>
+  <script src="js/storage.js"></script>
+  <script src="js/assessment.js"></script>
+  <script src="js/results.js"></script>
+  <script src="js/charts.js"></script>
+  <script src="js/recommendations.js"></script>
+  <script src="js/pdf.js"></script>
+  <script src="js/database.js"></script>
+  <script src="js/recorder.js"></script>
+  <script src="js/confetti.js"></script>
+  <script src="js/tasktracker.js"></script>
+  <script src="js/printer.js"></script>
+  <script src="js/app.js"></script>
+</body>
+</html>
+

@@ -1,0 +1,12 @@
+{
+  "name": "morning-routine-tracker",
+  "version": "1.0.0",
+  "private": true,
+  "description": "ADHD Awareness Portal — Morning Routine Tracker (INSPIRE MANAK). Parent-friendly Yes/No assessment with a non-diagnostic results summary.",
+  "scripts": {
+    "test": "node --test tests/"
+  },
+  "devDependencies": {
+    "jspdf": "^2.5.2"
+  }
+}
