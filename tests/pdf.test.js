@@ -2,10 +2,10 @@
  * Render test for the offline printable assessment PDF.
  *
  * Actually builds the PDF with jsPDF (dev dependency) and asserts:
- *   - it is exactly 3 pages
- *   - the Medical Disclaimer appears on page 2 (and not on page 3)
+ *   - it is exactly 2 pages
  *   - Section A (Inattention) is on page 1
- *   - the Tally Worksheet is on page 3
+ *   - "How to Interpret Your Answers" is on page 2
+ *   - The "Important – Educational Awareness Only" disclaimer is on page 2
  *
  * The site itself still loads jsPDF from the CDN; this dev dependency is for
  * testing only. jsPDF attaches its methods to each instance, so we wrap the
@@ -21,6 +21,7 @@ global.APP_CONFIG = config.APP_CONFIG;
 global.ASSESSMENT_QUESTIONS = config.ASSESSMENT_QUESTIONS;
 global.SEEK_ATTENTION_ADVISORY = config.SEEK_ATTENTION_ADVISORY;
 global.MEDICAL_DISCLAIMER = config.MEDICAL_DISCLAIMER;
+global.QR_CODE_DATA_URL = config.QR_CODE_DATA_URL;   // real base64 data URL
 global.showToast = () => {};
 
 const pdf = require('../js/pdf.js');
@@ -56,22 +57,32 @@ function buildOfflineWithTracking() {
   return { capturedDoc, pageText };
 }
 
-test('offline PDF: produces exactly 3 pages', () => {
+test('offline PDF: produces exactly 2 pages', () => {
   const { capturedDoc } = buildOfflineWithTracking();
   assert.ok(capturedDoc, 'a jsPDF document should be created');
-  assert.equal(capturedDoc.getNumberOfPages(), 3);
+  assert.equal(capturedDoc.getNumberOfPages(), 2);
 });
 
-test('offline PDF: Medical Disclaimer is on page 2', () => {
+test('offline PDF: Inattention section is on page 1', () => {
   const { pageText } = buildOfflineWithTracking();
-  const p2 = (pageText[2] || '').toLowerCase();
-  assert.ok(p2.includes('medical disclaimer'), `page 2 should contain the Medical Disclaimer; got: ${p2.slice(-160)}`);
-  const p3 = (pageText[3] || '').toLowerCase();
-  assert.ok(!p3.includes('medical disclaimer'), 'Medical Disclaimer must not appear on page 3');
+  assert.ok(
+    (pageText[1] || '').toLowerCase().includes('inattention'),
+    'page 1 should contain the Inattention section'
+  );
 });
 
-test('offline PDF: Inattention on page 1, Tally Worksheet on page 3', () => {
+test('offline PDF: "How to Interpret Your Answers" is on page 2', () => {
   const { pageText } = buildOfflineWithTracking();
-  assert.ok((pageText[1] || '').toLowerCase().includes('inattention'), 'page 1 should contain the Inattention section');
-  assert.ok((pageText[3] || '').toLowerCase().includes('tally worksheet'), 'page 3 should contain the Tally Worksheet');
+  assert.ok(
+    (pageText[2] || '').toLowerCase().includes('how to interpret'),
+    `page 2 should contain the interpretation guide; got: ${(pageText[2] || '').slice(0, 200)}`
+  );
+});
+
+test('offline PDF: disclaimer is on page 2', () => {
+  const { pageText } = buildOfflineWithTracking();
+  assert.ok(
+    (pageText[2] || '').toLowerCase().includes('educational awareness only'),
+    'page 2 should contain the Educational Awareness Only disclaimer'
+  );
 });

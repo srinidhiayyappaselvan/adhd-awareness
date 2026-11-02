@@ -230,25 +230,25 @@ function downloadOfflineAssessmentPDF() {
   };
 
   const box = (x, yPos, w, h) => {
-    doc.setDrawColor(120); doc.setLineWidth(0.3);
+    doc.setDrawColor(0); doc.setLineWidth(0.4);
     doc.rect(x, yPos, w, h, 'S');
   };
 
   const sectionBar = (text) => {
     ensure(12);
     y += 1;
-    doc.setFillColor(230, 240, 252);
+    doc.setFillColor(220, 220, 220);   // light grey — prints well in B&W
     doc.rect(M, y - 4, CW, 9, 'F');
-    doc.setTextColor(21, 101, 192); doc.setFontSize(11); doc.setFont(undefined, 'bold');
+    doc.setTextColor(0, 0, 0); doc.setFontSize(11); doc.setFont(undefined, 'bold');
     doc.text(text, M + 3, y + 2);
     y += 9;
-    doc.setTextColor(60, 60, 60);
+    doc.setTextColor(30, 30, 30);
   };
 
   /** Draw one question with Yes / No checkboxes. */
   const drawQuestionYesNo = (num, text) => {
     ensure(22);
-    doc.setTextColor(50, 50, 50);
+    doc.setTextColor(0, 0, 0);
     doc.setFontSize(10); doc.setFont(undefined, 'bold');
     doc.text(`Q${num}.`, M, y);
     doc.setFont(undefined, 'normal');
@@ -278,25 +278,45 @@ function downloadOfflineAssessmentPDF() {
     doc.rect(M + tw + 3, yPos - 3.5, boxW, 5, 'S');
   };
 
-  // ── Header ──
-  doc.setFillColor(21, 101, 192);
-  doc.rect(0, 0, PW, 32, 'F');
-  doc.setTextColor(255, 255, 255);
-  doc.setFontSize(16); doc.setFont(undefined, 'bold');
-  doc.text('ADHD Screening Assessment \u2014 Offline Form', PW / 2, 14, { align: 'center' });
-  doc.setFontSize(9); doc.setFont(undefined, 'normal');
-  doc.text(`${APP_CONFIG.school}  |  ${APP_CONFIG.project}`, PW / 2, 21, { align: 'center' });
-  doc.text('Educational awareness tool \u2014 not a clinical diagnosis', PW / 2, 26, { align: 'center' });
+  // ── Page 1 Header (B&W, with QR code on the right) ──
+  const HDR_H = 36;
 
-  y = 40;
-  doc.setTextColor(60, 60, 60);
+  // Bottom border rule separating header from body
+  doc.setDrawColor(0); doc.setLineWidth(0.5);
+  doc.line(0, HDR_H, PW, HDR_H);
+
+  // QR code — 26×26 mm, right-aligned inside the header
+  const QR_SIZE = 26;
+  const QR_X = PW - M - QR_SIZE;
+  const QR_Y = (HDR_H - QR_SIZE) / 2;
+  if (typeof QR_CODE_DATA_URL !== 'undefined' && QR_CODE_DATA_URL) {
+    doc.addImage(QR_CODE_DATA_URL, 'JPEG', QR_X, QR_Y, QR_SIZE, QR_SIZE);
+  } else {
+    // Fallback: outline box so layout is preserved even without the image
+    doc.setDrawColor(0); doc.setLineWidth(0.5);
+    doc.rect(QR_X, QR_Y, QR_SIZE, QR_SIZE, 'S');
+    doc.setFontSize(6); doc.setTextColor(100, 100, 100);
+    doc.text('QR', QR_X + QR_SIZE / 2, QR_Y + QR_SIZE / 2 + 1, { align: 'center' });
+  }
+
+  // Header text — black, centred in the space left of the QR code
+  const textAreaW = QR_X - M;
+  doc.setTextColor(0, 0, 0);
+  doc.setFontSize(15); doc.setFont(undefined, 'bold');
+  doc.text('ADHD Screening Assessment \u2014 Offline Form', M + textAreaW / 2, 13, { align: 'center' });
+  doc.setFontSize(11); doc.setFont(undefined, 'normal');
+  doc.text(`${APP_CONFIG.school}  |  ${APP_CONFIG.project}`, M + textAreaW / 2, 22, { align: 'center' });
+  doc.text('Educational awareness tool \u2014 not a clinical diagnosis', M + textAreaW / 2, 30, { align: 'center' });
+
+  y = 44;
+  doc.setTextColor(30, 30, 30);
   doc.setFontSize(10); doc.setFont(undefined, 'bold');
   doc.text('Instructions:', M, y); y += 6;
   doc.setFont(undefined, 'normal');
   [
     '1.  Answer all 18 questions based on behaviour observed over the past 6 months.',
     '2.  Tick one box per question: Yes or No.',
-    '3.  Use the Tally Worksheet (last page) to count your Yes and No answers.',
+    '3.  Should exhibit the behaviour in 2 or more settings (School, Home, etc).',
     '4.  This is an awareness tool \u2014 it cannot diagnose ADHD.',
   ].forEach((line) => { doc.text(line, M, y); y += 5; });
   y += 4;
@@ -305,7 +325,7 @@ function downloadOfflineAssessmentPDF() {
   doc.setFont(undefined, 'bold');
   doc.text("Child's Name:", M, y);
   doc.setFont(undefined, 'normal');
-  doc.setDrawColor(150); doc.setLineWidth(0.3);
+  doc.setDrawColor(0); doc.setLineWidth(0.3);
   doc.line(M + 28, y - 1, M + 90, y - 1);
   doc.setFont(undefined, 'bold');
   doc.text("Child's Age:", M + 96, y);
@@ -323,8 +343,15 @@ function downloadOfflineAssessmentPDF() {
   sectionBar(`Section ${groupA.section}: ${groupA.sectionTitle} (Q1\u2013Q9)`);
   groupA.items.forEach((text) => drawQuestionYesNo(qNum++, text));
 
-  // ── PAGE 2: Section B — Hyperactivity (Q10–Q15) + Section C — Impulsivity (Q16–Q18) + Medical Disclaimer ──
+  // ── PAGE 2: Section B — Hyperactivity (Q10–Q15) + Section C — Impulsivity (Q16–Q18) ──
   doc.addPage(); y = 20;
+  // Plain page 2 header — no QR code, no colour bar, just a thin rule
+  doc.setDrawColor(0); doc.setLineWidth(0.5);
+  doc.line(M, 14, PW - M, 14);
+  doc.setFontSize(9); doc.setFont(undefined, 'normal'); doc.setTextColor(60, 60, 60);
+  doc.text(`${APP_CONFIG.school}  |  ${APP_CONFIG.project}  \u2014  Educational awareness tool, not a clinical diagnosis`, PW / 2, 11, { align: 'center' });
+  doc.line(M, 15, PW - M, 15);
+  y = 22;
   const groupB = ASSESSMENT_QUESTIONS[1];
   sectionBar(`Section ${groupB.section}: ${groupB.sectionTitle} (Q10\u2013Q15)`);
   groupB.items.forEach((text) => drawQuestionYesNo(qNum++, text));
@@ -332,65 +359,92 @@ function downloadOfflineAssessmentPDF() {
   sectionBar(`Section ${groupC.section}: ${groupC.sectionTitle} (Q16\u2013Q18)`);
   groupC.items.forEach((text) => drawQuestionYesNo(qNum++, text));
 
-  // Medical disclaimer — kept on page 2
-  y += 4;
-  const discLines = doc.splitTextToSize(MEDICAL_DISCLAIMER, CW - 8);
-  const discBoxH = discLines.length * 5 + 12;
-  ensure(discBoxH + 4);
-  doc.setFillColor(255, 243, 205);
-  doc.rect(M, y, CW, discBoxH, 'F');
-  doc.setFontSize(9); doc.setTextColor(100, 80, 0); doc.setFont(undefined, 'bold');
-  doc.text('Medical Disclaimer', M + 4, y + 7);
-  doc.setFont(undefined, 'normal');
-  doc.text(discLines, M + 4, y + 13);
+  // ── How to Interpret Your Answers ──
+  y += 5;
+  ensure(36);
+  doc.setFontSize(12); doc.setTextColor(0, 0, 0); doc.setFont(undefined, 'bold');
+  doc.text('How to Interpret Your Answers', M, y); y += 7;
+  doc.setFontSize(9.5); doc.setTextColor(30, 30, 30); doc.setFont(undefined, 'normal');
+  const introLines = doc.splitTextToSize('Count the number of \u201cYes\u201d answers in each section.', CW - 8);
+  ensure(introLines.length * 5 + 2);
+  doc.text(introLines, M, y); y += introLines.length * 5 + 3;
 
-  // ── PAGE 3: Tally Worksheet + When to Seek Attention ──
-  doc.addPage();
-  doc.setFillColor(21, 101, 192);
-  doc.rect(0, 0, PW, 22, 'F');
-  doc.setTextColor(255, 255, 255);
-  doc.setFontSize(14); doc.setFont(undefined, 'bold');
-  doc.text('Tally Worksheet', PW / 2, 14, { align: 'center' });
-  y = 30;
-  doc.setTextColor(60, 60, 60);
-  doc.setFontSize(10); doc.setFont(undefined, 'normal');
-  doc.text('Count the number of Yes and No answers in each section and write the totals below.', M, y);
-  y += 9;
-
-  // Per-section tally rows
-  ASSESSMENT_QUESTIONS.forEach((group) => {
-    sectionBar(`Section ${group.section}: ${group.sectionTitle}`);
-    labelBox(`Yes responses (of ${group.items.length}):`, y, 14); y += 8;
-    labelBox(`No responses (of ${group.items.length}):`, y, 14); y += 10;
+  const patterns = [
+    '1.  Inattentive pattern \u2014 6 or more Yes answers in Section A (Q1\u2013Q9).',
+    '2.  Hyperactive-impulsive pattern \u2014 6 or more Yes answers in Sections B and C combined (Q10\u2013Q18).',
+    '3.  Combined pattern \u2014 6 or more Yes answers in Section A AND 6 or more Yes answers in Sections B and C combined.',
+  ];
+  patterns.forEach((p) => {
+    const pl = doc.splitTextToSize(p, CW - 8);
+    ensure(pl.length * 5 + 2);
+    doc.text(pl, M, y); y += pl.length * 5 + 2;
   });
 
-  // Combined + totals
-  sectionBar('Hyperactivity + Impulsivity (combined view)');
-  labelBox('Combined Yes responses (of 9):', y, 14); y += 8;
-  labelBox('Combined No responses (of 9):', y, 14); y += 10;
+  // ── Important – Educational Awareness Only (disclaimer box) ──
+  y += 3;
+  const importantNote =
+    'These patterns do not confirm or rule out ADHD and are not a clinical diagnosis. ' +
+    'This questionnaire is an awareness and preliminary observation tool only. ' +
+    'A qualified healthcare professional must conduct a comprehensive evaluation before any diagnosis or treatment.';
+  const noteLines = doc.splitTextToSize(importantNote, CW - 8);
+  const noteBoxH = noteLines.length * 5 + 14;
+  ensure(noteBoxH + 2);
+  doc.setFillColor(235, 235, 235);             // light grey — B&W safe
+  doc.rect(M, y, CW, noteBoxH, 'F');
+  doc.setDrawColor(0); doc.setLineWidth(0.5);
+  doc.rect(M, y, CW, noteBoxH, 'S');          // border
+  doc.setFontSize(9.5); doc.setTextColor(0, 0, 0); doc.setFont(undefined, 'bold');
+  doc.text('Important \u2013 Educational Awareness Only', M + 4, y + 7);
+  doc.setFont(undefined, 'normal'); doc.setTextColor(30, 30, 30);
+  doc.text(noteLines, M + 4, y + 13);
 
-  sectionBar('Overall Totals');
-  labelBox('Total Yes responses (of 18):', y, 14); y += 8;
-  labelBox('Total No responses (of 18):', y, 14); y += 12;
+  // // ── PAGE 3: Tally Worksheet + When to Seek Attention ──
+  // doc.addPage();
+  // doc.setFillColor(21, 101, 192);
+  // doc.rect(0, 0, PW, 22, 'F');
+  // doc.setTextColor(255, 255, 255);
+  // doc.setFontSize(14); doc.setFont(undefined, 'bold');
+  // doc.text('Tally Worksheet', PW / 2, 14, { align: 'center' });
+  // y = 30;
+  // doc.setTextColor(60, 60, 60);
+  // doc.setFontSize(10); doc.setFont(undefined, 'normal');
+  // doc.text('Count the number of Yes and No answers in each section and write the totals below.', M, y);
+  // y += 9;
+
+  // // Per-section tally rows
+  // ASSESSMENT_QUESTIONS.forEach((group) => {
+  //   sectionBar(`Section ${group.section}: ${group.sectionTitle}`);
+  //   labelBox(`Yes responses (of ${group.items.length}):`, y, 14); y += 8;
+  //   labelBox(`No responses (of ${group.items.length}):`, y, 14); y += 10;
+  // });
+
+  // // Combined + totals
+  // sectionBar('Hyperactivity + Impulsivity (combined view)');
+  // labelBox('Combined Yes responses (of 9):', y, 14); y += 8;
+  // labelBox('Combined No responses (of 9):', y, 14); y += 10;
+
+  // sectionBar('Overall Totals');
+  // labelBox('Total Yes responses (of 18):', y, 14); y += 8;
+  // labelBox('Total No responses (of 18):', y, 14); y += 12;
 
   // When to seek attention (screening thresholds — a prompt to consult a professional)
-  sectionBar('When to Seek Attention');
-  doc.setFontSize(9.5); doc.setTextColor(60, 60, 60); doc.setFont(undefined, 'normal');
-  [
-    'If your child receives 6 or more \u201cYes\u201d answers in the Inattention section (out of 9), consider seeking professional attention.',
-    'If your child receives more than 6 \u201cYes\u201d answers across the Hyperactivity and Impulsivity sections combined (out of 9), consider seeking professional attention.',
-  ].forEach((line) => {
-    const sl = doc.splitTextToSize('\u2022 ' + line, CW);
-    ensure(sl.length * 5 + 2); doc.text(sl, M, y); y += sl.length * 5 + 2;
-  });
-  doc.setFont(undefined, 'italic'); doc.setFontSize(9);
-  const seekNote = doc.splitTextToSize(SEEK_ATTENTION_ADVISORY.note, CW);
-  ensure(seekNote.length * 5 + 3); doc.text(seekNote, M, y); y += seekNote.length * 5 + 8;
-  doc.setFont(undefined, 'normal'); doc.setFontSize(10);
+  // sectionBar('When to Seek Attention');
+  // doc.setFontSize(9.5); doc.setTextColor(60, 60, 60); doc.setFont(undefined, 'normal');
+  // [
+  //   'If your child receives 6 or more \u201cYes\u201d answers in the Inattention section (out of 9), consider seeking professional attention.',
+  //   'If your child receives more than 6 \u201cYes\u201d answers across the Hyperactivity and Impulsivity sections combined (out of 9), consider seeking professional attention.',
+  // ].forEach((line) => {
+  //   const sl = doc.splitTextToSize('\u2022 ' + line, CW);
+  //   ensure(sl.length * 5 + 2); doc.text(sl, M, y); y += sl.length * 5 + 2;
+  // });
+  // doc.setFont(undefined, 'italic'); doc.setFontSize(9);
+  // const seekNote = doc.splitTextToSize(SEEK_ATTENTION_ADVISORY.note, CW);
+  // ensure(seekNote.length * 5 + 3); doc.text(seekNote, M, y); y += seekNote.length * 5 + 8;
+  // doc.setFont(undefined, 'normal'); doc.setFontSize(10);
 
-  // Safety: trim to exactly 3 pages
+  // Safety: trim to exactly 2 pages
   const totalPages = doc.getNumberOfPages();
-  for (let p = totalPages; p > 3; p--) doc.deletePage(p);
+  for (let p = totalPages; p > 2; p--) doc.deletePage(p);
 
   doc.save('ADHD-Screening-Offline-Assessment.pdf');
   showToast('Offline assessment PDF downloaded!');
