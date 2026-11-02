@@ -5,7 +5,7 @@
 
 const APP_CONFIG = {
   studentName: 'A Sri Nidhi',
-  studentClass: 'Class VIII B',
+  studentClass: 'Grade VIII,',
   school: 'Amrita Vidyalayam, Thuckalay',
   project: 'INSPIRE MANAK',
   disclaimer:
