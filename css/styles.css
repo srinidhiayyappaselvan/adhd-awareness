@@ -605,6 +605,16 @@ button:focus-visible {
 .tracker-item-body { flex: 1; display: flex; flex-direction: column; gap: 8px; }
 .tracker-item-top  { display: flex; align-items: center; gap: 8px; }
 .tracker-name-input { flex: 1; padding: 7px 11px; font-size: 0.9rem; font-family: 'Poppins', sans-serif; border-radius: 8px; }
+
+/* Voice message input row in setup */
+.tracker-message-row { display: flex; align-items: center; gap: 8px; }
+.tracker-message-label { font-size: 0.78rem; font-weight: 600; color: var(--text-muted); white-space: nowrap; flex-shrink: 0; }
+.tracker-message-input { flex: 1; padding: 6px 10px; font-size: 0.82rem; font-family: 'Poppins', sans-serif; border-radius: 8px; color: var(--text); background: var(--surface); border: 1px solid var(--border); }
+.tracker-message-input::placeholder { color: var(--text-muted); opacity: 0.7; }
+
+/* Message displayed on the active progress card */
+.tracker-card-body { display: flex; flex-direction: column; gap: 4px; flex: 1; }
+.tracker-card-message { margin: 0; font-size: 0.85rem; font-style: italic; opacity: 0.92; line-height: 1.4; }
 .tracker-item-actions { display: flex; gap: 5px; flex-shrink: 0; }
 .tracker-item-actions button {
   width: 30px; height: 30px; border: none; border-radius: 8px; cursor: pointer;

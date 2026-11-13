@@ -10,7 +10,7 @@
  */
 
 // ── State ────────────────────────────────────────────────────────────────────
-let trackerTasks           = [];          // { id, name, completed }
+let trackerTasks           = [];          // { id, name, completed, message? }
 let trackerActiveRecTaskId = null;        // which task is currently recording
 let trackerIsTransitioning = false;       // guard against double-tap on active card
 
@@ -31,6 +31,48 @@ function trackerEscapeAttr(str) {
     .replace(/</g, '&lt;').replace(/>/g, '&gt;');
 }
 
+// ── Text-to-speech ────────────────────────────────────────────────────────────
+/**
+ * Speak a message using the browser's built-in Web Speech API.
+ * Works offline. Falls back silently if the API is unavailable.
+ * @param {string} text
+ */
+function trackerSpeak(text) {
+  if (!text || !text.trim()) return;
+  if (!('speechSynthesis' in window)) return;
+  // Cancel any currently speaking utterance
+  window.speechSynthesis.cancel();
+  const utterance = new SpeechSynthesisUtterance(text.trim());
+  utterance.rate   = 0.92;   // slightly slower — clearer for children
+  utterance.pitch  = 1.0;
+  utterance.volume = 1.0;
+  window.speechSynthesis.speak(utterance);
+}
+
+/**
+ * Speak a message and return a Promise that resolves when speech ends.
+ * Used for the last task so congrats are held until the message finishes.
+ * Falls back to a 2-second pause if the API is unavailable.
+ * @param {string} text
+ * @returns {Promise<void>}
+ */
+function trackerSpeakAndWait(text) {
+  return new Promise((resolve) => {
+    if (!text || !text.trim() || !('speechSynthesis' in window)) {
+      setTimeout(resolve, 2000);   // brief pause even without TTS
+      return;
+    }
+    window.speechSynthesis.cancel();
+    const utterance = new SpeechSynthesisUtterance(text.trim());
+    utterance.rate   = 0.92;
+    utterance.pitch  = 1.0;
+    utterance.volume = 1.0;
+    utterance.onend   = () => setTimeout(resolve, 800);  // 0.8 s pause after speech
+    utterance.onerror = () => setTimeout(resolve, 800);
+    window.speechSynthesis.speak(utterance);
+  });
+}
+
 // ── Initialise ────────────────────────────────────────────────────────────────
 /**
  * Called by app.js when the user navigates to the #tracker section.
@@ -43,8 +85,8 @@ function initTracker() {
     // Normalise tasks (ensure every task has an id)
     trackerTasks = saved.tasks.map((t) =>
       typeof t === 'string'
-        ? { id: trackerGenerateId(), name: t, completed: false }
-        : { id: t.id || trackerGenerateId(), name: t.name, completed: t.completed || false }
+        ? { id: trackerGenerateId(), name: t, completed: false, message: '' }
+        : { id: t.id || trackerGenerateId(), name: t.name, completed: t.completed || false, message: t.message || '' }
     );
     showTrackerProgress(saved.username || 'User');
   } else {
@@ -53,8 +95,8 @@ function initTracker() {
       document.getElementById('tracker-username').value = saved.username || '';
       trackerTasks = (saved.tasks || []).map((t) =>
         typeof t === 'string'
-          ? { id: trackerGenerateId(), name: t, completed: false }
-          : { id: t.id || trackerGenerateId(), name: t.name, completed: t.completed || false }
+          ? { id: trackerGenerateId(), name: t, completed: false, message: '' }
+          : { id: t.id || trackerGenerateId(), name: t.name, completed: t.completed || false, message: t.message || '' }
       );
     } else {
       trackerTasks = [];
@@ -107,6 +149,13 @@ function renderTrackerTaskList() {
             <button class="tracker-delete-btn" title="Delete task" aria-label="Delete task">&#10005;</button>
           </div>
         </div>
+        <div class="tracker-message-row">
+          <span class="tracker-message-label">🔊 Voice message:</span>
+          <input type="text" class="tracker-message-input tracker-input"
+            value="${trackerEscapeAttr(task.message || '')}" maxlength="200"
+            placeholder="Type a message to read aloud when this task starts (optional)…"
+            data-index="${index}" aria-label="Voice message for task ${index + 1}">
+        </div>
         <div class="tracker-audio-controls" id="tac-${task.id}">
           <div class="tracker-audio-btn-row">
             <button class="btn-rec-action btn-rec-record"  data-tid="${task.id}">🎙 Record</button>
@@ -125,6 +174,11 @@ function renderTrackerTaskList() {
     // Live-edit task name
     li.querySelector('.tracker-name-input').addEventListener('input', (e) => {
       trackerTasks[index].name = e.target.value;
+    });
+
+    // Live-edit voice message
+    li.querySelector('.tracker-message-input').addEventListener('input', (e) => {
+      trackerTasks[index].message = e.target.value;
     });
 
     // Reorder / delete
@@ -154,7 +208,7 @@ function trackerAddTask() {
   const input = document.getElementById('tracker-task-input');
   const text  = input.value.trim();
   if (!text) { showToast('Please enter a task name.'); input.focus(); return; }
-  trackerTasks.push({ id: trackerGenerateId(), name: text, completed: false });
+  trackerTasks.push({ id: trackerGenerateId(), name: text, completed: false, message: '' });
   input.value = '';
   input.focus();
   renderTrackerTaskList();
@@ -221,6 +275,7 @@ async function trackerSave() {
     tasks: trackerTasks.map((t) => ({
       id:        t.id,
       name:      t.name,
+      message:   t.message || '',
       completed: existingMap[t.id] ? existingMap[t.id].completed : false,
     })),
   };
@@ -257,7 +312,12 @@ function renderTrackerCards() {
 
     card.innerHTML = `
       <div class="tracker-card-number">${index + 1}</div>
-      <span class="tracker-card-text">${trackerEscapeHtml(task.name)}</span>
+      <div class="tracker-card-body">
+        <span class="tracker-card-text">${trackerEscapeHtml(task.name)}</span>
+        ${(task.completed && task.message)
+          ? `<p class="tracker-card-message">🔊 ${trackerEscapeHtml(task.message)}</p>`
+          : ''}
+      </div>
       ${task.completed ? '<i class="fas fa-check-circle ms-auto" style="color:rgba(255,255,255,0.8);font-size:1.2rem;"></i>' : ''}`;
 
     // Only animate the newly-active card — completed/locked cards re-render without jumping
@@ -279,35 +339,56 @@ async function trackerHandleTaskClick(index) {
   if (trackerIsTransitioning) return;
   trackerIsTransitioning = true;
 
-  // ── 1. Update state immediately ──────────────────────────────────────────
+  // ── 1. Mark task complete and persist ────────────────────────────────────
   const saved = JSON.parse(localStorage.getItem('taskTrackerData'));
   trackerTasks = saved ? saved.tasks : trackerTasks;
 
-  trackerTasks[index].completed = true;
+  const task     = trackerTasks[index];
+  const message  = task.message || '';
+  task.completed = true;
   localStorage.setItem('taskTrackerData', JSON.stringify({ ...saved, tasks: trackerTasks }));
 
-  const total     = trackerTasks.length;
-  const completed = trackerTasks.filter((t) => t.completed).length;
-  const msg       = _completionMessages[index % _completionMessages.length];
-  showToast(`✅ "${trackerTasks[index].name}" done! ${msg} (${completed}/${total})`);
-
-  // ── 2. Fire celebration immediately (before audio) ───────────────────────
+  const total      = trackerTasks.length;
+  const completed  = trackerTasks.filter((t) => t.completed).length;
   const isLastTask = completed === total;
+  const toastMsg   = _completionMessages[index % _completionMessages.length];
+  showToast(`✅ "${task.name}" done! ${toastMsg} (${completed}/${total})`);
+
+  // ── 2. Fire confetti for non-last tasks ──────────────────────────────────
   if (!isLastTask && typeof launchTaskConfetti === 'function') launchTaskConfetti();
 
-  // ── 3. Re-render cards & progress immediately ────────────────────────────
+  // ── 3. Re-render so the completed card shows the message text ─────────────
+  //    For the last task, suppress the congrats screen until audio finishes.
   renderTrackerCards();
-  updateTrackerProgress();
+  updateTrackerProgress(isLastTask);   // suppress congrats on last task — fires after audio
 
-  // ── 4. Unlock clicks straight away — next task card is already in the DOM ─
+  // ── 4. Unlock the next card immediately ──────────────────────────────────
   trackerIsTransitioning = false;
 
-  // ── 5. Play audio cue in the background (non-blocking) ───────────────────
-  const taskId = trackerTasks[index].id;
-  if (taskId) {
-    hasAudio(taskId)
-      .then((exists) => { if (exists) trackerPlayAndWait(taskId); })
-      .catch(() => { /* no audio — ignore */ });
+  // ── 5. Play audio after completion — TTS first, then recorded audio ───────
+  //    For the last task: await TTS so congrats fires only after speech ends.
+  //    For all other tasks: play in the background, do not block the next tap.
+  const taskId = task.id;
+
+  if (isLastTask) {
+    // Speak typed message (waits for it to finish)
+    if (message) await trackerSpeakAndWait(message);
+    // Then play recorded audio (waits for it to finish)
+    try {
+      const exists = await hasAudio(taskId);
+      if (exists) await trackerPlayAndWait(taskId);
+    } catch { /* no recording — fine */ }
+    // Now trigger the congrats screen
+    updateTrackerProgress();
+  } else {
+    // Non-blocking: speak, then play recorded audio sequentially in the background
+    (async () => {
+      if (message) await trackerSpeakAndWait(message);
+      try {
+        const exists = await hasAudio(taskId);
+        if (exists) await trackerPlayAndWait(taskId);
+      } catch { /* no recording — fine */ }
+    })();
   }
 }
 
@@ -327,7 +408,7 @@ function trackerPlayAndWait(taskId) {
 }
 
 // ── Progress view: progress bar ───────────────────────────────────────────────
-function updateTrackerProgress() {
+function updateTrackerProgress(suppressCongrats = false) {
   const total     = trackerTasks.length;
   const completed = trackerTasks.filter((t) => t.completed).length;
   const percent   = total > 0 ? Math.round((completed / total) * 100) : 0;
@@ -344,7 +425,7 @@ function updateTrackerProgress() {
 
   const wasAlreadyDone = congrats && !congrats.classList.contains('d-none');
 
-  if (completed === total && total > 0) {
+  if (completed === total && total > 0 && !suppressCongrats) {
     congrats?.classList.remove('d-none');
     if (cards) cards.style.display = 'none';
 
@@ -375,6 +456,7 @@ function trackerResetProgress() {
   trackerTasks        = saved.tasks;
   trackerIsTransitioning = false;
   showToast('Progress reset — starting fresh!');
+  if ('speechSynthesis' in window) window.speechSynthesis.cancel();
   renderTrackerCards();
   updateTrackerProgress();
 }
