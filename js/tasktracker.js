@@ -10,7 +10,7 @@
  */
 
 // ── State ────────────────────────────────────────────────────────────────────
-let trackerTasks           = [];          // { id, name, completed, message? }
+let trackerTasks           = [];          // { id, name, completed, message, audioMode }
 let trackerActiveRecTaskId = null;        // which task is currently recording
 let trackerIsTransitioning = false;       // guard against double-tap on active card
 
@@ -85,18 +85,17 @@ function initTracker() {
     // Normalise tasks (ensure every task has an id)
     trackerTasks = saved.tasks.map((t) =>
       typeof t === 'string'
-        ? { id: trackerGenerateId(), name: t, completed: false, message: '' }
-        : { id: t.id || trackerGenerateId(), name: t.name, completed: t.completed || false, message: t.message || '' }
+        ? { id: trackerGenerateId(), name: t, completed: false, message: '', audioMode: 'none' }
+        : { id: t.id || trackerGenerateId(), name: t.name, completed: t.completed || false, message: t.message || '', audioMode: t.audioMode || 'none' }
     );
     showTrackerProgress(saved.username || 'User');
   } else {
-    // Pre-populate tasks array from saved data (if any partial config exists)
     if (saved) {
       document.getElementById('tracker-username').value = saved.username || '';
       trackerTasks = (saved.tasks || []).map((t) =>
         typeof t === 'string'
-          ? { id: trackerGenerateId(), name: t, completed: false, message: '' }
-          : { id: t.id || trackerGenerateId(), name: t.name, completed: t.completed || false, message: t.message || '' }
+          ? { id: trackerGenerateId(), name: t, completed: false, message: '', audioMode: 'none' }
+          : { id: t.id || trackerGenerateId(), name: t.name, completed: t.completed || false, message: t.message || '', audioMode: t.audioMode || 'none' }
       );
     } else {
       trackerTasks = [];
@@ -139,6 +138,7 @@ function renderTrackerTaskList() {
     li.innerHTML = `
       <span class="tracker-item-number">${index + 1}</span>
       <div class="tracker-item-body">
+
         <div class="tracker-item-top">
           <input type="text" class="tracker-name-input tracker-input"
             value="${trackerEscapeAttr(task.name)}" maxlength="100"
@@ -149,18 +149,51 @@ function renderTrackerTaskList() {
             <button class="tracker-delete-btn" title="Delete task" aria-label="Delete task">&#10005;</button>
           </div>
         </div>
-        <div class="tracker-message-row">
-          <span class="tracker-message-label">🔊 Voice message:</span>
-          <input type="text" class="tracker-message-input tracker-input"
+
+        <!-- Audio mode — radio group (mutually exclusive, opt-in) -->
+        <fieldset class="tracker-audio-fieldset">
+          <legend class="tracker-audio-legend">Play after completing this task:</legend>
+          <div class="tracker-audio-options">
+            <label class="tracker-audio-option ${task.audioMode === 'none'   ? 'selected' : ''}">
+              <input type="radio" name="audioMode-${task.id}" value="none"
+                ${task.audioMode === 'none' ? 'checked' : ''}>
+              <span class="tracker-audio-option-icon">🔕</span>
+              <span>No audio</span>
+            </label>
+            <label class="tracker-audio-option ${task.audioMode === 'text'   ? 'selected' : ''}">
+              <input type="radio" name="audioMode-${task.id}" value="text"
+                ${task.audioMode === 'text' ? 'checked' : ''}>
+              <span class="tracker-audio-option-icon">💬</span>
+              <span>Type message</span>
+            </label>
+            <label class="tracker-audio-option ${task.audioMode === 'record' ? 'selected' : ''}">
+              <input type="radio" name="audioMode-${task.id}" value="record"
+                ${task.audioMode === 'record' ? 'checked' : ''}>
+              <span class="tracker-audio-option-icon">🎙</span>
+              <span>Record voice</span>
+            </label>
+          </div>
+        </fieldset>
+
+        <!-- Text message panel -->
+        <div class="tracker-message-panel ${task.audioMode === 'text' ? '' : 'd-none'}" id="tmr-${task.id}">
+          <label class="tracker-panel-label" for="tmi-${task.id}">
+            Message to read aloud when this task is done:
+          </label>
+          <input type="text" id="tmi-${task.id}" class="tracker-message-input tracker-input"
             value="${trackerEscapeAttr(task.message || '')}" maxlength="200"
-            placeholder="Type a message to read aloud when this task starts (optional)…"
-            data-index="${index}" aria-label="Voice message for task ${index + 1}">
+            placeholder="e.g. Great job brushing your teeth! Now get dressed."
+            aria-label="Voice message text for task ${index + 1}">
+          <p class="tracker-panel-hint">The browser will read this aloud using a system voice.</p>
         </div>
-        <div class="tracker-audio-controls" id="tac-${task.id}">
+
+        <!-- Record panel -->
+        <div class="tracker-audio-controls ${task.audioMode === 'record' ? '' : 'd-none'}" id="tac-${task.id}">
+          <p class="tracker-panel-label">Record a voice message to play when this task is done:</p>
           <div class="tracker-audio-btn-row">
             <button class="btn-rec-action btn-rec-record"  data-tid="${task.id}">🎙 Record</button>
             <button class="btn-rec-action btn-rec-stop"    data-tid="${task.id}" disabled>⏹ Stop</button>
-            <button class="btn-rec-action btn-rec-play"    data-tid="${task.id}" disabled>▶ Play</button>
+            <button class="btn-rec-action btn-rec-play"    data-tid="${task.id}" disabled>▶ Play back</button>
             <button class="btn-rec-action btn-rec-delete"  data-tid="${task.id}" disabled>🗑 Delete</button>
           </div>
           <div class="tracker-rec-status-row">
@@ -169,6 +202,7 @@ function renderTrackerTaskList() {
             <span class="tracker-rec-status"    id="trs-${task.id}"></span>
           </div>
         </div>
+
       </div>`;
 
     // Live-edit task name
@@ -176,9 +210,26 @@ function renderTrackerTaskList() {
       trackerTasks[index].name = e.target.value;
     });
 
-    // Live-edit voice message
+    // Live-edit typed message
     li.querySelector('.tracker-message-input').addEventListener('input', (e) => {
       trackerTasks[index].message = e.target.value;
+    });
+
+    // Audio mode — radio group
+    li.querySelectorAll(`input[name="audioMode-${task.id}"]`).forEach((radio) => {
+      radio.addEventListener('change', () => {
+        const mode = radio.value;
+        trackerTasks[index].audioMode = mode;
+        // Update selected highlight on labels
+        li.querySelectorAll('.tracker-audio-option').forEach((lbl) =>
+          lbl.classList.toggle('selected', lbl.querySelector('input').value === mode)
+        );
+        // Show / hide the correct panel
+        const textPanel   = document.getElementById(`tmr-${task.id}`);
+        const recordPanel = document.getElementById(`tac-${task.id}`);
+        if (textPanel)   textPanel.classList.toggle('d-none',   mode !== 'text');
+        if (recordPanel) recordPanel.classList.toggle('d-none', mode !== 'record');
+      });
     });
 
     // Reorder / delete
@@ -208,7 +259,7 @@ function trackerAddTask() {
   const input = document.getElementById('tracker-task-input');
   const text  = input.value.trim();
   if (!text) { showToast('Please enter a task name.'); input.focus(); return; }
-  trackerTasks.push({ id: trackerGenerateId(), name: text, completed: false, message: '' });
+  trackerTasks.push({ id: trackerGenerateId(), name: text, completed: false, message: '', audioMode: 'none' });
   input.value = '';
   input.focus();
   renderTrackerTaskList();
@@ -275,7 +326,8 @@ async function trackerSave() {
     tasks: trackerTasks.map((t) => ({
       id:        t.id,
       name:      t.name,
-      message:   t.message || '',
+      message:   t.message  || '',
+      audioMode: t.audioMode || 'none',
       completed: existingMap[t.id] ? existingMap[t.id].completed : false,
     })),
   };
@@ -314,8 +366,11 @@ function renderTrackerCards() {
       <div class="tracker-card-number">${index + 1}</div>
       <div class="tracker-card-body">
         <span class="tracker-card-text">${trackerEscapeHtml(task.name)}</span>
-        ${(task.completed && task.message)
-          ? `<p class="tracker-card-message">🔊 ${trackerEscapeHtml(task.message)}</p>`
+        ${(task.completed && task.audioMode === 'text' && task.message)
+          ? `<p class="tracker-card-message">💬 ${trackerEscapeHtml(task.message)}</p>`
+          : ''}
+        ${(task.completed && task.audioMode === 'record')
+          ? `<p class="tracker-card-message">🎙 Voice message played</p>`
           : ''}
       </div>
       ${task.completed ? '<i class="fas fa-check-circle ms-auto" style="color:rgba(255,255,255,0.8);font-size:1.2rem;"></i>' : ''}`;
@@ -344,7 +399,6 @@ async function trackerHandleTaskClick(index) {
   trackerTasks = saved ? saved.tasks : trackerTasks;
 
   const task     = trackerTasks[index];
-  const message  = task.message || '';
   task.completed = true;
   localStorage.setItem('taskTrackerData', JSON.stringify({ ...saved, tasks: trackerTasks }));
 
@@ -365,29 +419,35 @@ async function trackerHandleTaskClick(index) {
   // ── 4. Unlock the next card immediately ──────────────────────────────────
   trackerIsTransitioning = false;
 
-  // ── 5. Play audio after completion — TTS first, then recorded audio ───────
-  //    For the last task: await TTS so congrats fires only after speech ends.
-  //    For all other tasks: play in the background, do not block the next tap.
-  const taskId = task.id;
+  // ── 5. Play audio after completion — only the chosen mode, never both ───────
+  const taskId   = task.id;
+  const mode     = task.audioMode || 'none';
+  const message  = task.message   || '';
 
   if (isLastTask) {
-    // Speak typed message (waits for it to finish)
-    if (message) await trackerSpeakAndWait(message);
-    // Then play recorded audio (waits for it to finish)
-    try {
-      const exists = await hasAudio(taskId);
-      if (exists) await trackerPlayAndWait(taskId);
-    } catch { /* no recording — fine */ }
-    // Now trigger the congrats screen
-    updateTrackerProgress();
-  } else {
-    // Non-blocking: speak, then play recorded audio sequentially in the background
-    (async () => {
-      if (message) await trackerSpeakAndWait(message);
+    if (mode === 'text' && message) {
+      await trackerSpeakAndWait(message);
+    } else if (mode === 'record') {
       try {
         const exists = await hasAudio(taskId);
         if (exists) await trackerPlayAndWait(taskId);
+        else setTimeout(() => {}, 2000);    // brief pause if no recording saved
       } catch { /* no recording — fine */ }
+    } else {
+      await new Promise((r) => setTimeout(r, 1200)); // small pause before congrats
+    }
+    updateTrackerProgress();   // now show the congrats screen
+  } else {
+    // Non-blocking background playback for all other tasks
+    (async () => {
+      if (mode === 'text' && message) {
+        await trackerSpeakAndWait(message);
+      } else if (mode === 'record') {
+        try {
+          const exists = await hasAudio(taskId);
+          if (exists) await trackerPlayAndWait(taskId);
+        } catch { /* no recording — fine */ }
+      }
     })();
   }
 }

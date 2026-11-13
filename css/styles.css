@@ -606,15 +606,37 @@ button:focus-visible {
 .tracker-item-top  { display: flex; align-items: center; gap: 8px; }
 .tracker-name-input { flex: 1; padding: 7px 11px; font-size: 0.9rem; font-family: 'Poppins', sans-serif; border-radius: 8px; }
 
-/* Voice message input row in setup */
-.tracker-message-row { display: flex; align-items: center; gap: 8px; }
-.tracker-message-label { font-size: 0.78rem; font-weight: 600; color: var(--text-muted); white-space: nowrap; flex-shrink: 0; }
-.tracker-message-input { flex: 1; padding: 6px 10px; font-size: 0.82rem; font-family: 'Poppins', sans-serif; border-radius: 8px; color: var(--text); background: var(--surface); border: 1px solid var(--border); }
-.tracker-message-input::placeholder { color: var(--text-muted); opacity: 0.7; }
+/* ── Audio mode radio group ── */
+.tracker-audio-fieldset { border: none; margin: 0; padding: 0; }
+.tracker-audio-legend { font-size: 0.78rem; font-weight: 600; color: var(--text-muted); margin-bottom: 7px; display: block; }
+.tracker-audio-options { display: flex; gap: 8px; flex-wrap: wrap; }
+.tracker-audio-option {
+  display: flex; align-items: center; gap: 6px; padding: 6px 13px;
+  border-radius: 20px; cursor: pointer; user-select: none;
+  border: 1.5px solid rgba(var(--tracker-rgb),0.22);
+  background: var(--card-bg); font-size: 0.82rem; font-weight: 500;
+  color: var(--text-muted); transition: var(--transition);
+}
+.tracker-audio-option input[type="radio"] { position: absolute; opacity: 0; width: 0; height: 0; pointer-events: none; }
+.tracker-audio-option:hover { border-color: var(--tracker-primary); color: var(--tracker-primary); background: rgba(var(--tracker-rgb),0.06); }
+.tracker-audio-option.selected { border-color: var(--tracker-primary); background: rgba(var(--tracker-rgb),0.12); color: var(--tracker-primary); font-weight: 600; }
+.tracker-audio-option-icon { font-size: 1rem; line-height: 1; }
 
-/* Message displayed on the active progress card */
+/* ── Text message panel ── */
+.tracker-message-panel { display: flex; flex-direction: column; gap: 5px; }
+.tracker-panel-label { font-size: 0.78rem; font-weight: 600; color: var(--text-muted); margin: 0; }
+.tracker-panel-hint  { font-size: 0.72rem; color: var(--text-muted); opacity: 0.7; margin: 0; }
+.tracker-message-input {
+  width: 100%; padding: 7px 11px; font-size: 0.85rem; font-family: 'Poppins', sans-serif;
+  border-radius: 8px; color: var(--text); background: var(--card-bg);
+  border: 1.5px solid rgba(var(--tracker-rgb),0.22); transition: var(--transition);
+}
+.tracker-message-input:focus { border-color: var(--tracker-primary); box-shadow: 0 0 0 3px rgba(var(--tracker-rgb),0.1); outline: none; }
+.tracker-message-input::placeholder { color: var(--text-muted); opacity: 0.65; }
+
+/* ── Message label on completed progress card ── */
 .tracker-card-body { display: flex; flex-direction: column; gap: 4px; flex: 1; }
-.tracker-card-message { margin: 0; font-size: 0.85rem; font-style: italic; opacity: 0.92; line-height: 1.4; }
+.tracker-card-message { margin: 0; font-size: 0.82rem; font-style: italic; opacity: 0.88; line-height: 1.4; }
 .tracker-item-actions { display: flex; gap: 5px; flex-shrink: 0; }
 .tracker-item-actions button {
   width: 30px; height: 30px; border: none; border-radius: 8px; cursor: pointer;
