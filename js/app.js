@@ -61,7 +61,16 @@ function initNavigation() {
   document.getElementById('btn-start-assessment')?.addEventListener('click', () => {
     navigateToSection('assessment'); setActiveNav('assessment');
   });
+  document.getElementById('btn-start-assessment-2')?.addEventListener('click', () => {
+    navigateToSection('assessment'); setActiveNav('assessment');
+  });
   document.getElementById('btn-open-tracker')?.addEventListener('click', () => {
+    navigateToSection('tracker'); setActiveNav('tracker');
+  });
+  document.getElementById('btn-open-tracker-2')?.addEventListener('click', () => {
+    navigateToSection('tracker'); setActiveNav('tracker');
+  });
+  document.getElementById('btn-open-tracker-banner')?.addEventListener('click', () => {
     navigateToSection('tracker'); setActiveNav('tracker');
   });
   document.getElementById('btn-learn-adhd')?.addEventListener('click', () => {

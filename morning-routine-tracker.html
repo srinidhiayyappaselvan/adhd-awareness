@@ -1,0 +1,423 @@
+<!DOCTYPE html>
+<html lang="en" data-theme="light">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <meta name="description" content="Morning Routine Tracker — Hardware and software solution to help children with ADHD follow a structured morning routine. CBSE Science Exhibition 2026-27.">
+  <meta name="theme-color" content="#1a56db">
+  <title>Morning Routine Tracker | ADHD Awareness — CBSE Science Exhibition 2026-27</title>
+  <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/css/bootstrap.min.css" rel="stylesheet">
+  <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;500;600;700;800&display=swap" rel="stylesheet">
+  <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.1/css/all.min.css" rel="stylesheet">
+  <link href="https://cdn.jsdelivr.net/npm/aos@2.3.4/dist/aos.css" rel="stylesheet">
+  <link href="css/styles.css" rel="stylesheet">
+  <style>
+    .module-hero {
+      min-height: 44vh; display: flex; align-items: center;
+      position: relative; overflow: hidden;
+      background: var(--hero-gradient); padding: 4rem 0 5rem;
+    }
+    .module-hero::before {
+      content: ''; position: absolute; inset: 0;
+      background:
+        radial-gradient(circle at 80% 10%, rgba(5,150,105,0.2) 0%, transparent 45%),
+        radial-gradient(circle at 10% 90%, rgba(6,182,212,0.12) 0%, transparent 40%);
+      pointer-events: none;
+    }
+    .module-hero::after {
+      content: ''; position: absolute; bottom: -2px; left: 0; right: 0;
+      height: 60px; background: linear-gradient(to bottom, transparent, var(--bg));
+      pointer-events: none;
+    }
+    .module-hero .hero-content { position: relative; z-index: 2; color: #fff; }
+    .module-section { padding: 4rem 0; }
+    .module-section.alt-bg { background: var(--bg-alt); }
+    .hero-stat-pill {
+      display: inline-flex; align-items: center; gap: 0.45rem;
+      background: rgba(255,255,255,0.12); border: 1px solid rgba(255,255,255,0.28);
+      color: rgba(255,255,255,0.92); padding: 0.4rem 1.1rem; border-radius: 50px;
+      font-size: 0.82rem; font-weight: 600; backdrop-filter: blur(6px);
+    }
+
+    /* ── Tab switcher ── */
+    .solution-tabs {
+      display: flex; gap: 0; border-radius: 14px; overflow: hidden;
+      border: 2px solid var(--border); width: fit-content; margin: 0 auto 2.5rem;
+    }
+    .solution-tab {
+      padding: 10px 28px; font-weight: 700; font-size: 0.9rem; cursor: pointer;
+      background: var(--card-bg); color: var(--text-muted); border: none;
+      transition: var(--transition); display: flex; align-items: center; gap: 7px;
+    }
+    .solution-tab.active {
+      background: var(--primary); color: #fff;
+    }
+    .solution-tab:first-child { border-radius: 11px 0 0 11px; }
+    .solution-tab:last-child  { border-radius: 0 11px 11px 0; }
+
+    /* ── Highlight band ── */
+    .software-highlight {
+      background: linear-gradient(135deg, rgba(5,150,105,0.08), rgba(6,182,212,0.08));
+      border: 2px solid rgba(5,150,105,0.25); border-radius: var(--radius);
+      padding: 2rem; position: relative; overflow: hidden;
+    }
+    .software-highlight::before {
+      content: '★ LIVE DIGITAL TOOL';
+      position: absolute; top: 12px; right: 16px;
+      font-size: 0.65rem; font-weight: 800; letter-spacing: 0.08em;
+      color: #059669; background: rgba(5,150,105,0.1);
+      padding: 3px 10px; border-radius: 20px; border: 1px solid rgba(5,150,105,0.25);
+    }
+
+    /* ── Task demo strip ── */
+    .task-demo { display: flex; flex-direction: column; gap: 8px; }
+    .task-demo-item {
+      display: flex; align-items: center; gap: 12px;
+      padding: 10px 14px; border-radius: 10px;
+      font-size: 0.88rem; font-weight: 500; transition: var(--transition);
+    }
+    .task-demo-item.completed {
+      background: var(--success); color: #fff;
+    }
+    .task-demo-item.active {
+      background: var(--card-bg); border: 2px solid var(--primary);
+      color: var(--text); font-weight: 700;
+    }
+    .task-demo-item.locked {
+      background: var(--card-bg); border: 2px solid var(--border);
+      color: var(--text-muted); opacity: 0.55;
+    }
+    .task-num {
+      width: 28px; height: 28px; border-radius: 50%; flex-shrink: 0;
+      background: rgba(255,255,255,0.2); display: flex; align-items: center;
+      justify-content: center; font-weight: 800; font-size: 0.8rem;
+    }
+    .task-demo-item.active .task-num { background: var(--primary); color: #fff; }
+    .task-demo-item.locked .task-num { background: var(--border); }
+
+    /* ── HW spec rows ── */
+    .spec-row {
+      display: flex; align-items: flex-start; gap: 0.75rem;
+      padding: 0.7rem 0; border-bottom: 1px solid var(--border); font-size: 0.9rem;
+    }
+    .spec-row:last-child { border-bottom: none; }
+    .spec-label { font-weight: 700; color: var(--primary); min-width: 130px; flex-shrink: 0; }
+    .spec-value { color: var(--text-muted); line-height: 1.55; }
+  </style>
+</head>
+<body>
+
+  <a href="#main-content" class="skip-link">Skip to main content</a>
+
+  <div class="awareness-ribbon" role="banner">
+    <span class="ribbon-icon">🎗️</span>
+    <strong>ADHD Awareness</strong> — Early identification and structured routines can transform a child's life.
+    <span class="ribbon-icon">🧠</span>
+    <span class="d-none d-sm-inline">This tool is for educational awareness only — not a clinical diagnosis.</span>
+  </div>
+
+  <nav class="navbar navbar-expand-lg navbar-custom sticky-top" aria-label="Main navigation">
+    <div class="container">
+      <a class="navbar-brand" href="index.html" aria-label="ADHD Awareness Home">
+        <span class="brand-emoji">🧠</span>
+        <span>ADHD Awareness</span>
+      </a>
+      <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarNav"
+        aria-controls="navbarNav" aria-expanded="false" aria-label="Toggle navigation">
+        <span class="navbar-toggler-icon"></span>
+      </button>
+      <div class="collapse navbar-collapse" id="navbarNav">
+        <ul class="navbar-nav ms-auto align-items-lg-center gap-lg-1">
+          <li class="nav-item"><a class="nav-link" href="index.html"><i class="fas fa-home me-1"></i>Home</a></li>
+          <li class="nav-item"><a class="nav-link" href="brain-models.html"><i class="fas fa-brain me-1"></i>Brain Models</a></li>
+          <li class="nav-item"><a class="nav-link" href="index.html#about"><i class="fas fa-book-open me-1"></i>About ADHD</a></li>
+          <li class="nav-item"><a class="nav-link" href="index.html#statistics"><i class="fas fa-chart-bar me-1"></i>Statistics</a></li>
+          <li class="nav-item"><a class="nav-link" href="index.html#assessment"><i class="fas fa-clipboard-check me-1"></i>Assessment</a></li>
+          <li class="nav-item"><a class="nav-link active" href="morning-routine-tracker.html" aria-current="page"><i class="fas fa-list-check me-1"></i>Morning Tracker</a></li>
+          <li class="nav-item"><a class="nav-link" href="focus-smartwatch.html"><i class="fas fa-clock me-1"></i>Focus Smartwatch</a></li>
+          <li class="nav-item"><a class="nav-link" href="smart-bag-assistant.html"><i class="fas fa-bag-shopping me-1"></i>Smart Bag</a></li>
+          <li class="nav-item"><a class="nav-link" href="index.html#references"><i class="fas fa-book me-1"></i>References</a></li>
+        </ul>
+      </div>
+    </div>
+  </nav>
+
+  <main id="main-content">
+
+    <!-- HERO -->
+    <section class="module-hero" aria-label="Morning Routine Tracker">
+      <div class="container">
+        <div class="row justify-content-center">
+          <div class="col-lg-9 text-center hero-content" data-aos="fade-up">
+            <a href="index.html" class="hero-stat-pill mb-3 d-inline-flex text-decoration-none">
+              <i class="fas fa-arrow-left"></i> Back to Home
+            </a>
+            <div class="mt-3 mb-2">
+              <span class="hero-badge"><i class="fas fa-award me-1"></i>Module 4 — CBSE Science Exhibition 2026-27</span>
+            </div>
+            <h1 class="hero-title" style="font-size:clamp(1.8rem,5vw,2.8rem);">
+              Morning Routine Tracker
+            </h1>
+            <p class="hero-subtitle mt-3" style="max-width:650px; margin:0 auto;">
+              A complete hardware + software solution — an Arduino device with thermal printer connected to a live web app — that guides children with ADHD through their morning routine one task at a time.
+            </p>
+            <div class="d-flex flex-wrap justify-content-center gap-2 mt-4">
+              <span class="hero-stat-pill"><i class="fas fa-microchip"></i> Arduino</span>
+              <span class="hero-stat-pill"><i class="fas fa-print"></i> Thermal Printer</span>
+              <span class="hero-stat-pill"><i class="fas fa-bluetooth"></i> Bluetooth</span>
+              <span class="hero-stat-pill"><i class="fas fa-mobile-alt"></i> Live Web App</span>
+              <span class="hero-stat-pill"><i class="fas fa-volume-up"></i> Voice Messages</span>
+            </div>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <!-- TAB SELECTOR -->
+    <section class="module-section" aria-label="Solution overview">
+      <div class="container">
+        <div class="text-center mb-4" data-aos="fade-up">
+          <span class="section-eyebrow"><i class="fas fa-th me-1"></i> Two Solutions, One Goal</span>
+          <h2 class="section-title">Software App &amp; Hardware Device</h2>
+          <p class="section-subtitle" style="max-width:620px; margin:0 auto;">
+            The morning routine tracker comes in two forms. Use the web app right now on any phone, or connect to the physical Arduino device for a full hardware experience.
+          </p>
+        </div>
+
+        <div class="row g-4">
+
+          <!-- ── SOFTWARE — Highlighted ── -->
+          <div class="col-lg-7" data-aos="fade-right">
+            <div class="software-highlight h-100">
+              <div class="d-flex align-items-center gap-3 mb-3">
+                <div style="width:50px;height:50px;border-radius:14px;background:linear-gradient(135deg,#059669,#0d9488);display:flex;align-items:center;justify-content:center;color:#fff;font-size:1.3rem;flex-shrink:0;">
+                  <i class="fas fa-mobile-alt"></i>
+                </div>
+                <div>
+                  <h3 class="h5 fw-bold text-primary mb-0">Software — Interactive Web App</h3>
+                  <span style="font-size:0.78rem; color:#059669; font-weight:600;">✓ Available right now — no hardware needed</span>
+                </div>
+              </div>
+              <p style="font-size:0.9rem; color:var(--text-muted); line-height:1.75; margin-bottom:1.25rem;">
+                The companion web app works on any phone, tablet, or computer. A parent sets up the child's name and task list, records a custom voice message for each task, and the child taps each card to complete tasks one by one.
+              </p>
+
+              <!-- Task demo -->
+              <div class="task-demo mb-3">
+                <div class="task-demo-item completed">
+                  <div class="task-num">1</div>
+                  <span>Brush your teeth</span>
+                  <i class="fas fa-check-circle ms-auto"></i>
+                </div>
+                <div class="task-demo-item active">
+                  <div class="task-num">2</div>
+                  <span>Get dressed 👈 Tap to complete</span>
+                </div>
+                <div class="task-demo-item locked">
+                  <div class="task-num">3</div>
+                  <span>Eat breakfast</span>
+                </div>
+                <div class="task-demo-item locked">
+                  <div class="task-num">4</div>
+                  <span>Pack your bag</span>
+                </div>
+              </div>
+
+              <ul style="font-size:0.88rem; color:var(--text-muted); padding-left:1.2rem; line-height:1.9; margin-bottom:1.5rem;">
+                <li>Tasks completed <strong>in sequence</strong> — child can't skip ahead</li>
+                <li>Voice message (typed or recorded) plays after each completion</li>
+                <li>Confetti celebration on each task + big burst when all done</li>
+                <li>Personalised reward sticker printed via Bluetooth on completion</li>
+                <li>Progress saved — child can close and resume anytime</li>
+              </ul>
+
+              <a href="index.html#tracker" class="btn btn-hero-primary" style="font-size:0.9rem; padding:0.75rem 1.75rem;">
+                <i class="fas fa-play me-2"></i>Open the Task Tracker Now
+              </a>
+            </div>
+          </div>
+
+          <!-- ── HARDWARE ── -->
+          <div class="col-lg-5" data-aos="fade-left" data-aos-delay="80">
+            <div class="glass-card h-100">
+              <div class="d-flex align-items-center gap-3 mb-3">
+                <div style="width:50px;height:50px;border-radius:14px;background:linear-gradient(135deg,var(--primary),#1341b0);display:flex;align-items:center;justify-content:center;color:#fff;font-size:1.3rem;flex-shrink:0;">
+                  <i class="fas fa-microchip"></i>
+                </div>
+                <div>
+                  <h3 class="h5 fw-bold text-primary mb-0">Hardware — Arduino Device</h3>
+                  <span style="font-size:0.78rem; color:var(--text-muted); font-weight:600;">Physical push-button tracker</span>
+                </div>
+              </div>
+              <p style="font-size:0.88rem; color:var(--text-muted); line-height:1.75; margin-bottom:1rem;">
+                An Arduino Uno-based device in a portable white enclosure. The child presses a physical button to mark each task as done. RGB LEDs provide visual feedback, the LCD shows the next task, and on 100% completion the thermal printer outputs a reward slip with the child's name.
+              </p>
+              <div class="spec-row"><span class="spec-label">Controller</span><span class="spec-value">Arduino Uno + NodeMCU ESP8266</span></div>
+              <div class="spec-row"><span class="spec-label">Input</span><span class="spec-value">5 push buttons — one per task</span></div>
+              <div class="spec-row"><span class="spec-label">Feedback</span><span class="spec-value">LCD display + RGB LEDs (task-by-task)</span></div>
+              <div class="spec-row"><span class="spec-label">Reward</span><span class="spec-value">Thermal printer — personalised sticker via Bluetooth</span></div>
+              <div class="spec-row"><span class="spec-label">Connectivity</span><span class="spec-value">Bluetooth to companion web app</span></div>
+              <a href="overview_1.html" class="solution-link mt-3 d-inline-flex">
+                <i class="fas fa-arrow-right me-1"></i>Full hardware overview &amp; schematics
+              </a>
+            </div>
+          </div>
+
+        </div>
+      </div>
+    </section>
+
+    <!-- HOW THEY WORK TOGETHER -->
+    <section class="module-section alt-bg" aria-label="How software and hardware work together">
+      <div class="container">
+        <div class="text-center mb-5" data-aos="fade-up">
+          <span class="section-eyebrow"><i class="fas fa-link me-1"></i> Connected</span>
+          <h2 class="section-title">How the App &amp; Device Work Together</h2>
+        </div>
+        <div class="row g-3 justify-content-center" data-aos="fade-up" data-aos-delay="60">
+          <div class="col-sm-6 col-lg-3">
+            <div class="glass-card about-card h-100">
+              <div class="card-icon" style="background:linear-gradient(135deg,#059669,#0d9488);">
+                <i class="fas fa-mobile-alt"></i>
+              </div>
+              <h4>1. Set Up on the App</h4>
+              <p>Parent enters the child's name, adds tasks, and records a voice message for each one on the web app.</p>
+            </div>
+          </div>
+          <div class="col-sm-6 col-lg-3">
+            <div class="glass-card about-card h-100">
+              <div class="card-icon" style="background:linear-gradient(135deg,var(--primary),#1341b0);">
+                <i class="fas fa-hand-pointer"></i>
+              </div>
+              <h4>2. Child Completes Tasks</h4>
+              <p>Child taps the app card or presses the hardware button after each task. Sequential lock prevents skipping.</p>
+            </div>
+          </div>
+          <div class="col-sm-6 col-lg-3">
+            <div class="glass-card about-card h-100">
+              <div class="card-icon" style="background:linear-gradient(135deg,#ea580c,#f97316);">
+                <i class="fas fa-volume-up"></i>
+              </div>
+              <h4>3. Voice Message Plays</h4>
+              <p>After completing a task, the custom voice message plays automatically — a motivational or instructional cue from the parent.</p>
+            </div>
+          </div>
+          <div class="col-sm-6 col-lg-3">
+            <div class="glass-card about-card h-100">
+              <div class="card-icon" style="background:linear-gradient(135deg,#7c3aed,#9333ea);">
+                <i class="fas fa-print"></i>
+              </div>
+              <h4>4. All Done — Reward!</h4>
+              <p>Confetti burst, congratulations screen, and a personalised thermal reward sticker prints via Bluetooth — a tangible reward the child can keep.</p>
+            </div>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <!-- WHY IT WORKS FOR ADHD -->
+    <section class="module-section" aria-label="Why it works for ADHD">
+      <div class="container">
+        <div class="text-center mb-5" data-aos="fade-up">
+          <span class="section-eyebrow"><i class="fas fa-brain me-1"></i> ADHD-Informed Design</span>
+          <h2 class="section-title">Why This Works for Children with ADHD</h2>
+        </div>
+        <div class="row g-4">
+          <div class="col-md-6 col-lg-4" data-aos="fade-up" data-aos-delay="0">
+            <div class="glass-card h-100" style="border-top:3px solid #059669;">
+              <h3 class="h6 fw-bold text-primary mb-2"><i class="fas fa-lock me-2"></i>Sequential Unlocking</h3>
+              <p style="font-size:0.88rem; color:var(--text-muted); line-height:1.7; margin:0;">Only the current task is active. Children can't jump ahead, which removes the overwhelm of seeing the whole list at once.</p>
+            </div>
+          </div>
+          <div class="col-md-6 col-lg-4" data-aos="fade-up" data-aos-delay="80">
+            <div class="glass-card h-100" style="border-top:3px solid #7c3aed;">
+              <h3 class="h6 fw-bold text-primary mb-2"><i class="fas fa-star me-2"></i>Immediate Positive Reinforcement</h3>
+              <p style="font-size:0.88rem; color:var(--text-muted); line-height:1.7; margin:0;">Confetti, motivational toasts, voice messages, and a printed sticker provide immediate, tangible rewards — which are more effective for ADHD brains than delayed praise.</p>
+            </div>
+          </div>
+          <div class="col-md-6 col-lg-4" data-aos="fade-up" data-aos-delay="160">
+            <div class="glass-card h-100" style="border-top:3px solid #1a56db;">
+              <h3 class="h6 fw-bold text-primary mb-2"><i class="fas fa-volume-up me-2"></i>Multi-Sensory Cues</h3>
+              <p style="font-size:0.88rem; color:var(--text-muted); line-height:1.7; margin:0;">Visual (progress bar, coloured cards), auditory (voice messages, TTS), and tactile (hardware button press, printed slip) cues engage multiple senses — reinforcing task completion.</p>
+            </div>
+          </div>
+          <div class="col-md-6 col-lg-4" data-aos="fade-up" data-aos-delay="0">
+            <div class="glass-card h-100" style="border-top:3px solid #ea580c;">
+              <h3 class="h6 fw-bold text-primary mb-2"><i class="fas fa-redo me-2"></i>Consistent Routine</h3>
+              <p style="font-size:0.88rem; color:var(--text-muted); line-height:1.7; margin:0;">Same tasks, same order, every morning. Consistency is key for ADHD — removing the need to decide "what's next" reduces cognitive load.</p>
+            </div>
+          </div>
+          <div class="col-md-6 col-lg-4" data-aos="fade-up" data-aos-delay="80">
+            <div class="glass-card h-100" style="border-top:3px solid #0d9488;">
+              <h3 class="h6 fw-bold text-primary mb-2"><i class="fas fa-users me-2"></i>Reduces Parental Reminders</h3>
+              <p style="font-size:0.88rem; color:var(--text-muted); line-height:1.7; margin:0;">The app/device does the reminding — parents don't need to nag, which reduces family conflict and stress during morning routines.</p>
+            </div>
+          </div>
+          <div class="col-md-6 col-lg-4" data-aos="fade-up" data-aos-delay="160">
+            <div class="glass-card h-100" style="border-top:3px solid #dc2626;">
+              <h3 class="h6 fw-bold text-primary mb-2"><i class="fas fa-shield-alt me-2"></i>Privacy Safe</h3>
+              <p style="font-size:0.88rem; color:var(--text-muted); line-height:1.7; margin:0;">All data stored only on the device — no accounts, no cloud, no data leaving the family's hands. 100% free to use.</p>
+            </div>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <!-- CTA -->
+    <section class="module-section alt-bg" aria-label="Try it now">
+      <div class="container text-center" data-aos="fade-up">
+        <h2 class="section-title">Try the Task Tracker Now</h2>
+        <p class="section-subtitle" style="max-width:520px; margin:0 auto 1.5rem;">
+          The web app works on any phone or tablet — no installation, no sign-up, completely free.
+        </p>
+        <div class="d-flex flex-wrap justify-content-center gap-3">
+          <a href="index.html#tracker" class="btn btn-hero-primary" style="font-size:0.95rem; padding:0.85rem 2rem;">
+            <i class="fas fa-list-check me-2"></i>Open Task Tracker
+          </a>
+          <a href="overview_1.html" class="btn btn-hero-outline" style="color:var(--primary); border-color:var(--primary);">
+            <i class="fas fa-microchip me-2"></i>Hardware Overview
+          </a>
+          <a href="index.html" class="btn btn-hero-outline" style="color:var(--primary); border-color:var(--primary);">
+            <i class="fas fa-home me-2"></i>Back to Home
+          </a>
+        </div>
+      </div>
+    </section>
+
+  </main>
+
+  <footer class="site-footer" role="contentinfo">
+    <div class="container">
+      <div class="footer-grid">
+        <div class="footer-brand">
+          <span class="footer-logo">🧠</span>
+          <span class="footer-name">ADHD Awareness</span>
+          <p class="footer-tagline">CBSE Science Exhibition 2026-27<br>Amrita Vidyalayam, Thuckalay</p>
+        </div>
+        <div class="footer-links-group">
+          <span class="footer-links-title">Modules</span>
+          <a href="brain-models.html" class="footer-link">Brain Models</a>
+          <a href="index.html#about" class="footer-link">Educational Website</a>
+          <a href="index.html#assessment" class="footer-link">Screening Assessment</a>
+          <a href="morning-routine-tracker.html" class="footer-link">Morning Routine Tracker</a>
+          <a href="focus-smartwatch.html" class="footer-link">Focus Smartwatch</a>
+          <a href="smart-bag-assistant.html" class="footer-link">Smart Bag Assistant</a>
+        </div>
+      </div>
+      <div class="footer-bottom">
+        <p class="footer-disclaimer">Educational awareness only — not a clinical diagnosis tool.</p>
+      </div>
+    </div>
+  </footer>
+
+  <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/js/bootstrap.bundle.min.js"></script>
+  <script src="https://cdn.jsdelivr.net/npm/aos@2.3.4/dist/aos.js"></script>
+  <script>
+    AOS.init({ duration: 800, once: true, offset: 60 });
+    window.addEventListener('load', () => {
+      const ls = document.getElementById('loading-screen');
+      if (ls) { ls.classList.add('hidden'); setTimeout(() => ls.remove(), 600); }
+    });
+  </script>
+</body>
+</html>

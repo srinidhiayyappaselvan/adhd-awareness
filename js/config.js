@@ -1,13 +1,14 @@
 /**
  * Application configuration and assessment data
- * MorningRoutineTracker — ADHD Awareness & Morning Routine Tracker
+ * Improving the Quality of Life of Children with ADHD
+ * CBSE Science Exhibition 2026-27
  */
 
 const APP_CONFIG = {
   studentName: 'A Sri Nidhi',
-  studentClass: 'Grade VIII,',
+  studentClass: 'Grade VIII',
   school: 'Amrita Vidyalayam, Thuckalay',
-  project: 'Amrita Pradarshanam 2026',
+  project: 'CBSE Science Exhibition 2026-27',
   disclaimer:
     'This assessment is intended for educational awareness only. It cannot diagnose ADHD. Please consult a qualified healthcare professional for a comprehensive evaluation.',
 };
