@@ -2,7 +2,7 @@
   "name": "morning-routine-tracker",
   "version": "1.0.0",
   "private": true,
-  "description": "ADHD Awareness Portal — Morning Routine Tracker (Amrita Pradarshanam 2026). Parent-friendly Yes/No assessment with a non-diagnostic results summary.",
+  "description": "ADHD Awareness Portal — Parent-friendly Yes/No assessment with a non-diagnostic results summary.",
   "scripts": {
     "test": "node --test tests/"
   },

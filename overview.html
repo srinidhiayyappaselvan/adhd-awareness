@@ -1,0 +1,846 @@
+<!DOCTYPE html>
+<html lang="en" data-theme="light">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <meta name="description" content="Overview & Implementation — Design and Implementation of a Morning Routine Tracker for Children with ADHD. An IoT-based project using NodeMCU ESP8266 and Blynk, by Amrita Vidyalayam, Thuckalay.">
+  <meta name="theme-color" content="#1a56db">
+  <title>ADHD Awareness</title>
+  <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/css/bootstrap.min.css" rel="stylesheet">
+  <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;500;600;700;800&display=swap" rel="stylesheet">
+  <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.1/css/all.min.css" rel="stylesheet">
+  <link href="https://cdn.jsdelivr.net/npm/aos@2.3.4/dist/aos.css" rel="stylesheet">
+  <link href="css/styles.css" rel="stylesheet">
+  <style>
+    /* ── Overview page hero (shorter variant) ── */
+    .overview-hero {
+      min-height: 50vh;
+      display: flex;
+      align-items: center;
+      position: relative;
+      overflow: hidden;
+      background: var(--hero-gradient);
+      padding: 4rem 0 5rem;
+    }
+    .overview-hero::before {
+      content: '';
+      position: absolute; inset: 0;
+      background:
+        radial-gradient(circle at 80% 10%, rgba(6,182,212,0.18) 0%, transparent 45%),
+        radial-gradient(circle at 10% 90%, rgba(124,58,237,0.12) 0%, transparent 40%);
+      pointer-events: none;
+    }
+    .overview-hero::after {
+      content: '';
+      position: absolute; bottom: -2px; left: 0; right: 0;
+      height: 70px;
+      background: linear-gradient(to bottom, transparent, var(--bg));
+      pointer-events: none;
+    }
+    .overview-hero .hero-content { position: relative; z-index: 2; color: #fff; }
+    .hero-stat-pill {
+      display: inline-flex; align-items: center; gap: 0.45rem;
+      background: rgba(255,255,255,0.12);
+      border: 1px solid rgba(255,255,255,0.28);
+      color: rgba(255,255,255,0.92);
+      padding: 0.4rem 1.1rem; border-radius: 50px;
+      font-size: 0.82rem; font-weight: 600;
+      backdrop-filter: blur(6px);
+    }
+
+    /* ── Flow diagram (Section 4) ── */
+    .flow-diagram {
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      gap: 0;
+    }
+    .flow-block {
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      gap: 0.75rem;
+      background: var(--glass-bg);
+      border: 2px solid rgba(var(--primary-rgb),0.15);
+      border-radius: var(--radius);
+      padding: 1rem 1.75rem;
+      min-width: 220px;
+      max-width: 320px;
+      width: 100%;
+      box-shadow: var(--shadow-sm);
+      backdrop-filter: blur(10px);
+      transition: var(--transition);
+      text-align: center;
+      flex-direction: column;
+    }
+    .flow-block:hover {
+      border-color: var(--primary);
+      box-shadow: var(--shadow-hover);
+      transform: translateY(-2px);
+    }
+    .flow-block-icon {
+      width: 52px; height: 52px;
+      border-radius: 50%;
+      background: linear-gradient(135deg, var(--primary), var(--secondary));
+      color: #fff;
+      display: flex; align-items: center; justify-content: center;
+      font-size: 1.25rem;
+      flex-shrink: 0;
+      box-shadow: 0 6px 18px rgba(var(--primary-rgb),0.25);
+      margin-bottom: 0.5rem;
+    }
+    .flow-block-label {
+      font-weight: 700; font-size: 0.92rem; color: var(--text); margin-bottom: 0.15rem;
+    }
+    .flow-block-sub {
+      font-size: 0.78rem; color: var(--text-muted); line-height: 1.45;
+    }
+    .flow-arrow {
+      display: flex; align-items: center; justify-content: center;
+      color: var(--primary); font-size: 1.5rem; margin: 0.35rem 0;
+      opacity: 0.7;
+    }
+    /* horizontal on desktop */
+    @media (min-width: 768px) {
+      .flow-diagram {
+        flex-direction: row;
+        flex-wrap: wrap;
+        justify-content: center;
+        align-items: flex-start;
+        gap: 0;
+      }
+      .flow-arrow { margin: 0 0.2rem; font-size: 1.3rem; align-self: center; }
+      .flow-block { min-width: 130px; max-width: 160px; padding: 1rem 0.75rem; }
+      .flow-block-icon { width: 44px; height: 44px; font-size: 1.05rem; }
+      .flow-block-label { font-size: 0.82rem; }
+      .flow-block-sub { font-size: 0.72rem; }
+    }
+    @media (min-width: 1200px) {
+      .flow-block { min-width: 145px; max-width: 175px; }
+    }
+
+    /* ── Implementation Timeline (Section 7) ── */
+    .impl-timeline {
+      position: relative;
+      padding-left: 2.25rem;
+      margin-top: 0.5rem;
+    }
+    .impl-timeline::before {
+      content: '';
+      position: absolute;
+      left: 0.85rem;
+      top: 0; bottom: 0;
+      width: 3px;
+      background: linear-gradient(to bottom, var(--primary), var(--secondary));
+      border-radius: 3px;
+    }
+    .impl-step {
+      position: relative;
+      margin-bottom: 2rem;
+      padding-left: 1.5rem;
+    }
+    .impl-step:last-child { margin-bottom: 0; }
+    .impl-step-circle {
+      position: absolute;
+      left: -2.25rem;
+      top: 0.15rem;
+      width: 38px; height: 38px;
+      border-radius: 50%;
+      background: linear-gradient(135deg, var(--primary), var(--secondary));
+      color: #fff;
+      display: flex; align-items: center; justify-content: center;
+      font-weight: 800; font-size: 0.9rem;
+      box-shadow: 0 4px 14px rgba(var(--primary-rgb),0.3);
+      z-index: 1;
+      flex-shrink: 0;
+    }
+    .impl-step-title {
+      font-weight: 700; font-size: 1rem; color: var(--primary); margin-bottom: 0.3rem;
+    }
+    .impl-step-desc {
+      font-size: 0.9rem; color: var(--text-muted); line-height: 1.65; margin: 0;
+    }
+
+    /* ── Hardware component cards ── */
+    .hw-card {
+      text-align: center;
+      padding: 1.75rem 1.25rem;
+    }
+    .hw-icon {
+      width: 64px; height: 64px; border-radius: 18px;
+      background: linear-gradient(135deg, var(--primary), var(--primary-dark));
+      color: #a5f3fc;
+      display: flex; align-items: center; justify-content: center;
+      font-size: 1.5rem;
+      margin: 0 auto 1rem;
+      box-shadow: 0 8px 24px rgba(var(--primary-rgb),0.25);
+      transition: var(--transition);
+    }
+    .glass-card:hover .hw-icon {
+      background: linear-gradient(135deg, var(--secondary), var(--primary));
+      transform: scale(1.08);
+    }
+    .hw-name {
+      font-weight: 700; font-size: 0.97rem; color: var(--text); margin-bottom: 0.4rem;
+    }
+    .hw-role {
+      font-size: 0.84rem; color: var(--text-muted); line-height: 1.55; margin: 0;
+    }
+
+    /* ── Feature cards ── */
+    .feature-card { text-align: center; padding: 2rem 1.5rem; }
+    .feature-icon {
+      width: 68px; height: 68px; border-radius: 50%;
+      background: linear-gradient(135deg, var(--primary), var(--secondary));
+      color: #fff;
+      display: flex; align-items: center; justify-content: center;
+      font-size: 1.5rem; margin: 0 auto 1.1rem;
+      box-shadow: 0 8px 24px rgba(var(--primary-rgb),0.25);
+      transition: var(--transition);
+    }
+    .glass-card:hover .feature-icon { transform: scale(1.08) rotate(-3deg); }
+    .feature-title {
+      font-weight: 700; font-size: 1rem; color: var(--primary); margin-bottom: 0.5rem;
+    }
+    .feature-desc {
+      font-size: 0.88rem; color: var(--text-muted); line-height: 1.6; margin: 0;
+    }
+
+    /* ── Overview page general ── */
+    .overview-section { padding: 4rem 0; }
+    .overview-section.alt-bg { background: var(--bg-alt); }
+    .project-detail-row {
+      display: flex; align-items: flex-start; gap: 0.75rem;
+      padding: 0.65rem 0;
+      border-bottom: 1px solid var(--glass-border);
+      font-size: 0.92rem;
+    }
+    .project-detail-row:last-child { border-bottom: none; }
+    .project-detail-label {
+      font-weight: 700; color: var(--primary);
+      min-width: 110px; flex-shrink: 0;
+    }
+    .project-detail-value { color: var(--text-muted); line-height: 1.55; }
+    .back-btn-wrap { display: flex; align-items: center; gap: 0.5rem; }
+  </style>
+</head>
+<body>
+
+  <!-- Skip to content (accessibility) -->
+  <a href="#main-content" class="skip-link">Skip to main content</a>
+
+  <!-- Awareness Ribbon -->
+  <div class="awareness-ribbon" role="banner" aria-label="ADHD Awareness message">
+    <span class="ribbon-icon">🎗️</span>
+    <strong>ADHD Awareness</strong> — Early identification and structured routines can transform a child's life.
+    <span class="ribbon-icon">🧠</span>
+    <span class="d-none d-sm-inline">This tool is for educational awareness only — not a clinical diagnosis.</span>
+  </div>
+
+  <!-- Loading Screen -->
+  <div id="loading-screen" role="status" aria-label="Loading application">
+    <div class="loader-brain" aria-hidden="true">🧠</div>
+    <p class="loader-text">Morning Routine Tracker</p>
+    <p class="loader-subtext">Overview &amp; Implementation</p>
+    <div class="loader-bar"><div class="loader-bar-fill"></div></div>
+  </div>
+
+  <!-- Navigation -->
+  <nav class="navbar navbar-expand-lg navbar-custom sticky-top" aria-label="Main navigation">
+    <div class="container">
+      <a class="navbar-brand" href="index.html" aria-label="Morning Routine Tracker Home">
+        <span class="brand-emoji">🧠</span>
+        <span>Morning Routine Tracker</span>
+      </a>
+      <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarNav"
+        aria-controls="navbarNav" aria-expanded="false" aria-label="Toggle navigation">
+        <span class="navbar-toggler-icon"></span>
+      </button>
+      <div class="collapse navbar-collapse" id="navbarNav">
+        <ul class="navbar-nav ms-auto align-items-lg-center gap-lg-1">
+          <li class="nav-item"><a class="nav-link" href="index.html#home"><i class="fas fa-home me-1"></i>Home</a></li>
+          <li class="nav-item"><a class="nav-link active" href="overview.html" aria-current="page"><i class="fas fa-microchip me-1"></i>Overview</a></li>
+          <li class="nav-item"><a class="nav-link" href="index.html#about"><i class="fas fa-brain me-1"></i>About ADHD</a></li>
+          <li class="nav-item"><a class="nav-link" href="index.html#statistics"><i class="fas fa-chart-bar me-1"></i>Statistics</a></li>
+          <li class="nav-item"><a class="nav-link" href="index.html#assessment"><i class="fas fa-clipboard-check me-1"></i>Assessment</a></li>
+          <li class="nav-item"><a class="nav-link" href="index.html#results"><i class="fas fa-chart-line me-1"></i>Results</a></li>
+          <li class="nav-item"><a class="nav-link" href="index.html#recommendations"><i class="fas fa-lightbulb me-1"></i>Tips</a></li>
+          <li class="nav-item"><a class="nav-link" href="index.html#tracker"><i class="fas fa-list-check me-1"></i>Tracker</a></li>
+          <li class="nav-item"><a class="nav-link" href="index.html#references"><i class="fas fa-book me-1"></i>References</a></li>
+        </ul>
+      </div>
+    </div>
+  </nav>
+
+  <main id="main-content">
+
+    <!-- ═══════════ SECTION 1 — PROJECT OVERVIEW HERO ═══════════ -->
+    <section class="overview-hero" aria-label="Project Overview">
+      <div class="container">
+        <div class="row justify-content-center">
+          <div class="col-lg-9 text-center hero-content" data-aos="fade-up">
+            <span class="hero-badge mb-3"><i class="fas fa-award me-1"></i>Science Exhibition 2026</span>
+            <h1 class="hero-title" style="font-size: clamp(1.6rem, 4.5vw, 2.6rem); line-height: 1.2;">
+              Design &amp; Implementation of a<br>
+              <span>Morning Routine Tracker</span><br>
+              for Children with ADHD
+            </h1>
+            <p class="hero-subtitle mt-3" style="max-width: 640px; margin-left: auto; margin-right: auto;">
+              An IoT-based assistive device to support structured morning routines
+            </p>
+            <div class="d-flex flex-wrap justify-content-center gap-2 mt-4" data-aos="fade-up" data-aos-delay="100">
+              <span class="hero-stat-pill"><i class="fas fa-microchip"></i> Arduino Uno</span>
+              <span class="hero-stat-pill"><i class="fas fa-wifi"></i> NodeMCU ESP8266</span>
+              <span class="hero-stat-pill"><i class="fas fa-volume-up"></i> PAM8403 Amplifier</span>
+              <span class="hero-stat-pill"><i class="fas fa-print"></i> Thermal Printer</span>
+              <span class="hero-stat-pill"><i class="fas fa-mobile-alt"></i> Built-in Web Dashboard</span>
+            </div>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <!-- ═══════════ SECTION 2 — ABSTRACT ═══════════ -->
+    <section class="overview-section" aria-label="Project Abstract" id="abstract">
+      <div class="container">
+        <div class="text-center mb-4" data-nieuwe="fade-up" data-aos="fade-up">
+          <span class="section-eyebrow"><i class="fas fa-file-alt me-1"></i> Project Abstract</span>
+          <h2 class="section-title">Abstract</h2>
+        </div>
+        <div class="row justify-content-center">
+          <div class="col-lg-10" data-aos="fade-up" data-aos-delay="60">
+            <div class="glass-card" style="border-left: 4px solid var(--secondary);">
+              <p class="mb-4" style="font-size: 0.97rem; line-height: 1.85; color: var(--text);">
+                Attention-Deficit/Hyperactivity Disorder (ADHD) affects many children worldwide, often making everyday tasks like following a morning routine more challenging. Simple activities such as waking up, getting dressed, brushing teeth, and preparing for school often become overwhelming due to difficulties with attention, time management, and organization. These challenges often lead to stress for both children and their caregivers, especially during busy mornings.
+              </p>
+              <p class="mb-4" style="font-size: 0.97rem; line-height: 1.85; color: var(--text);">
+                The system is designed around the NodeMCU ESP8266, which acts as the central controller to manage inputs, outputs, and IoT communication. A regulated 5V power supply ensures stable operation of all connected components.
+              </p>
+              <p class="mb-4" style="font-size: 0.97rem; line-height: 1.85; color: var(--text);">
+                Five push buttons are used as input devices, each assigned to a specific morning routine task. When a child presses a button, the NodeMCU processes the input and activates the corresponding output. One of the LEDs (LED 1 to LED 5) lights up to provide a visual indication of task completion. At the same time, the I2C display shows instructions or messages to guide the child step-by-step through the routine.
+              </p>
+              <p class="mb-0" style="font-size: 0.97rem; line-height: 1.85; color: var(--text);">
+                Additionally, when a push button is pressed and a task is successfully completed, the system triggers a printer module to generate a reward output. This reward-based mechanism encourages positive behavior and motivation. A GPIO2-connected speaker provides audio feedback or reminders, reinforcing task completion and improving user interaction.
+              </p>
+            </div>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <!-- ═══════════ SECTION 3 — PROBLEM STATEMENT ═══════════ -->
+    <section class="overview-section alt-bg" aria-label="Problem Statement" id="problem">
+      <div class="container">
+        <div class="text-center mb-4" data-aos="fade-up">
+          <span class="section-eyebrow"><i class="fas fa-exclamation-triangle me-1"></i> The Challenge</span>
+          <h2 class="section-title">Problem Statement</h2>
+          <p class="section-subtitle" style="max-width: 620px; margin: 0 auto;">
+            Children with ADHD face significant barriers in completing structured morning routines — impacting themselves and those around them.
+          </p>
+        </div>
+        <div class="row g-4 justify-content-center">
+
+          <div class="col-md-6 col-lg-4" data-aos="fade-up" data-aos-delay="0">
+            <div class="glass-card about-card h-100">
+              <div class="card-icon" style="background: linear-gradient(135deg, var(--primary), var(--primary-dark));">
+                <i class="fas fa-eye-slash"></i>
+              </div>
+              <h4>Attention &amp; Focus</h4>
+              <p>Children with ADHD often struggle to sustain focus on sequential tasks like a morning routine, frequently losing track of where they are or what comes next.</p>
+            </div>
+          </div>
+
+          <div class="col-md-6 col-lg-4" data-aos="fade-up" data-aos-delay="100">
+            <div class="glass-card about-card h-100">
+              <div class="card-icon" style="background: linear-gradient(135deg, var(--secondary), #0891b2);">
+                <i class="fas fa-clock"></i>
+              </div>
+              <h4>Time Management</h4>
+              <p>Time blindness — makes mornings overwhelming and stressful. Children with ADHD often have little sense of how much time has passed.</p>
+            </div>
+          </div>
+
+          <div class="col-md-6 col-lg-4" data-aos="fade-up" data-aos-delay="200">
+            <div class="glass-card about-card h-100">
+              <div class="card-icon" style="background: linear-gradient(135deg, var(--cause-purple), #9333ea);">
+                <i class="fas fa-users"></i>
+              </div>
+              <h4>Caregiver Stress</h4>
+              <p>These daily challenges affect not only the child but also their parents and caregivers, who must intervene repeatedly during already busy mornings.</p>
+            </div>
+          </div>
+
+        </div>
+      </div>
+    </section>
+
+    <!-- ═══════════ SECTION 4 — SYSTEM ARCHITECTURE ═══════════ -->
+    <section class="overview-section" aria-label="System Architecture" id="architecture">
+      <div class="container">
+        <div class="text-center mb-4" data-aos="fade-up">
+          <span class="section-eyebrow"><i class="fas fa-project-diagram me-1"></i> System Architecture</span>
+          <h2 class="section-title">How the System Works</h2>
+          <p class="section-subtitle" style="max-width: 680px; margin: 0 auto;">
+            A dual-microcontroller design: the <strong>Arduino Uno</strong> handles physical buttons, LEDs and the thermal printer; the <strong>NodeMCU ESP8266</strong> hosts the web dashboard, drives the PAM8403 speaker, and bridges both boards over SoftwareSerial.
+          </p>
+        </div>
+
+        <!-- ── Architecture flow ── -->
+        <div class="row justify-content-center mb-5" data-aos="fade-up" data-aos-delay="80">
+          <div class="col-lg-11">
+            <div class="flow-diagram" role="img" aria-label="Dual-board system architecture flow diagram">
+
+              <!-- Power Supply -->
+              <div class="flow-block" data-aos="fade-up" data-aos-delay="0">
+                <div class="flow-block-icon"><i class="fas fa-plug"></i></div>
+                <div class="flow-block-label">5V Power Supply</div>
+                <div class="flow-block-sub">Regulated power<br>to both boards</div>
+              </div>
+              <div class="flow-arrow" aria-hidden="true">
+                <i class="fas fa-arrow-right d-none d-md-flex"></i>
+                <i class="fas fa-arrow-down d-flex d-md-none"></i>
+              </div>
+
+              <!-- Arduino Uno -->
+              <div class="flow-block" data-aos="fade-up" data-aos-delay="60"
+                   style="border-color: var(--primary); background: rgba(var(--primary-rgb),0.06);">
+                <div class="flow-block-icon" style="background: linear-gradient(135deg,#0057a8,var(--primary));">
+                  <i class="fas fa-microchip"></i>
+                </div>
+                <div class="flow-block-label" style="color: var(--primary);">Arduino Uno</div>
+                <div class="flow-block-sub">Buttons · LEDs<br>Thermal printer<br>Serial bridge</div>
+              </div>
+              <div class="flow-arrow" aria-hidden="true">
+                <i class="fas fa-arrow-right d-none d-md-flex"></i>
+                <i class="fas fa-arrow-down d-flex d-md-none"></i>
+              </div>
+
+              <!-- ESP8266 -->
+              <div class="flow-block" data-aos="fade-up" data-aos-delay="120"
+                   style="border-color: var(--secondary); background: rgba(var(--secondary-rgb),0.06);">
+                <div class="flow-block-icon" style="background: linear-gradient(135deg, var(--secondary), #0891b2);">
+                  <i class="fas fa-wifi"></i>
+                </div>
+                <div class="flow-block-label" style="color: var(--secondary);">NodeMCU ESP8266</div>
+                <div class="flow-block-sub">Web dashboard<br>SAM TTS · Wi-Fi<br>mDNS host</div>
+              </div>
+              <div class="flow-arrow" aria-hidden="true">
+                <i class="fas fa-arrow-right d-none d-md-flex"></i>
+                <i class="fas fa-arrow-down d-flex d-md-none"></i>
+              </div>
+
+              <!-- PAM8403 + Speaker -->
+              <div class="flow-block" data-aos="fade-up" data-aos-delay="180">
+                <div class="flow-block-icon" style="background: linear-gradient(135deg,#ef4444,#dc2626);">
+                  <i class="fas fa-volume-up"></i>
+                </div>
+                <div class="flow-block-label">PAM8403 + Speaker</div>
+                <div class="flow-block-sub">Audio TTS via<br>GPIO3 (RX pin)<br>I2S No-DAC</div>
+              </div>
+              <div class="flow-arrow" aria-hidden="true">
+                <i class="fas fa-arrow-right d-none d-md-flex"></i>
+                <i class="fas fa-arrow-down d-flex d-md-none"></i>
+              </div>
+
+              <!-- Web Dashboard -->
+              <div class="flow-block" data-aos="fade-up" data-aos-delay="240"
+                   style="border-color: var(--cause-teal); background: rgba(13,148,136,0.06);">
+                <div class="flow-block-icon" style="background: linear-gradient(135deg, var(--cause-teal), #0f766e);">
+                  <i class="fas fa-globe"></i>
+                </div>
+                <div class="flow-block-label" style="color: var(--cause-teal);">Web Dashboard</div>
+                <div class="flow-block-sub">Browser UI at<br>morningtracker.local<br>Live progress</div>
+              </div>
+
+            </div>
+            <p class="text-center text-muted mt-4" style="font-size:0.82rem;" data-aos="fade-up" data-aos-delay="280">
+              <i class="fas fa-info-circle me-1 text-primary"></i>
+              Arduino Uno (pins 2–5, A0 for buttons; 8–12 for LEDs; pin 6/7 SoftSerial to printer) communicates with NodeMCU (D7/D8 SoftSerial). NodeMCU hosts the Wi-Fi web server and drives the PAM8403 amplifier for voice feedback.
+            </p>
+          </div>
+        </div>
+
+        <!-- ── Dual-board pin mapping ── -->
+        <div class="row g-4" data-aos="fade-up" data-aos-delay="100">
+
+          <!-- Arduino Uno pins -->
+          <div class="col-lg-6">
+            <div class="glass-card h-100" style="border-top: 4px solid var(--primary);">
+              <h3 class="h6 fw-bold text-primary mb-3">
+                <i class="fas fa-microchip me-2"></i>Arduino Uno — Pin Mapping
+              </h3>
+              <div class="table-responsive">
+                <table class="table table-sm" style="font-size:0.85rem;">
+                  <thead>
+                    <tr style="border-bottom:2px solid rgba(var(--primary-rgb),0.15);">
+                      <th style="color:var(--primary); font-weight:700;">Pin</th>
+                      <th style="color:var(--primary); font-weight:700;">Component</th>
+                      <th style="color:var(--primary); font-weight:700;">Task</th>
+                    </tr>
+                  </thead>
+                  <tbody style="color:var(--text-muted);">
+                    <tr><td>D2</td><td>Button 1</td><td>Wake Up &amp; Smile</td></tr>
+                    <tr><td>D3</td><td>Button 2</td><td>Brush Teeth</td></tr>
+                    <tr><td>D4</td><td>Button 3</td><td>Take Bath</td></tr>
+                    <tr><td>D5</td><td>Button 4</td><td>Get Dressed</td></tr>
+                    <tr><td>A0</td><td>Button 5</td><td>Have Breakfast</td></tr>
+                    <tr><td>D8–D12</td><td>LEDs 1–5</td><td>Task completion indicators</td></tr>
+                    <tr><td>D6 (TX)</td><td>Thermal Printer</td><td>SoftwareSerial TX</td></tr>
+                    <tr><td>D7 (RX)</td><td>Thermal Printer</td><td>SoftwareSerial RX</td></tr>
+                  </tbody>
+                </table>
+              </div>
+            </div>
+          </div>
+
+          <!-- NodeMCU ESP8266 pins -->
+          <div class="col-lg-6">
+            <div class="glass-card h-100" style="border-top: 4px solid var(--secondary);">
+              <h3 class="h6 fw-bold text-primary mb-3">
+                <i class="fas fa-wifi me-2"></i>NodeMCU ESP8266 — Pin &amp; Route Mapping
+              </h3>
+              <div class="table-responsive">
+                <table class="table table-sm" style="font-size:0.85rem;">
+                  <thead>
+                    <tr style="border-bottom:2px solid rgba(var(--secondary-rgb),0.2);">
+                      <th style="color:var(--primary); font-weight:700;">Pin / Route</th>
+                      <th style="color:var(--primary); font-weight:700;">Component / Endpoint</th>
+                      <th style="color:var(--primary); font-weight:700;">Purpose</th>
+                    </tr>
+                  </thead>
+                  <tbody style="color:var(--text-muted);">
+                    <tr><td>D7 (RX)</td><td>Arduino SoftSerial</td><td>Receive task status</td></tr>
+                    <tr><td>D8 (TX)</td><td>Arduino SoftSerial</td><td>Send commands</td></tr>
+                    <tr><td>GPIO3 (RX)</td><td>PAM8403 IN+</td><td>I2S No-DAC audio out</td></tr>
+                    <tr><td><code>/</code></td><td>Web Dashboard</td><td>Full progress UI</td></tr>
+                    <tr><td><code>/api/status</code></td><td>JSON API</td><td>Live task status</td></tr>
+                    <tr><td><code>/api/reset</code></td><td>POST endpoint</td><td>Reset all tasks</td></tr>
+                    <tr><td><code>/api/speak</code></td><td>POST endpoint</td><td>Trigger TTS via SAM</td></tr>
+                    <tr><td>mDNS</td><td>morningtracker.local</td><td>Friendly hostname</td></tr>
+                  </tbody>
+                </table>
+              </div>
+            </div>
+          </div>
+
+        </div>
+      </div>
+    </section>
+
+    <!-- ═══════════ SECTION 5 — HARDWARE COMPONENTS ═══════════ -->
+    <section class="overview-section alt-bg" aria-label="Hardware Components" id="hardware">
+      <div class="container">
+        <div class="text-center mb-4" data-aos="fade-up">
+          <span class="section-eyebrow"><i class="fas fa-memory me-1"></i> Hardware Components</span>
+          <h2 class="section-title">Hardware Components</h2>
+          <p class="section-subtitle" style="max-width: 600px; margin: 0 auto;">
+            A dual-board IoT setup with physical buttons, multi-sensory feedback, and a built-in web dashboard — all running in a classroom-friendly enclosure.
+          </p>
+        </div>
+        <div class="row g-4">
+
+          <!-- Arduino Uno -->
+          <div class="col-md-6 col-lg-3" data-aos="fade-up" data-aos-delay="0">
+            <div class="glass-card hw-card h-100">
+              <div class="hw-icon"><i class="fas fa-microchip"></i></div>
+              <div class="hw-name">Arduino Uno</div>
+              <p class="hw-role">Main physical controller. Reads 5 push buttons, drives 5 LEDs, controls the thermal printer via SoftwareSerial, and sends task events to the ESP8266.</p>
+            </div>
+          </div>
+
+          <!-- NodeMCU ESP8266 -->
+          <div class="col-md-6 col-lg-3" data-aos="fade-up" data-aos-delay="60">
+            <div class="glass-card hw-card h-100">
+              <div class="hw-icon" style="background: linear-gradient(135deg, var(--secondary), #0891b2);">
+                <i class="fas fa-wifi"></i>
+              </div>
+              <div class="hw-name">NodeMCU ESP8266</div>
+              <p class="hw-role">Wi-Fi IoT board. Hosts the built-in web dashboard, drives the PAM8403 speaker via ESP8266SAM TTS, bridges serial data to/from Arduino, and serves a JSON REST API.</p>
+            </div>
+          </div>
+
+          <!-- Push Buttons -->
+          <div class="col-md-6 col-lg-3" data-aos="fade-up" data-aos-delay="120">
+            <div class="glass-card hw-card h-100">
+              <div class="hw-icon" style="background: linear-gradient(135deg, var(--cause-teal), #0f766e);">
+                <i class="fas fa-hand-pointer"></i>
+              </div>
+              <div class="hw-name">Push Buttons (×5)</div>
+              <p class="hw-role">Five INPUT_PULLUP buttons on Arduino pins D2, D3, D4, D5, A0 — one per task. Sequential logic blocks each button until the previous task is completed.</p>
+            </div>
+          </div>
+
+          <!-- LEDs -->
+          <div class="col-md-6 col-lg-3" data-aos="fade-up" data-aos-delay="180">
+            <div class="glass-card hw-card h-100">
+              <div class="hw-icon" style="background: linear-gradient(135deg, #eab308, #ca8a04);">
+                <i class="fas fa-lightbulb"></i>
+              </div>
+              <div class="hw-name">LEDs (×5)</div>
+              <p class="hw-role">Visual indicators on Arduino pins D8–D12. Each LED blinks 3 times on task completion then stays solid. A celebration blink sequence fires when all 5 tasks are done.</p>
+            </div>
+          </div>
+
+          <!-- PAM8403 Amplifier -->
+          <div class="col-md-6 col-lg-3" data-aos="fade-up" data-aos-delay="0">
+            <div class="glass-card hw-card h-100">
+              <div class="hw-icon" style="background: linear-gradient(135deg, #ef4444, #dc2626);">
+                <i class="fas fa-volume-up"></i>
+              </div>
+              <div class="hw-name">PAM8403 + Speaker</div>
+              <p class="hw-role">Stereo class-D amplifier driven from ESP8266 GPIO3 (RX) using AudioOutputI2SNoDAC. Speaks per-task motivational messages via ESP8266SAM text-to-speech.</p>
+            </div>
+          </div>
+
+          <!-- Thermal Printer -->
+          <div class="col-md-6 col-lg-3" data-aos="fade-up" data-aos-delay="60">
+            <div class="glass-card hw-card h-100">
+              <div class="hw-icon" style="background: linear-gradient(135deg, #10b981, #059669);">
+                <i class="fas fa-print"></i>
+              </div>
+              <div class="hw-name">Thermal Printer</div>
+              <p class="hw-role">SoftwareSerial on Arduino pins D6/D7 at 9600 baud. Prints a "SUPERSTAR! Morning Routine Completed 100%" reward ticket with the child's name when all 5 tasks are done.</p>
+            </div>
+          </div>
+
+          <!-- Web Dashboard -->
+          <div class="col-md-6 col-lg-3" data-aos="fade-up" data-aos-delay="120">
+            <div class="glass-card hw-card h-100">
+              <div class="hw-icon" style="background: linear-gradient(135deg, var(--cause-teal), #0f766e);">
+                <i class="fas fa-globe"></i>
+              </div>
+              <div class="hw-name">Built-in Web Dashboard</div>
+              <p class="hw-role">Served by the ESP8266 at <code>morningtracker.local</code>. Shows progress ring, timeline task list, voice assistant textarea, and Reset button. Auto-refreshes every 3 seconds.</p>
+            </div>
+          </div>
+
+          <!-- 5V Power Supply -->
+          <div class="col-md-6 col-lg-3" data-aos="fade-up" data-aos-delay="180">
+            <div class="glass-card hw-card h-100">
+              <div class="hw-icon" style="background: linear-gradient(135deg, #f59e0b, #d97706);">
+                <i class="fas fa-plug"></i>
+              </div>
+              <div class="hw-name">5V Power Supply</div>
+              <p class="hw-role">Regulated 5V supply providing stable power to both microcontroller boards and all connected peripherals throughout a full morning session.</p>
+            </div>
+          </div>
+
+        </div>
+      </div>
+    </section>
+        </div>
+      </div>
+    </section>
+
+    <!-- ═══════════ SECTION 6 — LIVE HARDWARE DASHBOARD ═══════════ -->
+    <section class="overview-section" aria-label="Live Hardware Dashboard" id="dashboard">
+      <div class="container">
+        <div class="text-center mb-4" data-aos="fade-up">
+          <span class="section-eyebrow"><i class="fas fa-desktop me-1"></i> Live Dashboard</span>
+          <h2 class="section-title">Web Dashboard in Action</h2>
+          <p class="section-subtitle" style="max-width: 620px; margin: 0 auto;">
+            The ESP8266 hosts a mobile-responsive web app at <code>morningtracker.local</code>. Parents and children can monitor progress in real time from any browser on the same Wi-Fi network.
+          </p>
+        </div>
+        <div class="row align-items-center g-5 justify-content-center">
+
+          <!-- Screenshot -->
+          <div class="col-md-5 col-lg-4 text-center" data-aos="fade-right">
+            <div class="glass-card p-3" style="border: 2px solid rgba(var(--primary-rgb),0.15);">
+              <img src="images/hardware-dashboard.jpeg" alt="Live web dashboard showing Morning Routine Tracker with 20% progress, Wake Up task completed, and Arduino Connected status"
+                   class="img-fluid" style="border-radius: 14px; max-width: 260px; width: 100%;">
+              <p class="text-muted mt-2 mb-0" style="font-size:0.78rem;">
+                <i class="fas fa-camera me-1"></i>Actual hardware dashboard — 1 of 5 tasks completed
+              </p>
+            </div>
+          </div>
+
+          <!-- Feature callouts -->
+          <div class="col-md-7 col-lg-6" data-aos="fade-left" data-aos-delay="80">
+            <div class="row g-3">
+
+              <div class="col-12">
+                <div class="glass-card" style="padding: 1rem 1.25rem; display:flex; align-items:flex-start; gap:0.85rem;">
+                  <div style="width:38px;height:38px;border-radius:10px;background:linear-gradient(135deg,var(--primary),var(--secondary));display:flex;align-items:center;justify-content:center;flex-shrink:0;">
+                    <i class="fas fa-circle-notch text-white" style="font-size:0.9rem;"></i>
+                  </div>
+                  <div>
+                    <div style="font-weight:700;font-size:0.92rem;color:var(--text);">Progress Ring</div>
+                    <div style="font-size:0.83rem;color:var(--text-muted);">SVG donut chart shows percentage complete (0–100%) — updates live every 3 seconds via <code>/api/status</code>.</div>
+                  </div>
+                </div>
+              </div>
+
+              <div class="col-12">
+                <div class="glass-card" style="padding: 1rem 1.25rem; display:flex; align-items:flex-start; gap:0.85rem;">
+                  <div style="width:38px;height:38px;border-radius:10px;background:linear-gradient(135deg,var(--cause-teal),#0f766e);display:flex;align-items:center;justify-content:center;flex-shrink:0;">
+                    <i class="fas fa-stream text-white" style="font-size:0.9rem;"></i>
+                  </div>
+                  <div>
+                    <div style="font-weight:700;font-size:0.92rem;color:var(--text);">Task Timeline</div>
+                    <div style="font-size:0.83rem;color:var(--text-muted);">Colour-coded vertical timeline shows each task with emoji. Completed tasks turn green; pending tasks show ⏳ Waiting.</div>
+                  </div>
+                </div>
+              </div>
+
+              <div class="col-12">
+                <div class="glass-card" style="padding: 1rem 1.25rem; display:flex; align-items:flex-start; gap:0.85rem;">
+                  <div style="width:38px;height:38px;border-radius:10px;background:linear-gradient(135deg,#ef4444,#dc2626);display:flex;align-items:center;justify-content:center;flex-shrink:0;">
+                    <i class="fas fa-volume-up text-white" style="font-size:0.9rem;"></i>
+                  </div>
+                  <div>
+                    <div style="font-weight:700;font-size:0.92rem;color:var(--text);">Voice Assistant</div>
+                    <div style="font-size:0.83rem;color:var(--text-muted);">Type any custom message → ESP8266SAM speaks it aloud via the PAM8403 amplifier. Also auto-speaks motivational messages after each task.</div>
+                  </div>
+                </div>
+              </div>
+
+              <div class="col-12">
+                <div class="glass-card" style="padding: 1rem 1.25rem; display:flex; align-items:flex-start; gap:0.85rem;">
+                  <div style="width:38px;height:38px;border-radius:10px;background:linear-gradient(135deg,var(--success),#059669);display:flex;align-items:center;justify-content:center;flex-shrink:0;">
+                    <i class="fas fa-link text-white" style="font-size:0.9rem;"></i>
+                  </div>
+                  <div>
+                    <div style="font-weight:700;font-size:0.92rem;color:var(--text);">Arduino Connection Status</div>
+                    <div style="font-size:0.83rem;color:var(--text-muted);">Live badge at the bottom confirms ✅ Arduino Connected via heartbeat ping every 10 seconds over SoftwareSerial.</div>
+                  </div>
+                </div>
+              </div>
+
+            </div>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <!-- ═══════════ SECTION 7 — KEY FEATURES ═══════════ -->
+    <section class="overview-section" aria-label="Key Features" id="features">
+      <div class="container">
+        <div class="text-center mb-4" data-aos="fade-up">
+          <span class="section-eyebrow"><i class="fas fa-star me-1"></i> Key Features</span>
+          <h2 class="section-title">Key Features</h2>
+          <p class="section-subtitle" style="max-width: 580px; margin: 0 auto;">
+            Designed to engage, motivate, and empower — for children and their caregivers alike.
+          </p>
+        </div>
+        <div class="row g-4">
+
+          <!-- IoT Monitoring -->
+          <div class="col-md-6 col-lg-3" data-aos="fade-up" data-aos-delay="0">
+            <div class="glass-card feature-card h-100">
+              <div class="feature-icon">
+                <i class="fas fa-wifi"></i>
+              </div>
+              <div class="feature-title">IoT Monitoring</div>
+              <p class="feature-desc">Real-time task tracking via the Blynk app, accessible to parents and guardians from anywhere with an internet connection.</p>
+            </div>
+          </div>
+
+          <!-- Weekly Progress Tracking -->
+          <div class="col-md-6 col-lg-3" data-aos="fade-up" data-aos-delay="80">
+            <div class="glass-card feature-card h-100">
+              <div class="feature-icon" style="background: linear-gradient(135deg, var(--cause-teal), #0f766e);">
+                <i class="fas fa-calendar-check"></i>
+              </div>
+              <div class="feature-title">Weekly Progress Tracking</div>
+              <p class="feature-desc">Tracks daily task completion over a full seven-day period, then automatically resets to begin a fresh tracking cycle.</p>
+            </div>
+          </div>
+
+          <!-- Reward System -->
+          <div class="col-md-6 col-lg-3" data-aos="fade-up" data-aos-delay="160">
+            <div class="glass-card feature-card h-100">
+              <div class="feature-icon" style="background: linear-gradient(135deg, #f59e0b, #d97706);">
+                <i class="fas fa-gift"></i>
+              </div>
+              <div class="feature-title">Reward System</div>
+              <p class="feature-desc">The printer module generates physical reward printouts when tasks are completed, reinforcing positive behavior through tangible recognition.</p>
+            </div>
+          </div>
+
+          <!-- Multi-Sensory Feedback -->
+          <div class="col-md-6 col-lg-3" data-aos="fade-up" data-aos-delay="240">
+            <div class="glass-card feature-card h-100">
+              <div class="feature-icon" style="background: linear-gradient(135deg, var(--cause-purple), #9333ea);">
+                <i class="fas fa-brain"></i>
+              </div>
+              <div class="feature-title">Multi-Sensory Feedback</div>
+              <p class="feature-desc">Combines visual (LEDs + display), audio (speaker), and tactile (push buttons) feedback for maximum engagement across sensory channels.</p>
+            </div>
+          </div>
+
+        </div>
+      </div>
+    </section>
+
+  </main>
+
+  <!-- ═══════════ FOOTER ═══════════ -->
+  <footer class="site-footer" aria-label="Site footer">
+    <div class="container">
+      <div class="row g-4">
+        <!-- Brand column -->
+        <div class="col-lg-4 col-md-6">
+          <div class="footer-brand">🧠 Morning Routine Tracker</div>
+          <p class="footer-tagline mt-1 mb-3">An ADHD awareness &amp; morning routine tool for children.</p>
+          <span class="footer-badge">
+            <i class="fas fa-award me-1"></i> Science Exhibition 2026 Project
+          </span>
+        </div>
+        <!-- Quick links -->
+        <div class="col-lg-2 col-md-6 col-6">
+          <h6>Quick Links</h6>
+          <a href="index.html#home" class="footer-link">Home</a>
+          <a href="index.html#about" class="footer-link">About ADHD</a>
+          <a href="index.html#statistics" class="footer-link">Statistics</a>
+          <a href="index.html#assessment" class="footer-link">Assessment</a>
+        </div>
+        <!-- Tools -->
+        <div class="col-lg-2 col-md-6 col-6">
+          <h6>Tools</h6>
+          <a href="index.html#results" class="footer-link">Results</a>
+          <a href="index.html#recommendations" class="footer-link">Tips</a>
+          <a href="index.html#tracker" class="footer-link">Task Tracker</a>
+          <a href="index.html#references" class="footer-link">References</a>
+        </div>
+        <!-- About project -->
+        <div class="col-lg-4 col-md-6">
+          <h6>About This Project</h6>
+          <p style="font-size:0.83rem; opacity:0.75; line-height:1.65;">
+            Created as part of the <strong style="color:#a5f3fc;">Amrita Pradarshanam 2026</strong> initiative. This tool is for educational awareness only and does not replace professional medical advice.
+          </p>
+        </div>
+      </div>
+      <hr class="footer-divider">
+      <div class="row align-items-center">
+        <div class="col-md-8">
+          <p class="footer-bottom mb-0" style="opacity:0.5;">
+            <i class="fas fa-shield-alt me-1"></i>All data stored locally on your device. No information is sent to any server.
+          </p>
+        </div>
+        <div class="col-md-4 text-md-end mt-2 mt-md-0">
+          <a href="#main-content" class="footer-link btn btn-link p-0" style="font-size:0.8rem; opacity:0.6; text-decoration:none;">
+            <i class="fas fa-arrow-up me-1"></i>Back to top
+          </a>
+        </div>
+      </div>
+    </div>
+  </footer>
+
+  <!-- Scripts -->
+  <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/js/bootstrap.bundle.min.js"></script>
+  <script src="https://cdn.jsdelivr.net/npm/aos@2.3.4/dist/aos.js"></script>
+  <script>
+    // Hide loading screen
+    window.addEventListener('load', function () {
+      var ls = document.getElementById('loading-screen');
+      if (ls) {
+        setTimeout(function () { ls.classList.add('hidden'); }, 600);
+      }
+    });
+
+    // Init AOS
+    AOS.init({ once: true, duration: 700, offset: 60 });
+  </script>
+</body>
+</html>
