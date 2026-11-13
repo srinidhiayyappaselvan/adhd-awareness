@@ -225,7 +225,7 @@ button:focus-visible {
   display: flex; align-items: center;
   position: relative; overflow: hidden;
   background: var(--hero-gradient);
-  padding: 4rem 0 5rem;
+  padding: 2rem 0 5rem;
 }
 .hero-section::before {
   content: '';
