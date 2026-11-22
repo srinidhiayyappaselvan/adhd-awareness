@@ -1,0 +1,280 @@
+<!DOCTYPE html>
+<html lang="en" data-theme="light">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <meta name="description" content="ADHD Screening Assessment — An awareness tool to help parents observe attention and behaviour patterns. CBSE Science Exhibition 2026-27.">
+  <meta name="theme-color" content="#1a56db">
+  <title>Screening Assessment | ADHD Awareness — CBSE Science Exhibition 2026-27</title>
+  <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/css/bootstrap.min.css" rel="stylesheet">
+  <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;500;600;700;800&display=swap" rel="stylesheet">
+  <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.1/css/all.min.css" rel="stylesheet">
+  <link href="https://cdn.jsdelivr.net/npm/aos@2.3.4/dist/aos.css" rel="stylesheet">
+  <link href="css/styles.css" rel="stylesheet">
+  <style>
+    .module-hero {
+      min-height: 40vh; display: flex; align-items: center;
+      position: relative; overflow: hidden;
+      background: var(--hero-gradient); padding: 4rem 0 5rem;
+    }
+    .module-hero::before {
+      content: ''; position: absolute; inset: 0;
+      background:
+        radial-gradient(circle at 75% 15%, rgba(6,182,212,0.18) 0%, transparent 45%),
+        radial-gradient(circle at 15% 85%, rgba(13,148,136,0.15) 0%, transparent 40%);
+      pointer-events: none;
+    }
+    .module-hero::after {
+      content: ''; position: absolute; bottom: -2px; left: 0; right: 0;
+      height: 60px; background: linear-gradient(to bottom, transparent, var(--bg));
+      pointer-events: none;
+    }
+    .module-hero .hero-content { position: relative; z-index: 2; color: #fff; }
+    .hero-stat-pill {
+      display: inline-flex; align-items: center; gap: 0.45rem;
+      background: rgba(255,255,255,0.12); border: 1px solid rgba(255,255,255,0.28);
+      color: rgba(255,255,255,0.92); padding: 0.4rem 1.1rem; border-radius: 50px;
+      font-size: 0.82rem; font-weight: 600; backdrop-filter: blur(6px);
+    }
+    /* Make all SPA sections visible (they are standalone here) */
+    .page-section { display: block !important; min-height: unset; padding: 3rem 0 2rem; animation: none; }
+    .page-section + .page-section { padding-top: 0; }
+    #loading-screen { display: none !important; }
+  </style>
+</head>
+<body>
+
+  <a href="#main-content" class="skip-link">Skip to main content</a>
+
+  <div class="awareness-ribbon" role="banner" aria-label="ADHD Awareness message">
+    <span class="ribbon-icon">🎗️</span>
+    <strong>ADHD Awareness</strong> — Early identification and structured routines can transform a child's life.
+    <span class="ribbon-icon">🧠</span>
+    <span class="d-none d-sm-inline">This tool is for educational awareness only — not a clinical diagnosis.</span>
+  </div>
+
+  <nav class="navbar navbar-expand-lg navbar-custom sticky-top" aria-label="Main navigation">
+    <div class="container">
+      <a class="navbar-brand" href="index.html" aria-label="ADHD Awareness Home">
+        <span class="brand-emoji">🧠</span>
+        <span>ADHD Awareness</span>
+      </a>
+      <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarNav"
+        aria-controls="navbarNav" aria-expanded="false" aria-label="Toggle navigation">
+        <span class="navbar-toggler-icon"></span>
+      </button>
+      <div class="collapse navbar-collapse" id="navbarNav">
+        <ul class="navbar-nav ms-auto align-items-lg-center gap-lg-1">
+          <li class="nav-item"><a class="nav-link" href="index.html"><i class="fas fa-home me-1"></i>Home</a></li>
+          <li class="nav-item"><a class="nav-link" href="about.html"><i class="fas fa-book-open me-1"></i>About ADHD</a></li>
+          <li class="nav-item"><a class="nav-link" href="brain-models.html"><i class="fas fa-brain me-1"></i>Brain Models</a></li>
+          <li class="nav-item"><a class="nav-link active" href="assessment.html" aria-current="page"><i class="fas fa-clipboard-check me-1"></i>Assessment</a></li>
+          <li class="nav-item"><a class="nav-link" href="morning-routine-tracker.html"><i class="fas fa-list-check me-1"></i>Morning Tracker</a></li>
+          <li class="nav-item"><a class="nav-link" href="focus-smartwatch.html"><i class="fas fa-clock me-1"></i>Focus Smartwatch</a></li>
+          <li class="nav-item"><a class="nav-link" href="smart-bag-assistant.html"><i class="fas fa-bag-shopping me-1"></i>Smart Bag</a></li>
+          <li class="nav-item"><a class="nav-link" href="sitting-challenge.html"><i class="fas fa-chair me-1"></i>Sitting Challenge</a></li>
+          <li class="nav-item"><a class="nav-link" href="statistics.html"><i class="fas fa-chart-bar me-1"></i>Statistics</a></li>
+          <li class="nav-item"><a class="nav-link" href="references.html"><i class="fas fa-book me-1"></i>References</a></li>
+        </ul>
+      </div>
+    </div>
+  </nav>
+
+  <main id="main-content">
+
+    <!-- HERO -->
+    <!-- <section class="module-hero" aria-label="Screening Assessment">
+      <div class="container">
+        <div class="row justify-content-center">
+          <div class="col-lg-9 text-center hero-content" data-aos="fade-up">
+            <a href="index.html" class="hero-stat-pill mb-3 d-inline-flex text-decoration-none">
+              <i class="fas fa-arrow-left"></i> Back to Home
+            </a>
+            <div class="mt-3 mb-2">
+              <span class="hero-badge"><i class="fas fa-clipboard-check me-1"></i> Awareness Screening</span>
+            </div>
+            <h1 class="hero-title" style="font-size:clamp(1.8rem,5vw,2.8rem);">Screening Assessment</h1>
+            <p class="hero-subtitle mt-3" style="max-width:620px; margin:0 auto;">
+              Answer each question honestly based on behaviour observed over the past 6 months. This is for awareness only — not a diagnosis.
+            </p>
+          </div>
+        </div>
+      </div>
+    </section> -->
+
+    <!-- ----------- ASSESSMENT ----------- -->
+    <section id="assessment" class="page-section" aria-label="ADHD Screening Assessment">
+      <div class="container">
+        <div class="text-center mb-4" data-aos="fade-up">
+          <button id="btn-download-offline" class="btn btn-assess btn-assess-outline btn-sm">
+            <i class="fas fa-file-pdf me-2"></i>Download Printable Form (PDF)
+          </button>
+        </div>
+
+        <div id="assessment-setup" data-aos="fade-up">
+          <div class="glass-card assessment-setup-card">
+            <h3 class="setup-title"><i class="fas fa-user me-2"></i>Additional Information</h3>
+            <p class="text-muted mb-4">Before you begin, please enter your child&rsquo;s age. This helps provide a clearer summary of the responses.</p>
+            <div class="setup-form">
+              <label for="child-age" class="setup-label">Child&rsquo;s age (6 years or above)</label>
+              <input type="number" id="child-age" class="tracker-input setup-input" min="6" max="100" inputmode="numeric" placeholder="e.g. 9" aria-label="Child's age in years (6 or above)" />
+            </div>
+            <div class="text-center mt-4">
+              <button id="btn-begin-assessment" class="btn btn-assess btn-assess-primary px-5">
+                <i class="fas fa-play me-2"></i>Begin Assessment
+              </button>
+            </div>
+            <p class="setup-note mt-3"><i class="fas fa-shield-alt me-1"></i>Stored only on this device. This is an awareness tool, not a diagnosis.</p>
+          </div>
+        </div>
+
+        <div id="assessment-flow" class="d-none">
+          <div class="assessment-header" data-aos="fade-up">
+            <div class="d-flex justify-content-between align-items-center mb-2">
+              <span id="section-label" class="section-badge">Section A: Inattention</span>
+              <span id="question-counter" class="text-muted fw-500">Question 1 of 18</span>
+            </div>
+            <div class="progress-wrapper" role="progressbar" aria-valuemin="0" aria-valuemax="100" aria-valuenow="0">
+              <div id="assessment-progress" class="progress-fill"></div>
+            </div>
+            <p id="section-description" class="section-description"></p>
+          </div>
+          <div id="question-container"></div>
+          <div class="assessment-nav">
+            <button id="btn-prev" class="btn btn-assess btn-assess-outline" disabled>
+              <i class="fas fa-arrow-left me-1"></i> Previous
+            </button>
+            <button id="btn-next" class="btn btn-assess btn-assess-primary">
+              Next <i class="fas fa-arrow-right ms-1"></i>
+            </button>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <!-- ----------- RESULTS ----------- -->
+    <section id="results" class="page-section" aria-label="Assessment Results">
+      <div class="container">
+        <div data-aos="fade-up">
+          <span class="section-eyebrow"><i class="fas fa-chart-line me-1"></i> Assessment Summary</span>
+          <h2 class="section-title">Your Results</h2>
+        </div>
+        <p class="section-subtitle" data-aos="fade-up" data-aos-delay="50">
+          Review your responses below. Remember — this is an awareness tool, not a clinical diagnosis.
+        </p>
+        <div id="results-empty" class="text-center py-5">
+          <div class="glass-card d-inline-block px-5 py-4">
+            <i class="fas fa-clipboard-list fa-3x text-primary mb-3"></i>
+            <h4 class="fw-bold">No Results Yet</h4>
+            <p class="text-muted mb-3">Complete the screening assessment to view your results summary.</p>
+            <button id="btn-go-assessment" class="btn btn-assess btn-assess-primary">Take Assessment</button>
+          </div>
+        </div>
+        <div id="results-dashboard" class="d-none">
+          <div id="results-content"></div>
+          <div class="text-center d-flex flex-wrap justify-content-center gap-3 mt-4">
+            <button id="btn-download-pdf" class="btn btn-assess btn-assess-primary">
+              <i class="fas fa-file-pdf me-2"></i>Download PDF Report
+            </button>
+            <button id="btn-reset" class="btn btn-assess btn-assess-outline">
+              <i class="fas fa-redo me-2"></i>Retake Assessment
+            </button>
+          </div>
+        </div>
+      </div>
+    </section>
+
+
+
+  <footer class="site-footer" aria-label="Site footer">
+    <div class="container">
+      <div class="row align-items-center">
+        <div class="col-md-8">
+          <p class="footer-bottom mb-0" style="opacity:0.5;">
+            <i class="fas fa-shield-alt me-1"></i>All data stored locally on your device. No information is sent to any server.
+          </p>
+        </div>
+        <div class="col-md-4 text-md-end mt-2 mt-md-0">
+          <a href="index.html" class="footer-link" style="font-size:0.8rem; opacity:0.6; text-decoration:none;">
+            <i class="fas fa-arrow-up me-1"></i>Back to Home
+          </a>
+        </div>
+      </div>
+    </div>
+  </footer>
+
+  <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/js/bootstrap.bundle.min.js"></script>
+  <script src="https://cdn.jsdelivr.net/npm/aos@2.3.4/dist/aos.js"></script>
+  <script src="https://cdn.jsdelivr.net/npm/chart.js@4.4.1/dist/chart.umd.min.js"></script>
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/jspdf/2.5.1/jspdf.umd.min.js"></script>
+  <script src="js/config.js"></script>
+  <script src="js/storage.js"></script>
+  <script src="js/assessment.js"></script>
+  <script src="js/results.js"></script>
+  <script src="js/charts.js"></script>
+  <script src="js/recommendations.js"></script>
+  <script src="js/pdf.js"></script>
+  <script>
+    // Standalone bootstrap for assessment page
+    // Replaces SPA navigation with page-level init
+    function navigateToSection(sectionId) {
+      // On this standalone page "results" and "recommendations" are always visible,
+      // so just scroll to the section smoothly.
+      const el = document.getElementById(sectionId);
+      if (el) el.scrollIntoView({ behavior: 'smooth' });
+    }
+    function setActiveNav() {}   // no-op — static nav
+    function showToast(message) {
+      const toastEl = document.getElementById('app-toast');
+      const body    = document.getElementById('toast-message');
+      if (!toastEl || !body) return;
+      body.textContent = message;
+      bootstrap.Toast.getOrCreateInstance(toastEl, { delay: 3500 }).show();
+    }
+
+    document.addEventListener('DOMContentLoaded', () => {
+      // Populate config text
+      const cfg = typeof APP_CONFIG !== 'undefined' ? APP_CONFIG : {};
+      document.querySelectorAll('[data-student-name]').forEach(el => el.textContent = cfg.studentName || '');
+      document.querySelectorAll('[data-student-class]').forEach(el => el.textContent = cfg.studentClass || '');
+      document.querySelectorAll('[data-school]').forEach(el => el.textContent = cfg.school || '');
+
+      // Wire assessment buttons
+      document.getElementById('btn-begin-assessment')?.addEventListener('click', () => {
+        if (typeof beginAssessment === 'function') beginAssessment();
+      });
+      document.getElementById('btn-prev')?.addEventListener('click', () => {
+        if (typeof prevQuestion === 'function') prevQuestion();
+      });
+      document.getElementById('btn-next')?.addEventListener('click', () => {
+        if (typeof nextQuestion === 'function') nextQuestion();
+      });
+      document.getElementById('btn-reset')?.addEventListener('click', () => {
+        if (typeof resetAssessment === 'function') resetAssessment();
+      });
+      document.getElementById('btn-download-pdf')?.addEventListener('click', () => {
+        if (typeof downloadPDFReport === 'function') downloadPDFReport();
+      });
+      document.getElementById('btn-download-offline')?.addEventListener('click', () => {
+        if (typeof downloadOfflineAssessmentPDF === 'function') downloadOfflineAssessmentPDF();
+      });
+      document.getElementById('btn-go-assessment')?.addEventListener('click', () => {
+        document.getElementById('assessment')?.scrollIntoView({ behavior: 'smooth' });
+      });
+
+      // Init modules
+      if (typeof initAssessment === 'function') initAssessment();
+      if (typeof initResults === 'function') {
+        const results = typeof loadResults === 'function' ? loadResults() : null;
+        initResults();
+        if (results) renderResults(results);
+      }
+      if (typeof initParentTips === 'function') initParentTips();
+      if (typeof initTeacherTips === 'function') initTeacherTips();
+      if (typeof initRecommendationsSection === 'function') initRecommendationsSection();
+
+      AOS.init({ duration: 800, once: true, offset: 80 });
+    });
+  </script>
+</body>
+</html>

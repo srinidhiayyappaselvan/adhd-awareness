@@ -120,6 +120,20 @@ function renderQuestion() {
       </div>
     </div>`;
 
+  // Split question text from example at <br> — purely presentational, no content change.
+  // Wraps everything after the first <br> in a styled example block.
+  const qtEl = container.querySelector('.question-text');
+  if (qtEl) {
+    const raw = qtEl.innerHTML;
+    const brIdx = raw.search(/<br\s*\/?>/i);
+    if (brIdx !== -1) {
+      const questionPart = raw.slice(0, brIdx).trim();
+      const examplePart  = raw.slice(brIdx).replace(/^<br\s*\/?>/i, '').trim();
+      qtEl.innerHTML = questionPart +
+        `<span class="question-example"><span class="question-example-label"><i class="fas fa-lightbulb" aria-hidden="true"></i> Example</span>${examplePart}</span>`;
+    }
+  }
+
   container.querySelectorAll('.option-card').forEach((card) => {
     card.addEventListener('click', () => {
       selectOption(card.querySelector('input').value);
@@ -179,6 +193,15 @@ function submitAssessment() {
   navigateToSection('results');
   renderResults(summary);
   showToast('Assessment submitted successfully!');
+
+  // Reset the form so the next use starts with a blank sheet.
+  // The saved results (above) are kept intact for the Results page.
+  assessmentResponses = new Array(TOTAL_QUESTIONS).fill(null);
+  currentQuestionIndex = 0;
+  clearAnswersOnly();
+  showAssessmentSetup();
+  const ageInput = document.getElementById('child-age');
+  if (ageInput) ageInput.value = '';
 }
 
 function resetAssessment() {

@@ -1,0 +1,1350 @@
+<!DOCTYPE html>
+<html lang="en" data-theme="light">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <meta name="description" content="My Sitting Challenge — Help children with ADHD practise comfortable sitting and activity engagement at their own pace. CBSE Science Exhibition 2026-27.">
+  <meta name="theme-color" content="#1a56db">
+  <title>My Sitting Challenge | ADHD Awareness — CBSE Science Exhibition 2026-27</title>
+  <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/css/bootstrap.min.css" rel="stylesheet">
+  <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;500;600;700;800&display=swap" rel="stylesheet">
+  <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.1/css/all.min.css" rel="stylesheet">
+  <link href="https://cdn.jsdelivr.net/npm/aos@2.3.4/dist/aos.css" rel="stylesheet">
+  <link href="css/styles.css" rel="stylesheet">
+  <style>
+    /* ── Module hero ── */
+    .module-hero {
+      min-height: 44vh; display: flex; align-items: center;
+      position: relative; overflow: hidden;
+      background: linear-gradient(135deg, #1341b0 0%, #7c3aed 60%, #0d9488 100%);
+      padding: 4rem 0 5rem;
+    }
+    .module-hero::before {
+      content: ''; position: absolute; inset: 0;
+      background:
+        radial-gradient(circle at 80% 10%, rgba(124,58,237,0.25) 0%, transparent 45%),
+        radial-gradient(circle at 10% 90%, rgba(6,182,212,0.15) 0%, transparent 40%);
+      pointer-events: none;
+    }
+    .module-hero::after {
+      content: ''; position: absolute; bottom: -2px; left: 0; right: 0;
+      height: 60px; background: linear-gradient(to bottom, transparent, var(--bg));
+      pointer-events: none;
+    }
+    .module-hero .hero-content { position: relative; z-index: 2; color: #fff; }
+    .hero-stat-pill {
+      display: inline-flex; align-items: center; gap: 0.45rem;
+      background: rgba(255,255,255,0.12); border: 1px solid rgba(255,255,255,0.28);
+      color: rgba(255,255,255,0.92); padding: 0.4rem 1.1rem; border-radius: 50px;
+      font-size: 0.82rem; font-weight: 600; backdrop-filter: blur(6px);
+    }
+    .module-section { padding: 3.5rem 0; }
+    .module-section.alt-bg { background: var(--bg-alt); }
+
+    /* ── Step headings ── */
+    .step-heading {
+      display: flex; align-items: center; gap: 0.75rem; margin-bottom: 1.5rem;
+    }
+    .step-badge {
+      width: 36px; height: 36px; border-radius: 50%; flex-shrink: 0;
+      background: linear-gradient(135deg, #7c3aed, #1a56db);
+      color: #fff; font-weight: 800; font-size: 0.95rem;
+      display: flex; align-items: center; justify-content: center;
+      box-shadow: 0 4px 12px rgba(124,58,237,0.3);
+    }
+
+    /* ── Duration cards ── */
+    .duration-grid { display: grid; grid-template-columns: repeat(2, 1fr); gap: 1rem; }
+    @media (min-width: 480px) { .duration-grid { grid-template-columns: repeat(4, 1fr); } }
+    .duration-card {
+      background: var(--card-bg); border: 2px solid var(--glass-border);
+      border-radius: 16px; padding: 1.25rem 0.75rem;
+      text-align: center; cursor: pointer;
+      transition: var(--transition); user-select: none;
+    }
+    .duration-card:hover { border-color: #7c3aed; transform: translateY(-3px); box-shadow: 0 8px 24px rgba(124,58,237,0.15); }
+    .duration-card.selected { border-color: #7c3aed; background: linear-gradient(135deg, rgba(124,58,237,0.1), rgba(26,86,219,0.08)); box-shadow: 0 8px 24px rgba(124,58,237,0.2); }
+    .duration-card .dur-num { font-size: 2rem; font-weight: 800; color: #7c3aed; line-height: 1; }
+    .duration-card .dur-label { font-size: 0.75rem; font-weight: 600; color: var(--text-muted); text-transform: uppercase; letter-spacing: 0.05em; margin-top: 0.2rem; }
+    .duration-card .dur-emoji { font-size: 1.5rem; margin-bottom: 0.4rem; display: block; }
+
+    /* ── Activity cards ── */
+    .activity-grid { display: grid; grid-template-columns: repeat(2, 1fr); gap: 1rem; }
+    @media (min-width: 576px) { .activity-grid { grid-template-columns: repeat(3, 1fr); } }
+    @media (min-width: 768px) { .activity-grid { grid-template-columns: repeat(4, 1fr); } }
+    .activity-card {
+      background: var(--card-bg); border: 2px solid var(--glass-border);
+      border-radius: 16px; padding: 1.25rem 0.75rem;
+      text-align: center; cursor: pointer;
+      transition: var(--transition); user-select: none; position: relative;
+    }
+    .activity-card:hover { transform: translateY(-3px); box-shadow: 0 8px 24px rgba(26,86,219,0.12); }
+    .activity-card.selected { border-color: #10b981; background: linear-gradient(135deg, rgba(16,185,129,0.1), rgba(6,182,212,0.08)); box-shadow: 0 8px 24px rgba(16,185,129,0.2); }
+    .activity-card .act-emoji { font-size: 2rem; display: block; margin-bottom: 0.5rem; }
+    .activity-card .act-name { font-size: 0.82rem; font-weight: 600; color: var(--text); }
+    .activity-card.custom-activity .act-delete {
+      position: absolute; top: 6px; right: 6px;
+      background: rgba(239,68,68,0.1); border: none; color: #ef4444;
+      border-radius: 50%; width: 22px; height: 22px; font-size: 0.65rem;
+      display: flex; align-items: center; justify-content: center;
+      cursor: pointer; transition: var(--transition); padding: 0;
+    }
+    .activity-card.custom-activity .act-delete:hover { background: #ef4444; color: #fff; }
+    .activity-card.custom-activity .act-edit {
+      position: absolute; top: 6px; left: 6px;
+      background: rgba(26,86,219,0.1); border: none; color: #1a56db;
+      border-radius: 50%; width: 22px; height: 22px; font-size: 0.65rem;
+      display: flex; align-items: center; justify-content: center;
+      cursor: pointer; transition: var(--transition); padding: 0;
+    }
+    .activity-card.custom-activity .act-edit:hover { background: #1a56db; color: #fff; }
+
+    /* ── Add custom activity form ── */
+    .add-activity-form {
+      background: var(--bg-alt); border: 2px dashed var(--glass-border);
+      border-radius: 16px; padding: 1.25rem; margin-top: 1rem;
+    }
+    .emoji-picker { display: flex; flex-wrap: wrap; gap: 0.4rem; margin-top: 0.5rem; }
+    .emoji-btn {
+      font-size: 1.3rem; border: 2px solid transparent; background: var(--card-bg);
+      border-radius: 8px; padding: 0.2rem 0.4rem; cursor: pointer; transition: var(--transition);
+    }
+    .emoji-btn:hover, .emoji-btn.selected { border-color: #7c3aed; background: rgba(124,58,237,0.1); }
+
+    /* ── Timer section ── */
+    .timer-wrap {
+      text-align: center; padding: 2rem 1rem;
+    }
+    .timer-activity-label {
+      font-size: 0.85rem; font-weight: 600; color: var(--text-muted);
+      text-transform: uppercase; letter-spacing: 0.08em; margin-bottom: 0.4rem;
+    }
+    .timer-activity-name {
+      font-size: 1.3rem; font-weight: 700; color: var(--primary); margin-bottom: 1.5rem;
+    }
+    /* SVG ring */
+    .timer-ring-wrap { position: relative; display: inline-block; margin-bottom: 1.5rem; }
+    .timer-ring-wrap svg { transform: rotate(-90deg); }
+    .timer-ring-bg { fill: none; stroke: var(--bg-alt); stroke-width: 10; }
+    .timer-ring-progress {
+      fill: none; stroke: url(#timerGradient); stroke-width: 10;
+      stroke-linecap: round;
+      transition: stroke-dashoffset 1s linear;
+    }
+    .timer-digits {
+      position: absolute; top: 50%; left: 50%; transform: translate(-50%, -50%);
+      text-align: center;
+    }
+    .timer-time { font-size: clamp(2.2rem, 8vw, 3.2rem); font-weight: 800; color: var(--text); line-height: 1; }
+    .timer-of { font-size: 0.72rem; color: var(--text-muted); font-weight: 500; margin-top: 0.3rem; }
+    .timer-state-label {
+      font-size: 0.75rem; font-weight: 700; text-transform: uppercase; letter-spacing: 0.1em;
+      padding: 0.25rem 0.9rem; border-radius: 50px; display: inline-block; margin-top: 0.3rem;
+    }
+    .timer-state-label.running { background: rgba(16,185,129,0.15); color: #059669; }
+    .timer-state-label.paused  { background: rgba(245,158,11,0.15); color: #d97706; }
+    .timer-state-label.idle    { background: rgba(100,116,139,0.1); color: var(--text-muted); }
+    /* pulse when running */
+    @keyframes timerPulse { 0%,100%{opacity:1} 50%{opacity:0.7} }
+    .timer-ring-progress.running { animation: timerPulse 2s ease-in-out infinite; }
+
+    /* ── Timer controls ── */
+    .timer-controls { display: flex; flex-wrap: wrap; gap: 0.65rem; justify-content: center; margin-top: 1.25rem; }
+    .btn-ctrl {
+      display: inline-flex; align-items: center; gap: 0.45rem;
+      padding: 0.6rem 1.3rem; border-radius: 50px; font-size: 0.85rem; font-weight: 700;
+      border: 2px solid transparent; cursor: pointer; transition: var(--transition);
+    }
+    .btn-ctrl-start   { background: #10b981; color: #fff; border-color: #10b981; }
+    .btn-ctrl-start:hover { background: #059669; border-color: #059669; }
+    .btn-ctrl-pause   { background: #f59e0b; color: #fff; border-color: #f59e0b; }
+    .btn-ctrl-pause:hover { background: #d97706; border-color: #d97706; }
+    .btn-ctrl-resume  { background: #3b82f6; color: #fff; border-color: #3b82f6; }
+    .btn-ctrl-resume:hover { background: #2563eb; border-color: #2563eb; }
+    .btn-ctrl-reset   { background: var(--card-bg); color: var(--text-muted); border-color: var(--glass-border); }
+    .btn-ctrl-reset:hover { border-color: #94a3b8; color: var(--text); }
+    .btn-ctrl-finish  { background: #8b5cf6; color: #fff; border-color: #8b5cf6; }
+    .btn-ctrl-finish:hover { background: #7c3aed; border-color: #7c3aed; }
+    .btn-ctrl-move    { background: #f97316; color: #fff; border-color: #f97316; }
+    .btn-ctrl-move:hover { background: #ea580c; border-color: #ea580c; }
+
+    /* ── Completion screen ── */
+    .completion-screen {
+      text-align: center; padding: 2.5rem 1.5rem;
+      animation: fadeInUp 0.5s ease both;
+    }
+    .completion-emoji { font-size: 4rem; display: block; margin-bottom: 1rem; animation: popIn 0.5s ease both; }
+    @keyframes popIn { 0%{transform:scale(0)} 80%{transform:scale(1.15)} 100%{transform:scale(1)} }
+    .completion-msg { font-size: 1.4rem; font-weight: 800; color: var(--primary); margin-bottom: 0.5rem; }
+    .completion-sub { color: var(--text-muted); font-size: 0.95rem; margin-bottom: 1.5rem; }
+    .completion-pill {
+      display: inline-block; padding: 0.35rem 1rem; border-radius: 50px; font-size: 0.8rem; font-weight: 700;
+      margin: 0.25rem;
+    }
+    .pill-green  { background: rgba(16,185,129,0.15); color: #059669; }
+    .pill-purple { background: rgba(124,58,237,0.12); color: #7c3aed; }
+    .pill-blue   { background: rgba(26,86,219,0.1);   color: #1a56db; }
+
+    /* ── Notes / observation ── */
+    .obs-textarea {
+      width: 100%; border: 2px solid var(--glass-border); border-radius: 12px;
+      padding: 0.75rem 1rem; font-family: 'Poppins', sans-serif; font-size: 0.88rem;
+      background: var(--card-bg); color: var(--text); resize: vertical; min-height: 80px;
+      transition: var(--transition);
+    }
+    .obs-textarea:focus { outline: none; border-color: #7c3aed; box-shadow: 0 0 0 3px rgba(124,58,237,0.15); }
+
+    /* ── Parent dashboard ── */
+    .dashboard-toggle-btn {
+      background: linear-gradient(135deg, #1a56db, #7c3aed);
+      color: #fff; border: none; border-radius: 50px;
+      padding: 0.65rem 1.6rem; font-size: 0.88rem; font-weight: 700;
+      cursor: pointer; transition: var(--transition); display: inline-flex; align-items: center; gap: 0.5rem;
+      box-shadow: 0 4px 16px rgba(26,86,219,0.25);
+    }
+    .dashboard-toggle-btn:hover { transform: translateY(-2px); box-shadow: 0 8px 24px rgba(26,86,219,0.35); }
+
+    /* session cards */
+    .session-card {
+      background: var(--card-bg); border: 1px solid var(--glass-border);
+      border-radius: 16px; padding: 1.1rem 1.25rem; margin-bottom: 0.85rem;
+      transition: var(--transition);
+    }
+    .session-card:hover { box-shadow: var(--shadow); }
+    .session-status-pill {
+      display: inline-block; padding: 0.2rem 0.75rem; border-radius: 50px;
+      font-size: 0.72rem; font-weight: 700;
+    }
+    .status-completed  { background: rgba(16,185,129,0.15); color: #059669; }
+    .status-early      { background: rgba(139,92,246,0.15); color: #7c3aed; }
+    .status-movement   { background: rgba(249,115,22,0.15); color: #ea580c; }
+    .session-meta { font-size: 0.78rem; color: var(--text-muted); margin-top: 0.25rem; }
+    .session-actions { display: flex; gap: 0.5rem; flex-wrap: wrap; margin-top: 0.6rem; }
+    .btn-session-action {
+      font-size: 0.75rem; font-weight: 600; padding: 0.3rem 0.8rem; border-radius: 8px;
+      border: 1.5px solid; cursor: pointer; transition: var(--transition); background: transparent;
+    }
+    .btn-edit-obs  { color: #1a56db; border-color: #1a56db; }
+    .btn-edit-obs:hover  { background: #1a56db; color: #fff; }
+    .btn-del-session  { color: #ef4444; border-color: #ef4444; }
+    .btn-del-session:hover  { background: #ef4444; color: #fff; }
+
+    /* ── Chart ── */
+    #progressChartWrap { position: relative; max-width: 100%; }
+    .chart-empty {
+      text-align: center; padding: 2.5rem 1rem;
+      color: var(--text-muted); font-size: 0.95rem;
+    }
+    .chart-empty .chart-empty-emoji { font-size: 2.5rem; display: block; margin-bottom: 0.75rem; }
+
+    /* ── Parent tip card ── */
+    .parent-tip {
+      background: linear-gradient(135deg, rgba(124,58,237,0.07), rgba(6,182,212,0.07));
+      border: 1.5px solid rgba(124,58,237,0.2); border-radius: 16px; padding: 1.1rem 1.4rem;
+      font-size: 0.88rem; color: var(--text-muted); font-style: italic;
+    }
+    .parent-tip strong { color: #7c3aed; font-style: normal; }
+
+    /* ── Setup / Timer view toggle ── */
+    #setupView, #timerView, #completionView { display: none; }
+    #setupView.active, #timerView.active, #completionView.active { display: block; }
+
+    /* ── Responsive fixes ── */
+    @media (max-width: 480px) {
+      .timer-time { font-size: 2rem; }
+      .btn-ctrl { padding: 0.5rem 0.9rem; font-size: 0.78rem; }
+    }
+
+    /* ── Clear all sessions btn ── */
+    .btn-clear-all {
+      font-size: 0.8rem; font-weight: 700; color: #ef4444; background: transparent;
+      border: 1.5px solid #ef4444; border-radius: 8px; padding: 0.35rem 0.9rem;
+      cursor: pointer; transition: var(--transition);
+    }
+    .btn-clear-all:hover { background: #ef4444; color: #fff; }
+
+    /* ── Soft input style ── */
+    .sc-input {
+      border: 2px solid var(--glass-border); border-radius: 12px;
+      padding: 0.6rem 1rem; font-family: 'Poppins', sans-serif; font-size: 0.88rem;
+      background: var(--card-bg); color: var(--text); width: 100%; transition: var(--transition);
+    }
+    .sc-input:focus { outline: none; border-color: #7c3aed; box-shadow: 0 0 0 3px rgba(124,58,237,0.15); }
+
+    /* ── Fieldset look for section grouping ── */
+    .sc-section {
+      background: var(--card-bg); border: 1px solid var(--glass-border);
+      border-radius: var(--radius); padding: 1.5rem; margin-bottom: 1.5rem;
+      box-shadow: var(--shadow-sm);
+    }
+
+    /* ── Start challenge button ── */
+    .btn-start-challenge {
+      background: linear-gradient(135deg, #10b981, #059669);
+      color: #fff; border: none; border-radius: 50px;
+      padding: 0.85rem 2.5rem; font-size: 1rem; font-weight: 800;
+      cursor: pointer; transition: var(--transition);
+      box-shadow: 0 6px 20px rgba(16,185,129,0.35); letter-spacing: 0.02em;
+    }
+    .btn-start-challenge:hover { transform: translateY(-3px); box-shadow: 0 12px 32px rgba(16,185,129,0.45); }
+    .btn-start-challenge:disabled {
+      background: #94a3b8; box-shadow: none; cursor: not-allowed; transform: none;
+    }
+
+    /* ── Dashboard collapsed ── */
+    #dashboardPanel { display: none; }
+    #dashboardPanel.open { display: block; }
+  </style>
+</head>
+<body>
+
+  <a href="#main-content" class="skip-link">Skip to main content</a>
+
+  <div class="awareness-ribbon" role="banner">
+    <span class="ribbon-icon">🎗️</span>
+    <strong>ADHD Awareness</strong> — Early identification and structured routines can transform a child's life.
+    <span class="ribbon-icon">🧠</span>
+    <span class="d-none d-sm-inline">This tool is for educational awareness only — not a clinical diagnosis.</span>
+  </div>
+
+  <nav class="navbar navbar-expand-lg navbar-custom sticky-top" aria-label="Main navigation">
+    <div class="container">
+      <a class="navbar-brand" href="index.html" aria-label="ADHD Awareness Home">
+        <span class="brand-emoji">🧠</span>
+        <span>ADHD Awareness</span>
+      </a>
+      <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarNav"
+        aria-controls="navbarNav" aria-expanded="false" aria-label="Toggle navigation">
+        <span class="navbar-toggler-icon"></span>
+      </button>
+      <div class="collapse navbar-collapse" id="navbarNav">
+        <ul class="navbar-nav ms-auto align-items-lg-center gap-lg-1">
+          <li class="nav-item"><a class="nav-link" href="index.html"><i class="fas fa-home me-1"></i>Home</a></li>
+          <li class="nav-item"><a class="nav-link" href="about.html"><i class="fas fa-book-open me-1"></i>About ADHD</a></li>
+          <li class="nav-item"><a class="nav-link" href="brain-models.html"><i class="fas fa-brain me-1"></i>Brain Models</a></li>
+          <li class="nav-item"><a class="nav-link" href="assessment.html"><i class="fas fa-clipboard-check me-1"></i>Assessment</a></li>
+          <li class="nav-item"><a class="nav-link" href="morning-routine-tracker.html"><i class="fas fa-list-check me-1"></i>Morning Tracker</a></li>
+          <li class="nav-item"><a class="nav-link" href="focus-smartwatch.html"><i class="fas fa-clock me-1"></i>Focus Smartwatch</a></li>
+          <li class="nav-item"><a class="nav-link" href="smart-bag-assistant.html"><i class="fas fa-bag-shopping me-1"></i>Smart Bag</a></li>
+          <li class="nav-item"><a class="nav-link active" href="sitting-challenge.html" aria-current="page"><i class="fas fa-chair me-1"></i>Sitting Challenge</a></li>
+          <li class="nav-item"><a class="nav-link" href="statistics.html"><i class="fas fa-chart-bar me-1"></i>Statistics</a></li>
+          <li class="nav-item"><a class="nav-link" href="references.html"><i class="fas fa-book me-1"></i>References</a></li>
+        </ul>
+      </div>
+    </div>
+  </nav>
+
+  <main id="main-content">
+
+    <!-- ── HERO ── -->
+    <!-- <section class="module-hero" aria-label="My Sitting Challenge">
+      <div class="container">
+        <div class="row justify-content-center">
+          <div class="col-lg-9 text-center hero-content" data-aos="fade-up">
+            <a href="index.html" class="hero-stat-pill mb-3 d-inline-flex text-decoration-none">
+              <i class="fas fa-arrow-left"></i> Back to Home
+            </a>
+            <div class="mt-3 mb-2">
+              <span class="hero-badge"><i class="fas fa-award me-1"></i>Module 6 — CBSE Science Exhibition 2026-27</span>
+            </div>
+            <h1 class="hero-title" style="font-size:clamp(1.8rem,5vw,2.9rem);">
+              🪑 My Sitting Challenge
+            </h1>
+            <p class="hero-subtitle mt-3" style="max-width:580px; margin:0.5rem auto 0;">
+              <em>I can enjoy an activity at my own pace. Every little effort counts!</em>
+            </p>
+            <div class="d-flex flex-wrap justify-content-center gap-2 mt-4">
+              <span class="hero-stat-pill"><i class="fas fa-heart"></i> Child-Friendly</span>
+              <span class="hero-stat-pill"><i class="fas fa-paint-brush"></i> Fun Activities</span>
+              <span class="hero-stat-pill"><i class="fas fa-database"></i> Offline &amp; Private</span>
+              <span class="hero-stat-pill"><i class="fas fa-chart-line"></i> Progress Chart</span>
+            </div>
+          </div>
+        </div>
+      </div>
+    </section> -->
+
+    <!-- ── MAIN CHALLENGE TOOL ── -->
+    <section class="module-section" aria-label="Challenge tool">
+      <div class="container" style="max-width:860px;">
+
+        <!-- Setup View -->
+        <div id="setupView" class="active">
+
+          <!-- STEP 1: Duration -->
+          <div class="sc-section" data-aos="fade-up">
+            <div class="step-heading">
+              <div class="step-badge">1</div>
+              <h2 class="h5 fw-bold mb-0" style="color:var(--text);">Pick Your Practice Time ⏱️</h2>
+            </div>
+            <p class="text-muted mb-3" style="font-size:0.88rem;">Choose how long you would like to sit and enjoy your activity today.</p>
+            <div class="duration-grid" id="durationGrid" role="radiogroup" aria-label="Select practice duration">
+              <div class="duration-card" data-minutes="2" role="radio" aria-checked="false" tabindex="0">
+                <span class="dur-emoji">⚡</span>
+                <div class="dur-num">2</div>
+                <div class="dur-label">Minutes</div>
+              </div>
+              <div class="duration-card" data-minutes="3" role="radio" aria-checked="false" tabindex="0">
+                <span class="dur-emoji">🌱</span>
+                <div class="dur-num">3</div>
+                <div class="dur-label">Minutes</div>
+              </div>
+              <div class="duration-card" data-minutes="5" role="radio" aria-checked="false" tabindex="0">
+                <span class="dur-emoji">🌟</span>
+                <div class="dur-num">5</div>
+                <div class="dur-label">Minutes</div>
+              </div>
+              <div class="duration-card" data-minutes="10" role="radio" aria-checked="false" tabindex="0">
+                <span class="dur-emoji">🚀</span>
+                <div class="dur-num">10</div>
+                <div class="dur-label">Minutes</div>
+              </div>
+            </div>
+          </div>
+
+          <!-- STEP 2: Activity -->
+          <div class="sc-section" data-aos="fade-up" data-aos-delay="80">
+            <div class="step-heading">
+              <div class="step-badge">2</div>
+              <h2 class="h5 fw-bold mb-0" style="color:var(--text);">Choose Your Activity 🎉</h2>
+            </div>
+            <p class="text-muted mb-3" style="font-size:0.88rem;">Pick something you enjoy doing.</p>
+            <div class="activity-grid" id="activityGrid" role="radiogroup" aria-label="Select activity">
+              <!-- default activities rendered by JS -->
+            </div>
+
+            <!-- Add custom activity -->
+            <div class="mt-3">
+              <button class="btn btn-sm" style="border:2px dashed #7c3aed;color:#7c3aed;border-radius:10px;font-weight:600;font-size:0.82rem;background:transparent;" id="showAddActivityBtn">
+                <i class="fas fa-plus me-1"></i> Add My Own Activity
+              </button>
+            </div>
+            <div class="add-activity-form mt-2" id="addActivityForm" style="display:none;">
+              <label class="form-label fw-600 mb-1" style="font-size:0.85rem;">Activity name</label>
+              <input type="text" class="sc-input mb-2" id="customActivityName" placeholder="e.g. Sticker Book" maxlength="40" aria-label="Custom activity name">
+              <div class="mb-2">
+                <span style="font-size:0.82rem;font-weight:600;color:var(--text-muted);">Pick an emoji (optional)</span>
+                <div class="emoji-picker" id="emojiPicker" role="group" aria-label="Pick emoji for activity">
+                  <!-- emojis rendered by JS -->
+                </div>
+              </div>
+              <div id="addActivityError" class="text-danger mb-2" style="font-size:0.8rem;display:none;"></div>
+              <div class="d-flex gap-2">
+                <button class="btn-ctrl btn-ctrl-start" id="saveCustomActivityBtn" style="border-radius:10px;padding:0.45rem 1rem;font-size:0.82rem;">
+                  <i class="fas fa-check"></i> Save Activity
+                </button>
+                <button class="btn-ctrl btn-ctrl-reset" id="cancelAddActivityBtn" style="border-radius:10px;padding:0.45rem 1rem;font-size:0.82rem;">
+                  Cancel
+                </button>
+              </div>
+            </div>
+          </div>
+
+          <!-- Parent tip -->
+          <div class="parent-tip mb-4" data-aos="fade-up" data-aos-delay="120">
+            <strong>💡 For parents:</strong> Let your child choose an activity and a comfortable time. Repeat, shorten, or take breaks whenever needed. There is no need to increase the time every day.
+          </div>
+
+          <!-- Start button -->
+          <div class="text-center" data-aos="fade-up" data-aos-delay="160">
+            <button class="btn-start-challenge" id="startChallengeBtn" disabled>
+              <i class="fas fa-play me-2"></i> Start My Challenge!
+            </button>
+            <p class="text-muted mt-2" style="font-size:0.8rem;" id="setupHint">Please pick a time and an activity above to begin.</p>
+          </div>
+
+        </div><!-- /setupView -->
+
+        <!-- Timer View -->
+        <div id="timerView">
+
+          <div class="sc-section" data-aos="fade-up">
+            <div class="timer-wrap">
+              <div class="timer-activity-label">Currently doing</div>
+              <div class="timer-activity-name" id="timerActivityName">—</div>
+
+              <!-- SVG ring timer -->
+              <div class="timer-ring-wrap" aria-label="Countdown timer" role="timer" aria-live="off">
+                <svg width="200" height="200" viewBox="0 0 200 200" aria-hidden="true">
+                  <defs>
+                    <linearGradient id="timerGradient" x1="0%" y1="0%" x2="100%" y2="100%">
+                      <stop offset="0%" style="stop-color:#7c3aed"/>
+                      <stop offset="100%" style="stop-color:#06b6d4"/>
+                    </linearGradient>
+                  </defs>
+                  <circle class="timer-ring-bg" cx="100" cy="100" r="88"/>
+                  <circle class="timer-ring-progress" id="timerRingProgress" cx="100" cy="100" r="88"
+                    stroke-dasharray="553" stroke-dashoffset="0"/>
+                </svg>
+                <div class="timer-digits">
+                  <div class="timer-time" id="timerDisplay" aria-live="polite" aria-atomic="true">00:00</div>
+                  <div class="timer-of" id="timerOf">of 0 min</div>
+                  <div class="timer-state-label idle" id="timerStateLabel">Ready</div>
+                </div>
+              </div>
+
+              <!-- Controls -->
+              <div class="timer-controls" role="group" aria-label="Timer controls">
+                <button class="btn-ctrl btn-ctrl-start"  id="btnStart"  aria-label="Start timer"><i class="fas fa-play"></i> Start</button>
+                <button class="btn-ctrl btn-ctrl-pause"  id="btnPause"  aria-label="Pause timer"  style="display:none;"><i class="fas fa-pause"></i> Pause</button>
+                <button class="btn-ctrl btn-ctrl-resume" id="btnResume" aria-label="Resume timer" style="display:none;"><i class="fas fa-play"></i> Resume</button>
+                <button class="btn-ctrl btn-ctrl-reset"  id="btnReset"  aria-label="Reset timer"><i class="fas fa-undo"></i> Reset</button>
+                <button class="btn-ctrl btn-ctrl-finish" id="btnFinish" aria-label="Finish early"><i class="fas fa-flag-checkered"></i> Finish Early</button>
+                <button class="btn-ctrl btn-ctrl-move"   id="btnMove"   aria-label="Take a movement break"><i class="fas fa-running"></i> Movement Break</button>
+              </div>
+
+              <div class="mt-3">
+                <button class="btn btn-sm text-muted" id="btnBackToSetup" style="font-size:0.8rem;border:none;background:transparent;text-decoration:underline;">
+                  ← Change activity or time
+                </button>
+              </div>
+            </div>
+          </div>
+
+        </div><!-- /timerView -->
+
+        <!-- Completion View -->
+        <div id="completionView">
+          <div class="sc-section">
+            <div class="completion-screen" id="completionScreen" aria-live="polite">
+              <span class="completion-emoji" id="completionEmoji">🌟</span>
+              <div class="completion-msg" id="completionMsg">Great job!</div>
+              <div class="completion-sub" id="completionSub"></div>
+              <div id="completionPills" class="mb-3"></div>
+
+              <!-- Optional parent note -->
+              <div class="text-start mb-3" style="max-width:420px;margin:0 auto;">
+                <label class="form-label fw-600 mb-1" style="font-size:0.85rem;" for="parentObsInput">
+                  💬 Parent / Carer note <span style="font-weight:400;color:var(--text-muted);">(optional)</span>
+                </label>
+                <textarea class="obs-textarea" id="parentObsInput" placeholder="What did you notice? How did your child feel? (optional)" rows="2"></textarea>
+              </div>
+
+              <div class="d-flex flex-wrap gap-2 justify-content-center">
+                <button class="btn-ctrl btn-ctrl-start" id="btnSaveSession" style="border-radius:12px;">
+                  <i class="fas fa-save"></i> Save Session
+                </button>
+                <button class="btn-ctrl btn-ctrl-reset" id="btnTryAgain" style="border-radius:12px;">
+                  <i class="fas fa-redo"></i> Try Again
+                </button>
+                <button id="btnMuteVoice" title="Turn voice off"
+                  style="border-radius:12px;border:2px solid var(--glass-border);background:var(--card-bg);
+                         color:var(--text-muted);font-size:0.82rem;font-weight:700;padding:0.6rem 1.1rem;
+                         cursor:pointer;display:inline-flex;align-items:center;gap:0.4rem;transition:var(--transition);">
+                  <i class="fas fa-volume-up me-1"></i> Voice On
+                </button>
+              </div>
+            </div>
+          </div>
+        </div><!-- /completionView -->
+
+      </div>
+    </section>
+
+    <!-- ── PARENT DASHBOARD ── -->
+    <section class="module-section alt-bg" aria-label="Parent Dashboard" id="dashboardSection">
+      <div class="container" style="max-width:860px;">
+        <div class="text-center mb-4" data-aos="fade-up">
+          <span class="section-eyebrow"><i class="fas fa-user-shield me-1"></i> Parent Area</span>
+          <h2 class="section-title">Parent Dashboard</h2>
+          <p class="section-subtitle" style="max-width:580px;margin:0 auto 1.5rem;">
+            View practice sessions, add observations, and understand your child's participation over time.
+          </p>
+          <button class="dashboard-toggle-btn" id="toggleDashboardBtn" aria-expanded="false" aria-controls="dashboardPanel">
+            <i class="fas fa-chart-bar me-1"></i> <span id="dashToggleLabel">Show Dashboard</span>
+          </button>
+        </div>
+
+        <div id="dashboardPanel">
+
+          <!-- Progress chart -->
+          <div class="glass-card mb-4" data-aos="fade-up">
+            <div class="d-flex align-items-center justify-content-between mb-3 flex-wrap gap-2">
+              <h3 class="h6 fw-bold mb-0" style="color:var(--primary);"><i class="fas fa-chart-line me-2"></i>Practice Duration Over Time</h3>
+            </div>
+            <div id="progressChartWrap">
+              <div class="chart-empty" id="chartEmptyState">
+                <span class="chart-empty-emoji">📊</span>
+                Complete your first session to see the chart here.
+              </div>
+              <canvas id="progressChart" style="display:none;max-height:280px;" aria-label="Practice duration chart"></canvas>
+            </div>
+          </div>
+
+          <!-- Session history -->
+          <div class="glass-card" data-aos="fade-up" data-aos-delay="60">
+            <div class="d-flex align-items-center justify-content-between mb-3 flex-wrap gap-2">
+              <h3 class="h6 fw-bold mb-0" style="color:var(--primary);"><i class="fas fa-history me-2"></i>Session History</h3>
+              <button class="btn-clear-all" id="btnClearAll" style="display:none;">
+                <i class="fas fa-trash-alt me-1"></i> Clear All
+              </button>
+            </div>
+            <div id="sessionList">
+              <div class="chart-empty" id="sessionsEmptyState">
+                <span class="chart-empty-emoji">🌱</span>
+                No sessions yet — complete your first challenge above!
+              </div>
+            </div>
+          </div>
+
+        </div><!-- /dashboardPanel -->
+      </div>
+    </section>
+
+  </main>
+
+  <!-- ── FOOTER ── -->
+  <footer style="background:var(--text);color:rgba(255,255,255,0.7);text-align:center;padding:1.5rem 1rem;font-size:0.8rem;">
+    <p class="mb-1">🪑 My Sitting Challenge — Part of the ADHD Awareness Project</p>
+    <p class="mb-0">CBSE Science Exhibition 2026-27 &nbsp;|&nbsp; Amrita Vidyalayam, Thuckalay</p>
+  </footer>
+
+  <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/js/bootstrap.bundle.min.js"></script>
+  <script src="https://cdn.jsdelivr.net/npm/aos@2.3.4/dist/aos.js"></script>
+  <script src="https://cdn.jsdelivr.net/npm/chart.js@4.4.3/dist/chart.umd.min.js"></script>
+  <script>
+  AOS.init({ duration: 600, once: true });
+
+  /* ════════════════════════════════════════════════
+     STORAGE KEYS  (namespaced to avoid conflicts)
+  ════════════════════════════════════════════════ */
+  const KEYS = {
+    sessions:   'adhd_sc_sessions',
+    activities: 'adhd_sc_custom_activities'
+  };
+
+  /* ════════════════════════════════════════════════
+     STORAGE HELPERS
+  ════════════════════════════════════════════════ */
+  function loadJSON(key, fallback) {
+    try {
+      const raw = localStorage.getItem(key);
+      if (!raw) return fallback;
+      return JSON.parse(raw);
+    } catch (e) { return fallback; }
+  }
+  function saveJSON(key, value) {
+    try { localStorage.setItem(key, JSON.stringify(value)); } catch (e) { /* storage full */ }
+  }
+
+  /* ════════════════════════════════════════════════
+     DEFAULT ACTIVITIES
+  ════════════════════════════════════════════════ */
+  const DEFAULT_ACTIVITIES = [
+    { id: 'act_color',  name: 'Coloring / Drawing',  emoji: '🎨', custom: false },
+    { id: 'act_book',   name: 'Picture Book Reading', emoji: '📚', custom: false },
+    { id: 'act_puzzle', name: 'Simple Puzzles',       emoji: '🧩', custom: false },
+    { id: 'act_blocks', name: 'Building Blocks',      emoji: '🧱', custom: false },
+  ];
+
+  const EMOJI_OPTIONS = ['⭐','🎵','🎮','✏️','🖍️','🏀','🌈','🦋','🚂','🌸','🧸','🐾','🎭','🏆','🌊','🍀'];
+
+  /* ════════════════════════════════════════════════
+     STATE
+  ════════════════════════════════════════════════ */
+  let selectedMinutes = null;
+  let selectedActivityId = null;
+  let customActivities = loadJSON(KEYS.activities, []);
+
+  // Timer state
+  let timerInterval = null;
+  let totalSeconds = 0;
+  let remainingSeconds = 0;
+  let sessionStartTime = null;
+  let timerState = 'idle'; // idle | running | paused
+
+  // Current session being built (before saving)
+  let pendingSession = null;
+
+  /* ════════════════════════════════════════════════
+     ALL ACTIVITIES (default + custom)
+  ════════════════════════════════════════════════ */
+  function getAllActivities() {
+    return [...DEFAULT_ACTIVITIES, ...customActivities];
+  }
+  function getActivityById(id) {
+    return getAllActivities().find(a => a.id === id) || null;
+  }
+
+  /* ════════════════════════════════════════════════
+     RENDER DURATION CARDS
+  ════════════════════════════════════════════════ */
+  document.querySelectorAll('.duration-card').forEach(card => {
+    card.addEventListener('click', () => selectDuration(parseInt(card.dataset.minutes)));
+    card.addEventListener('keydown', e => { if (e.key === 'Enter' || e.key === ' ') selectDuration(parseInt(card.dataset.minutes)); });
+  });
+
+  function selectDuration(mins) {
+    selectedMinutes = mins;
+    document.querySelectorAll('.duration-card').forEach(c => {
+      const isThis = parseInt(c.dataset.minutes) === mins;
+      c.classList.toggle('selected', isThis);
+      c.setAttribute('aria-checked', String(isThis));
+    });
+    updateStartBtn();
+  }
+
+  /* ════════════════════════════════════════════════
+     RENDER ACTIVITY CARDS
+  ════════════════════════════════════════════════ */
+  function renderActivities() {
+    const grid = document.getElementById('activityGrid');
+    grid.innerHTML = '';
+    getAllActivities().forEach(act => {
+      const card = document.createElement('div');
+      card.className = 'activity-card' + (act.custom ? ' custom-activity' : '') +
+                       (act.id === selectedActivityId ? ' selected' : '');
+      card.setAttribute('role', 'radio');
+      card.setAttribute('aria-checked', String(act.id === selectedActivityId));
+      card.setAttribute('tabindex', '0');
+      card.dataset.actId = act.id;
+      card.innerHTML = `
+        <span class="act-emoji">${act.emoji}</span>
+        <div class="act-name">${escHtml(act.name)}</div>
+        ${act.custom ? `
+          <button class="act-edit" title="Edit activity" aria-label="Edit ${escHtml(act.name)}">
+            <i class="fas fa-pen" aria-hidden="true"></i>
+          </button>
+          <button class="act-delete" title="Delete activity" aria-label="Delete ${escHtml(act.name)}">
+            <i class="fas fa-times" aria-hidden="true"></i>
+          </button>` : ''}
+      `;
+      card.addEventListener('click', (e) => {
+        if (e.target.closest('.act-delete')) { deleteCustomActivity(act.id); return; }
+        if (e.target.closest('.act-edit'))   { startEditActivity(act.id); return; }
+        selectActivity(act.id);
+      });
+      card.addEventListener('keydown', e => { if (e.key === 'Enter' || e.key === ' ') selectActivity(act.id); });
+      grid.appendChild(card);
+    });
+  }
+
+  function selectActivity(id) {
+    selectedActivityId = id;
+    document.querySelectorAll('.activity-card').forEach(c => {
+      const isThis = c.dataset.actId === id;
+      c.classList.toggle('selected', isThis);
+      c.setAttribute('aria-checked', String(isThis));
+    });
+    updateStartBtn();
+  }
+
+  /* ════════════════════════════════════════════════
+     CUSTOM ACTIVITIES
+  ════════════════════════════════════════════════ */
+  let editingActivityId = null;
+  let selectedEmoji = '';
+
+  function renderEmojiPicker() {
+    const picker = document.getElementById('emojiPicker');
+    picker.innerHTML = '';
+    EMOJI_OPTIONS.forEach(em => {
+      const btn = document.createElement('button');
+      btn.className = 'emoji-btn' + (em === selectedEmoji ? ' selected' : '');
+      btn.textContent = em;
+      btn.type = 'button';
+      btn.setAttribute('aria-label', em);
+      btn.addEventListener('click', () => {
+        selectedEmoji = em;
+        document.querySelectorAll('.emoji-btn').forEach(b => b.classList.remove('selected'));
+        btn.classList.add('selected');
+      });
+      picker.appendChild(btn);
+    });
+  }
+
+  document.getElementById('showAddActivityBtn').addEventListener('click', () => {
+    editingActivityId = null;
+    selectedEmoji = '';
+    document.getElementById('customActivityName').value = '';
+    document.getElementById('addActivityError').style.display = 'none';
+    document.getElementById('addActivityForm').style.display = 'block';
+    renderEmojiPicker();
+    document.getElementById('customActivityName').focus();
+  });
+
+  document.getElementById('cancelAddActivityBtn').addEventListener('click', () => {
+    document.getElementById('addActivityForm').style.display = 'none';
+    editingActivityId = null;
+  });
+
+  document.getElementById('saveCustomActivityBtn').addEventListener('click', () => {
+    const name = document.getElementById('customActivityName').value.trim();
+    const errEl = document.getElementById('addActivityError');
+    errEl.style.display = 'none';
+
+    if (!name) { showAddErr('Please enter an activity name.'); return; }
+    if (name.length < 2) { showAddErr('Name must be at least 2 characters.'); return; }
+
+    // Check duplicate (case-insensitive), excluding current editing id
+    const dup = getAllActivities().find(a => a.name.toLowerCase() === name.toLowerCase() && a.id !== editingActivityId);
+    if (dup) { showAddErr('An activity with this name already exists.'); return; }
+
+    const emoji = selectedEmoji || '✨';
+
+    if (editingActivityId) {
+      customActivities = customActivities.map(a => a.id === editingActivityId ? { ...a, name, emoji } : a);
+    } else {
+      customActivities.push({ id: 'custom_' + Date.now(), name, emoji, custom: true });
+    }
+    saveJSON(KEYS.activities, customActivities);
+    editingActivityId = null;
+    document.getElementById('addActivityForm').style.display = 'none';
+    renderActivities();
+  });
+
+  function showAddErr(msg) {
+    const el = document.getElementById('addActivityError');
+    el.textContent = msg; el.style.display = 'block';
+  }
+
+  function deleteCustomActivity(id) {
+    if (!confirm('Remove this activity?')) return;
+    customActivities = customActivities.filter(a => a.id !== id);
+    saveJSON(KEYS.activities, customActivities);
+    if (selectedActivityId === id) { selectedActivityId = null; updateStartBtn(); }
+    renderActivities();
+  }
+
+  function startEditActivity(id) {
+    const act = customActivities.find(a => a.id === id);
+    if (!act) return;
+    editingActivityId = id;
+    selectedEmoji = act.emoji;
+    document.getElementById('customActivityName').value = act.name;
+    document.getElementById('addActivityError').style.display = 'none';
+    document.getElementById('addActivityForm').style.display = 'block';
+    renderEmojiPicker();
+    document.getElementById('customActivityName').focus();
+  }
+
+  /* ════════════════════════════════════════════════
+     START BUTTON ENABLE LOGIC
+  ════════════════════════════════════════════════ */
+  function updateStartBtn() {
+    const btn = document.getElementById('startChallengeBtn');
+    const hint = document.getElementById('setupHint');
+    const ready = selectedMinutes !== null && selectedActivityId !== null;
+    btn.disabled = !ready;
+    if (ready) {
+      const act = getActivityById(selectedActivityId);
+      hint.textContent = `Ready! ${act.emoji} ${act.name} for ${selectedMinutes} minute${selectedMinutes > 1 ? 's' : ''}.`;
+    } else if (selectedMinutes === null && selectedActivityId === null) {
+      hint.textContent = 'Please pick a time and an activity above to begin.';
+    } else if (selectedMinutes === null) {
+      hint.textContent = 'Please pick a practice time above.';
+    } else {
+      hint.textContent = 'Please choose an activity above.';
+    }
+  }
+
+  document.getElementById('startChallengeBtn').addEventListener('click', () => {
+    showView('timerView');
+    initTimer(selectedMinutes, selectedActivityId);
+  });
+
+  /* ════════════════════════════════════════════════
+     VIEW SWITCHER
+  ════════════════════════════════════════════════ */
+  function showView(viewId) {
+    ['setupView','timerView','completionView'].forEach(id => {
+      document.getElementById(id).classList.toggle('active', id === viewId);
+    });
+  }
+
+  /* ════════════════════════════════════════════════
+     TIMER
+  ════════════════════════════════════════════════ */
+  const CIRCUMFERENCE = 553; // 2π × 88
+
+  function initTimer(mins, actId) {
+    clearTimerInterval();
+    totalSeconds = mins * 60;
+    remainingSeconds = totalSeconds;
+    timerState = 'idle';
+    sessionStartTime = null;
+    pendingSession = null;
+
+    const act = getActivityById(actId);
+    document.getElementById('timerActivityName').textContent = `${act.emoji} ${act.name}`;
+    document.getElementById('timerOf').textContent = `of ${mins} min`;
+    updateTimerDisplay();
+    updateTimerControls();
+    setRingOffset(0);
+  }
+
+  function updateTimerDisplay() {
+    const m = String(Math.floor(remainingSeconds / 60)).padStart(2, '0');
+    const s = String(remainingSeconds % 60).padStart(2, '0');
+    document.getElementById('timerDisplay').textContent = `${m}:${s}`;
+    document.getElementById('timerDisplay').setAttribute('aria-label', `${m} minutes ${s} seconds remaining`);
+  }
+
+  function setRingOffset(elapsed) {
+    const pct = totalSeconds > 0 ? elapsed / totalSeconds : 0;
+    const offset = CIRCUMFERENCE * (1 - pct);
+    document.getElementById('timerRingProgress').style.strokeDashoffset = offset;
+  }
+
+  function setTimerStateLabel(state) {
+    const el = document.getElementById('timerStateLabel');
+    el.className = 'timer-state-label';
+    if (state === 'running') { el.classList.add('running'); el.textContent = 'Running'; }
+    else if (state === 'paused') { el.classList.add('paused'); el.textContent = 'Paused'; }
+    else { el.classList.add('idle'); el.textContent = 'Ready'; }
+    const ring = document.getElementById('timerRingProgress');
+    ring.classList.toggle('running', state === 'running');
+  }
+
+  function updateTimerControls() {
+    document.getElementById('btnStart') .style.display = timerState === 'idle'    ? '' : 'none';
+    document.getElementById('btnPause') .style.display = timerState === 'running' ? '' : 'none';
+    document.getElementById('btnResume').style.display = timerState === 'paused'  ? '' : 'none';
+  }
+
+  function clearTimerInterval() {
+    if (timerInterval !== null) { clearInterval(timerInterval); timerInterval = null; }
+  }
+
+  document.getElementById('btnStart').addEventListener('click', () => {
+    if (timerState !== 'idle') return;
+    timerState = 'running';
+    sessionStartTime = Date.now();
+    setTimerStateLabel('running');
+    updateTimerControls();
+    timerInterval = setInterval(tick, 1000);
+  });
+
+  document.getElementById('btnPause').addEventListener('click', () => {
+    if (timerState !== 'running') return;
+    clearTimerInterval();
+    timerState = 'paused';
+    setTimerStateLabel('paused');
+    updateTimerControls();
+  });
+
+  document.getElementById('btnResume').addEventListener('click', () => {
+    if (timerState !== 'paused') return;
+    timerState = 'running';
+    setTimerStateLabel('running');
+    updateTimerControls();
+    timerInterval = setInterval(tick, 1000);
+  });
+
+  document.getElementById('btnReset').addEventListener('click', () => {
+    clearTimerInterval();
+    timerState = 'idle';
+    remainingSeconds = totalSeconds;
+    setTimerStateLabel('idle');
+    updateTimerDisplay();
+    setRingOffset(0);
+    updateTimerControls();
+    sessionStartTime = null;
+    pendingSession = null;
+  });
+
+  document.getElementById('btnFinish').addEventListener('click', () => {
+    endSession('Finished Early');
+  });
+
+  document.getElementById('btnMove').addEventListener('click', () => {
+    endSession('Movement Break');
+  });
+
+  document.getElementById('btnBackToSetup').addEventListener('click', () => {
+    clearTimerInterval();
+    timerState = 'idle';
+    showView('setupView');
+  });
+
+  function tick() {
+    if (remainingSeconds <= 0) {
+      clearTimerInterval();
+      setRingOffset(totalSeconds);
+      endSession('Completed');
+      return;
+    }
+    remainingSeconds--;
+    const elapsed = totalSeconds - remainingSeconds;
+    updateTimerDisplay();
+    setRingOffset(elapsed);
+  }
+
+  function endSession(status) {
+    clearTimerInterval();
+    timerState = 'idle';
+
+    const actualSecondsElapsed = sessionStartTime ? Math.floor((Date.now() - sessionStartTime) / 1000) : 0;
+    const actualMinutes = +(actualSecondsElapsed / 60).toFixed(2);
+    const act = getActivityById(selectedActivityId);
+
+    pendingSession = {
+      id: 'sess_' + Date.now(),
+      date: new Date().toISOString(),
+      selectedMinutes,
+      actualMinutes,
+      activityId: selectedActivityId,
+      activityName: act ? act.name : '—',
+      activityEmoji: act ? act.emoji : '✨',
+      status,
+      observation: ''
+    };
+
+    showCompletionScreen(status, act, actualMinutes);
+    showView('completionView');
+    speakMotivation(status);
+  }
+
+  /* ════════════════════════════════════════════════
+     COMPLETION SCREEN
+  ════════════════════════════════════════════════ */
+  const MESSAGES = {
+    Completed: [
+      { emoji: '🌟', msg: 'Wonderful! Thank you for trying!', sub: 'You spent time doing something you enjoy!' },
+      { emoji: '🎉', msg: 'You did it your way, and that\'s great!', sub: 'Every little moment of practice counts!' },
+      { emoji: '🌈', msg: 'Great job exploring and learning!', sub: 'Taking time for yourself is wonderful!' },
+      { emoji: '⭐', msg: 'Amazing effort today!', sub: 'You showed great focus and patience!' },
+    ],
+    'Finished Early': [
+      { emoji: '💚', msg: 'Thank you for giving it a try!', sub: 'You can try again whenever you feel ready!' },
+      { emoji: '🌸', msg: 'Good listening to yourself today!', sub: 'Every try — big or small — matters!' },
+    ],
+    'Movement Break': [
+      { emoji: '🏃', msg: 'Good job listening to your body!', sub: 'Movement is important too!' },
+      { emoji: '🌺', msg: 'Taking a break is a great choice!', sub: 'You can come back whenever you like!' },
+    ]
+  };
+
+  function showCompletionScreen(status, act, actualMinutes) {
+    const pool = MESSAGES[status] || MESSAGES['Finished Early'];
+    const pick = pool[Math.floor(Math.random() * pool.length)];
+
+    document.getElementById('completionEmoji').textContent = pick.emoji;
+    document.getElementById('completionMsg').textContent = pick.msg;
+    document.getElementById('completionSub').textContent = pick.sub;
+    document.getElementById('parentObsInput').value = '';
+
+    const pills = document.getElementById('completionPills');
+    pills.innerHTML = `
+      <span class="completion-pill pill-green">${act ? act.emoji + ' ' + act.name : '—'}</span>
+      <span class="completion-pill pill-purple">${selectedMinutes} min selected</span>
+      <span class="completion-pill pill-blue">${formatDuration(actualMinutes)} practised</span>
+      <span class="completion-pill ${statusPillClass(status)}">${status}</span>
+    `;
+  }
+
+  function statusPillClass(status) {
+    if (status === 'Completed') return 'pill-green';
+    if (status === 'Finished Early') return 'pill-purple';
+    return 'pill-blue';
+  }
+
+  function formatDuration(mins) {
+    if (mins < 1) return Math.round(mins * 60) + ' sec';
+    return mins.toFixed(1) + ' min';
+  }
+
+  document.getElementById('btnSaveSession').addEventListener('click', () => {
+    if (!pendingSession) return;
+    pendingSession.observation = document.getElementById('parentObsInput').value.trim();
+
+    const sessions = loadJSON(KEYS.sessions, []);
+    sessions.push(pendingSession);
+    saveJSON(KEYS.sessions, sessions);
+    pendingSession = null;
+
+    // reset for next use
+    selectedMinutes = null;
+    selectedActivityId = null;
+    document.querySelectorAll('.duration-card').forEach(c => { c.classList.remove('selected'); c.setAttribute('aria-checked','false'); });
+    renderActivities();
+    updateStartBtn();
+    renderDashboard();
+
+    showView('setupView');
+  });
+
+  document.getElementById('btnTryAgain').addEventListener('click', () => {
+    pendingSession = null;
+    showView('setupView');
+  });
+
+  /* ════════════════════════════════════════════════
+     PARENT DASHBOARD
+  ════════════════════════════════════════════════ */
+  let chartInstance = null;
+
+  document.getElementById('toggleDashboardBtn').addEventListener('click', () => {
+    const panel = document.getElementById('dashboardPanel');
+    const isOpen = panel.classList.toggle('open');
+    document.getElementById('dashToggleLabel').textContent = isOpen ? 'Hide Dashboard' : 'Show Dashboard';
+    document.getElementById('toggleDashboardBtn').setAttribute('aria-expanded', String(isOpen));
+    if (isOpen) renderDashboard();
+  });
+
+  function renderDashboard() {
+    renderSessionList();
+    renderChart();
+  }
+
+  function renderSessionList() {
+    const sessions = loadJSON(KEYS.sessions, []);
+    const list = document.getElementById('sessionList');
+    const empty = document.getElementById('sessionsEmptyState');
+    const clearBtn = document.getElementById('btnClearAll');
+
+    if (sessions.length === 0) {
+      empty.style.display = 'block'; list.innerHTML = ''; list.appendChild(empty);
+      clearBtn.style.display = 'none';
+      return;
+    }
+    clearBtn.style.display = '';
+    // Newest first
+    const sorted = [...sessions].reverse();
+    list.innerHTML = '';
+    sorted.forEach(sess => {
+      const card = document.createElement('div');
+      card.className = 'session-card';
+      card.dataset.sessId = sess.id;
+      const dt = formatDate(sess.date);
+      card.innerHTML = `
+        <div class="d-flex align-items-start justify-content-between flex-wrap gap-2">
+          <div>
+            <span style="font-size:1.1rem;">${sess.activityEmoji || '✨'}</span>
+            <strong style="font-size:0.9rem;margin-left:4px;">${escHtml(sess.activityName)}</strong>
+            <span class="session-status-pill ${sessionStatusClass(sess.status)} ms-2">${sess.status}</span>
+          </div>
+          <div class="text-end" style="font-size:0.78rem;color:var(--text-muted);">${dt}</div>
+        </div>
+        <div class="session-meta">
+          Selected: ${sess.selectedMinutes} min &nbsp;·&nbsp;
+          Practised: ${formatDuration(sess.actualMinutes)}
+        </div>
+        ${sess.observation ? `<div class="mt-1" style="font-size:0.82rem;color:var(--text-muted);font-style:italic;">💬 ${escHtml(sess.observation)}</div>` : ''}
+        <div class="session-actions">
+          <button class="btn-session-action btn-edit-obs" data-sid="${sess.id}"><i class="fas fa-pen me-1"></i>Edit Note</button>
+          <button class="btn-session-action btn-del-session" data-sid="${sess.id}"><i class="fas fa-trash me-1"></i>Delete</button>
+        </div>
+      `;
+      list.appendChild(card);
+    });
+
+    // wire buttons
+    list.querySelectorAll('.btn-edit-obs').forEach(btn => {
+      btn.addEventListener('click', () => editObservation(btn.dataset.sid));
+    });
+    list.querySelectorAll('.btn-del-session').forEach(btn => {
+      btn.addEventListener('click', () => deleteSession(btn.dataset.sid));
+    });
+  }
+
+  function sessionStatusClass(status) {
+    if (status === 'Completed') return 'status-completed';
+    if (status === 'Finished Early') return 'status-early';
+    return 'status-movement';
+  }
+
+  function formatDate(iso) {
+    try {
+      const d = new Date(iso);
+      return d.toLocaleDateString('en-IN', { day:'numeric', month:'short', year:'numeric' }) +
+             ' ' + d.toLocaleTimeString('en-IN', { hour:'2-digit', minute:'2-digit' });
+    } catch { return iso; }
+  }
+
+  function editObservation(id) {
+    const sessions = loadJSON(KEYS.sessions, []);
+    const sess = sessions.find(s => s.id === id);
+    if (!sess) return;
+    const note = prompt('Edit parent note:', sess.observation || '');
+    if (note === null) return; // cancelled
+    sess.observation = note.trim();
+    saveJSON(KEYS.sessions, sessions);
+    renderSessionList();
+  }
+
+  function deleteSession(id) {
+    if (!confirm('Delete this session record?')) return;
+    const sessions = loadJSON(KEYS.sessions, []).filter(s => s.id !== id);
+    saveJSON(KEYS.sessions, sessions);
+    renderSessionList();
+    renderChart();
+  }
+
+  document.getElementById('btnClearAll').addEventListener('click', () => {
+    if (!confirm('Clear all session history? This cannot be undone.')) return;
+    saveJSON(KEYS.sessions, []);
+    renderSessionList();
+    renderChart();
+  });
+
+  /* ════════════════════════════════════════════════
+     PROGRESS CHART
+  ════════════════════════════════════════════════ */
+  function renderChart() {
+    const sessions = loadJSON(KEYS.sessions, []);
+    const canvas = document.getElementById('progressChart');
+    const empty = document.getElementById('chartEmptyState');
+
+    if (sessions.length === 0) {
+      empty.style.display = 'block'; canvas.style.display = 'none';
+      if (chartInstance) { chartInstance.destroy(); chartInstance = null; }
+      return;
+    }
+
+    empty.style.display = 'none'; canvas.style.display = '';
+
+    const sorted = [...sessions].sort((a,b) => new Date(a.date) - new Date(b.date));
+    const labels = sorted.map(s => formatDateShort(s.date));
+    const data   = sorted.map(s => +s.actualMinutes.toFixed(2));
+    const colors = sorted.map(s => {
+      if (s.status === 'Completed') return '#10b981';
+      if (s.status === 'Finished Early') return '#8b5cf6';
+      return '#f97316';
+    });
+
+    if (chartInstance) { chartInstance.destroy(); chartInstance = null; }
+
+    chartInstance = new Chart(canvas, {
+      type: 'bar',
+      data: {
+        labels,
+        datasets: [{
+          label: 'Practised (minutes)',
+          data,
+          backgroundColor: colors,
+          borderRadius: 8,
+          borderSkipped: false,
+          maxBarThickness: 48,
+        }]
+      },
+      options: {
+        responsive: true,
+        plugins: {
+          legend: { display: false },
+          tooltip: {
+            callbacks: {
+              label: ctx => `${ctx.parsed.y} min practised`,
+              afterLabel: ctx => {
+                const s = sorted[ctx.dataIndex];
+                return `Activity: ${s.activityEmoji} ${s.activityName}\nStatus: ${s.status}`;
+              }
+            }
+          }
+        },
+        scales: {
+          y: {
+            beginAtZero: true,
+            title: { display: true, text: 'Minutes', font: { size: 11 }, color: '#64748b' },
+            ticks: { font: { size: 11 } }
+          },
+          x: { ticks: { font: { size: 11 }, maxRotation: 45 } }
+        }
+      }
+    });
+  }
+
+  function formatDateShort(iso) {
+    try {
+      const d = new Date(iso);
+      return d.toLocaleDateString('en-IN', { day:'numeric', month:'short' });
+    } catch { return iso; }
+  }
+
+  /* ════════════════════════════════════════════════
+     MOTIVATIONAL VOICE (Web Speech API)
+  ════════════════════════════════════════════════ */
+  let voiceMuted = false;
+
+  // Pick a spoken message matching the session outcome
+  const VOICE_MESSAGES = {
+    Completed: [
+      "Wonderful! You did it! Great job sitting and enjoying your activity today!",
+      "Amazing! You finished your challenge! Every little effort counts, and you should be very proud!",
+      "You did it your way, and that is great! Well done for spending time doing something you enjoy!",
+      "Fantastic job! You showed great focus today! Keep it up — you are doing brilliantly!",
+    ],
+    'Finished Early': [
+      "Thank you for giving it a try! That is what matters most. You can try again whenever you feel ready!",
+      "Good job listening to yourself today! Every try, big or small, counts. Well done!",
+    ],
+    'Movement Break': [
+      "Good job listening to your body! Movement is important too. Come back whenever you like!",
+      "Taking a break is a great choice! You are doing wonderfully. We will be here when you are ready!",
+    ]
+  };
+
+  function speakMotivation(status) {
+    if (voiceMuted) return;
+    if (!window.speechSynthesis) return; // browser doesn't support TTS
+
+    // Cancel any speech already playing
+    window.speechSynthesis.cancel();
+
+    const pool = VOICE_MESSAGES[status] || VOICE_MESSAGES['Finished Early'];
+    const text = pool[Math.floor(Math.random() * pool.length)];
+
+    const utter = new SpeechSynthesisUtterance(text);
+    utter.lang  = 'en-IN';   // Indian English accent; falls back to en-US on most browsers
+    utter.rate  = 0.9;        // slightly slower — easier for children
+    utter.pitch = 1.1;        // slightly warmer/higher
+    utter.volume = 1.0;
+
+    // Try to pick a friendly female voice if available
+    const voices = window.speechSynthesis.getVoices();
+    const preferred = voices.find(v =>
+      v.lang.startsWith('en') && v.name.toLowerCase().includes('female')
+    ) || voices.find(v =>
+      v.lang.startsWith('en-IN')
+    ) || voices.find(v =>
+      v.lang.startsWith('en')
+    );
+    if (preferred) utter.voice = preferred;
+
+    window.speechSynthesis.speak(utter);
+  }
+
+  // Voices load asynchronously in some browsers — pre-load them
+  if (window.speechSynthesis) {
+    window.speechSynthesis.getVoices(); // trigger load
+    window.speechSynthesis.onvoiceschanged = () => window.speechSynthesis.getVoices();
+  }
+
+  // Mute toggle wired after DOM elements exist (see init section)
+  function setupMuteToggle() {
+    const btn = document.getElementById('btnMuteVoice');
+    if (!btn) return;
+    btn.addEventListener('click', () => {
+      voiceMuted = !voiceMuted;
+      if (voiceMuted) {
+        window.speechSynthesis && window.speechSynthesis.cancel();
+        btn.innerHTML = '<i class="fas fa-volume-mute me-1"></i> Voice Off';
+        btn.style.opacity = '0.55';
+        btn.title = 'Turn voice on';
+      } else {
+        btn.innerHTML = '<i class="fas fa-volume-up me-1"></i> Voice On';
+        btn.style.opacity = '1';
+        btn.title = 'Turn voice off';
+      }
+    });
+  }
+
+  /* ════════════════════════════════════════════════
+     UTILITIES
+  ════════════════════════════════════════════════ */
+  function escHtml(str) {
+    return String(str)
+      .replace(/&/g,'&amp;').replace(/</g,'&lt;').replace(/>/g,'&gt;')
+      .replace(/"/g,'&quot;').replace(/'/g,'&#39;');
+  }
+
+  /* ════════════════════════════════════════════════
+     INIT
+  ════════════════════════════════════════════════ */
+  renderActivities();
+  updateStartBtn();
+  setupMuteToggle();
+
+  </script>
+</body>
+</html>

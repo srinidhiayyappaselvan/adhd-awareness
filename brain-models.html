@@ -38,28 +38,115 @@
       color: rgba(255,255,255,0.92); padding: 0.4rem 1.1rem; border-radius: 50px;
       font-size: 0.82rem; font-weight: 600; backdrop-filter: blur(6px);
     }
-    .brain-compare-card {
-      border-radius: var(--radius); overflow: hidden;
-      border: 2px solid var(--border); transition: var(--transition);
+
+    /* ── Model photo cards ── */
+    .model-photo-card {
+      border-radius: 20px; overflow: hidden;
+      background: var(--card-bg);
+      box-shadow: 0 6px 28px rgba(0,0,0,0.09);
+      transition: transform 0.3s ease, box-shadow 0.3s ease;
     }
-    .brain-compare-card:hover { transform: translateY(-4px); box-shadow: 0 16px 40px rgba(0,0,0,0.12); }
-    .brain-compare-header {
-      padding: 1rem 1.5rem; font-weight: 700; font-size: 1rem;
-      display: flex; align-items: center; gap: 0.6rem;
+    .model-photo-card:hover {
+      transform: translateY(-5px);
+      box-shadow: 0 16px 48px rgba(0,0,0,0.14);
     }
-    .brain-compare-header.typical { background: rgba(5,150,105,0.12); color: #059669; border-bottom: 2px solid #059669; }
-    .brain-compare-header.adhd    { background: rgba(220,38,38,0.1);  color: #dc2626; border-bottom: 2px solid #dc2626; }
-    .brain-compare-body { padding: 1.5rem; background: var(--card-bg); }
-    .led-dot { display: inline-block; width: 12px; height: 12px; border-radius: 50%; margin-right: 6px; }
-    .led-green  { background: #22c55e; box-shadow: 0 0 8px #22c55e; }
-    .led-red    { background: #ef4444; box-shadow: 0 0 8px #ef4444; }
-    .region-pill {
-      display: inline-flex; align-items: center; gap: 5px;
-      padding: 4px 11px; border-radius: 20px; font-size: 0.78rem; font-weight: 600;
-      margin: 3px 2px;
+    .model-photo-wrap {
+      position: relative;
+      background: #f8fafc;
+      aspect-ratio: 1 / 1;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      overflow: hidden;
     }
-    .region-pill.typical { background: rgba(5,150,105,0.1); color: #059669; border: 1px solid rgba(5,150,105,0.25); }
-    .region-pill.adhd    { background: rgba(220,38,38,0.1);  color: #dc2626; border: 1px solid rgba(220,38,38,0.25); }
+    .model-photo-wrap img {
+      width: 100%; height: 100%;
+      object-fit: contain;
+      display: block;
+    }
+    .model-photo-badge {
+      position: absolute; top: 12px; left: 12px;
+      display: inline-flex; align-items: center; gap: 6px;
+      padding: 0.3rem 0.85rem; border-radius: 50px;
+      font-size: 0.75rem; font-weight: 700; letter-spacing: 0.04em;
+      backdrop-filter: blur(8px);
+    }
+    .model-photo-badge.typical {
+      background: rgba(5,150,105,0.85); color: #fff;
+    }
+    .model-photo-badge.adhd {
+      background: rgba(220,38,38,0.85); color: #fff;
+    }
+    .led-dot { display: inline-block; width: 9px; height: 9px; border-radius: 50%; flex-shrink: 0; }
+    .led-green { background: #4ade80; box-shadow: 0 0 6px #4ade80; }
+    .led-red   { background: #f87171; box-shadow: 0 0 6px #f87171; }
+    .model-photo-body { padding: 1.4rem 1.6rem 1.6rem; }
+    .model-photo-title {
+      font-size: 1.05rem; font-weight: 700; margin-bottom: 0.6rem;
+    }
+    .model-photo-title.typical { color: #059669; }
+    .model-photo-title.adhd    { color: #dc2626; }
+    .model-photo-desc { font-size: 0.88rem; color: var(--text-muted); line-height: 1.7; margin: 0; }
+
+    /* ── What we demonstrate cards ── */
+    .demo-card {
+      background: var(--card-bg);
+      border: 1px solid var(--glass-border);
+      border-radius: 18px;
+      padding: 1.6rem 1.4rem;
+      text-align: center;
+      transition: transform 0.3s ease, box-shadow 0.3s ease;
+      height: 100%;
+    }
+    .demo-card:hover { transform: translateY(-4px); box-shadow: 0 12px 36px rgba(26,86,219,0.11); }
+    .demo-icon-wrap {
+      width: 60px; height: 60px; border-radius: 18px;
+      display: flex; align-items: center; justify-content: center;
+      font-size: 1.4rem; margin: 0 auto 1.1rem;
+    }
+    .demo-card h4 { font-size: 0.97rem; font-weight: 700; color: var(--text); margin-bottom: 0.5rem; }
+    .demo-card p  { font-size: 0.84rem; color: var(--text-muted); line-height: 1.65; margin: 0; }
+
+    /* ── LED legend ── */
+    .led-legend {
+      background: var(--card-bg);
+      border: 1px solid var(--glass-border);
+      border-radius: 16px;
+      padding: 1.4rem 1.75rem;
+    }
+    .led-legend-row {
+      display: flex; align-items: flex-start; gap: 0.9rem;
+      padding: 0.6rem 0;
+      border-bottom: 1px solid var(--glass-border);
+    }
+    .led-legend-row:last-child { border-bottom: none; }
+    .led-legend-dot {
+      width: 14px; height: 14px; border-radius: 50%; flex-shrink: 0; margin-top: 3px;
+    }
+    .led-legend-row .led-legend-label { font-size: 0.88rem; color: var(--text); line-height: 1.6; }
+    .led-legend-row .led-legend-label strong { font-weight: 600; }
+
+    /* ── Accuracy note ── */
+    .accuracy-note {
+      background: rgba(var(--primary-rgb), 0.04);
+      border: 1px solid rgba(var(--primary-rgb), 0.14);
+      border-left: 4px solid var(--primary);
+      border-radius: 12px;
+      padding: 1rem 1.25rem;
+      font-size: 0.84rem; color: var(--text-muted); line-height: 1.65;
+    }
+    .accuracy-note strong { color: var(--text); font-weight: 600; }
+
+    /* ── Disclaimer strip ── */
+    .model-disclaimer {
+      background: rgba(var(--primary-rgb), 0.06);
+      border-radius: 14px;
+      padding: 1rem 1.5rem;
+      text-align: center;
+      font-size: 0.84rem; color: var(--text-muted);
+      font-style: italic;
+    }
+    .model-disclaimer strong { color: var(--primary); font-style: normal; }
   </style>
 </head>
 <body>
@@ -86,14 +173,15 @@
       <div class="collapse navbar-collapse" id="navbarNav">
         <ul class="navbar-nav ms-auto align-items-lg-center gap-lg-1">
           <li class="nav-item"><a class="nav-link" href="index.html"><i class="fas fa-home me-1"></i>Home</a></li>
-          <li class="nav-item"><a class="nav-link" href="index.html#about"><i class="fas fa-book-open me-1"></i>About ADHD</a></li>
+          <li class="nav-item"><a class="nav-link" href="about.html"><i class="fas fa-book-open me-1"></i>About ADHD</a></li>
           <li class="nav-item"><a class="nav-link active" href="brain-models.html" aria-current="page"><i class="fas fa-brain me-1"></i>Brain Models</a></li>
-          <li class="nav-item"><a class="nav-link" href="index.html#assessment"><i class="fas fa-clipboard-check me-1"></i>Assessment</a></li>
+          <li class="nav-item"><a class="nav-link" href="assessment.html"><i class="fas fa-clipboard-check me-1"></i>Assessment</a></li>
           <li class="nav-item"><a class="nav-link" href="morning-routine-tracker.html"><i class="fas fa-list-check me-1"></i>Morning Tracker</a></li>
           <li class="nav-item"><a class="nav-link" href="focus-smartwatch.html"><i class="fas fa-clock me-1"></i>Focus Smartwatch</a></li>
           <li class="nav-item"><a class="nav-link" href="smart-bag-assistant.html"><i class="fas fa-bag-shopping me-1"></i>Smart Bag</a></li>
-          <li class="nav-item"><a class="nav-link" href="index.html#statistics"><i class="fas fa-chart-bar me-1"></i>Statistics</a></li>
-          <li class="nav-item"><a class="nav-link" href="index.html#references"><i class="fas fa-book me-1"></i>References</a></li>
+          <li class="nav-item"><a class="nav-link" href="sitting-challenge.html"><i class="fas fa-chair me-1"></i>Sitting Challenge</a></li>
+          <li class="nav-item"><a class="nav-link" href="statistics.html"><i class="fas fa-chart-bar me-1"></i>Statistics</a></li>
+          <li class="nav-item"><a class="nav-link" href="references.html"><i class="fas fa-book me-1"></i>References</a></li>
         </ul>
       </div>
     </div>
@@ -101,185 +189,203 @@
 
   <main id="main-content">
 
-    <!-- HERO -->
-    <section class="module-hero" aria-label="Brain Models">
+    <!-- ══════════════════════════════════════════════
+         SECTION 1 — HEADING + MODEL PHOTOGRAPHS
+         ══════════════════════════════════════════════ -->
+    <section class="module-section" aria-label="Brain models overview">
       <div class="container">
-        <div class="row justify-content-center">
-          <div class="col-lg-9 text-center hero-content" data-aos="fade-up">
-            <a href="index.html" class="hero-stat-pill mb-3 d-inline-flex text-decoration-none">
-              <i class="fas fa-arrow-left"></i> Back to Home
-            </a>
-            <div class="mt-3 mb-2">
-              <span class="hero-badge"><i class="fas fa-award me-1"></i>Module 1 — CBSE Science Exhibition 2026-27</span>
-            </div>
-            <h1 class="hero-title" style="font-size: clamp(1.8rem,5vw,2.8rem);">
-              Understanding ADHD<br>Handcrafted Brain Models
-            </h1>
-            <p class="hero-subtitle mt-3" style="max-width:620px; margin:0 auto;">
-              Two LED-circuit brain models that visually demonstrate the neurological difference between a typical brain and an ADHD brain — making the invisible visible.
-            </p>
-            <div class="d-flex flex-wrap justify-content-center gap-2 mt-4">
-              <span class="hero-stat-pill"><i class="fas fa-lightbulb"></i> LED Circuits</span>
-              <span class="hero-stat-pill"><i class="fas fa-hands"></i> Handcrafted Models</span>
-              <span class="hero-stat-pill"><i class="fas fa-brain"></i> Neuroscience Awareness</span>
-            </div>
-          </div>
-        </div>
-      </div>
-    </section>
 
-    <!-- WHAT ARE THE MODELS -->
-    <section class="module-section" aria-label="About the brain models">
-      <div class="container">
+        <!-- Section heading -->
         <div class="text-center mb-5" data-aos="fade-up">
-          <span class="section-eyebrow"><i class="fas fa-info-circle me-1"></i> About This Module</span>
-          <h2 class="section-title">What Are the Brain Models?</h2>
-          <p class="section-subtitle" style="max-width:650px; margin:0 auto;">
-            Two handcrafted brain models with LED circuits visually demonstrate the neurological difference between a Typical Brain and an ADHD Brain. They help parents and children understand that ADHD is a brain-based neurological condition — not laziness or bad behaviour.
+          <span class="section-eyebrow"><i class="fas fa-brain me-1"></i> Module 1 — CBSE Science Exhibition 2026-27</span>
+          <h2 class="section-title">How Does the ADHD Brain Work Differently?</h2>
+          <p class="section-subtitle" style="max-width:680px; margin:0 auto;">
+            Explore how differences in brain development, attention, self-regulation and dopamine-related signalling may affect children with ADHD.
           </p>
         </div>
-        <div class="row g-4 align-items-stretch">
+
+        <!-- Model photographs side by side -->
+        <div class="row g-4 align-items-stretch mb-4">
 
           <!-- Typical Brain -->
           <div class="col-md-6" data-aos="fade-up" data-aos-delay="0">
-            <div class="brain-compare-card h-100">
-              <div class="brain-compare-header typical">
-                <span class="led-dot led-green"></span> Typical Brain
+            <div class="model-photo-card h-100">
+              <div class="model-photo-wrap">
+                <img src="images/brain_models/typical_brain.png"
+                     alt="Typical Brain Model — handcrafted model with green LEDs representing coordinated brain activity"
+                     loading="lazy">
+                <span class="model-photo-badge typical">
+                  <span class="led-dot led-green"></span> Typical Brain
+                </span>
               </div>
-              <div class="brain-compare-body">
-                <p style="font-size:0.95rem; color:var(--text-muted); line-height:1.75;">
-                  The Typical Brain model glows with <strong style="color:#059669;">green LEDs across all regions</strong>, representing full neural connectivity. All areas — from the prefrontal cortex to the limbic system — light up together, showing coordinated brain activity.
+              <div class="model-photo-body">
+                <p class="model-photo-title typical">
+                  <i class="fas fa-circle-check me-2"></i>Typical Brain Model
                 </p>
-                <p class="mb-3" style="font-size:0.9rem; color:var(--text-muted);">Active regions:</p>
-                <div>
-                  <span class="region-pill typical"><span class="led-dot led-green"></span>Prefrontal Cortex</span>
-                  <span class="region-pill typical"><span class="led-dot led-green"></span>Limbic System</span>
-                  <span class="region-pill typical"><span class="led-dot led-green"></span>Basal Ganglia</span>
-                  <span class="region-pill typical"><span class="led-dot led-green"></span>Cerebellum</span>
-                  <span class="region-pill typical"><span class="led-dot led-green"></span>Sensory Cortex</span>
-                </div>
+                <p class="model-photo-desc">
+                  Our model uses <strong>green LEDs</strong> across different brain regions to illustrate brain activity and the coordinated functioning of areas involved in attention, thinking, learning and emotional regulation.
+                </p>
               </div>
             </div>
           </div>
 
           <!-- ADHD Brain -->
           <div class="col-md-6" data-aos="fade-up" data-aos-delay="100">
-            <div class="brain-compare-card h-100">
-              <div class="brain-compare-header adhd">
-                <span class="led-dot led-red"></span> ADHD Brain
+            <div class="model-photo-card h-100">
+              <div class="model-photo-wrap">
+                <img src="images/brain_models/adhd_brain.png"
+                     alt="ADHD Brain Model — handcrafted model with red LEDs highlighting selected brain regions"
+                     loading="lazy">
+                <span class="model-photo-badge adhd">
+                  <span class="led-dot led-red"></span> ADHD Brain
+                </span>
               </div>
-              <div class="brain-compare-body">
-                <p style="font-size:0.95rem; color:var(--text-muted); line-height:1.75;">
-                  The ADHD Brain model uses <strong style="color:#dc2626;">red LEDs in key areas</strong> such as the prefrontal cortex and limbic system, highlighting reduced activity in regions responsible for attention, impulse control, and emotional regulation.
+              <div class="model-photo-body">
+                <p class="model-photo-title adhd">
+                  <i class="fas fa-circle-info me-2"></i>ADHD Brain Model
                 </p>
-                <p class="mb-3" style="font-size:0.9rem; color:var(--text-muted);">Reduced-activity regions:</p>
-                <div>
-                  <span class="region-pill adhd"><span class="led-dot led-red"></span>Prefrontal Cortex</span>
-                  <span class="region-pill adhd"><span class="led-dot led-red"></span>Limbic System</span>
-                  <span class="region-pill adhd"><span class="led-dot led-red"></span>Basal Ganglia</span>
-                </div>
+                <p class="model-photo-desc">
+                  Our model highlights selected brain regions using <strong>red LEDs</strong> and represents some regions as comparatively smaller. It is designed to introduce differences in brain development and the functioning of brain networks involved in attention, impulse control, motivation and emotional regulation.
+                </p>
               </div>
             </div>
           </div>
 
         </div>
+
+        <!-- Disclaimer strip -->
+        <div class="model-disclaimer" data-aos="fade-up" data-aos-delay="150">
+          <strong>These are simplified educational models, not actual brain scans.</strong>
+          ADHD cannot be identified by brain size or LED patterns. Every child with ADHD is unique.
+        </div>
+
       </div>
     </section>
 
-    <!-- KEY MESSAGE -->
-    <section class="module-section alt-bg" aria-label="Key message">
+    <!-- ══════════════════════════════════════════════
+         SECTION 2 — WHAT ARE WE DEMONSTRATING?
+         ══════════════════════════════════════════════ -->
+    <section class="module-section alt-bg" aria-label="What the models demonstrate">
       <div class="container">
-        <div class="row g-4 justify-content-center">
-          <div class="col-lg-10" data-aos="fade-up">
-            <div class="glass-card" style="border-left: 4px solid var(--cause-purple);">
-              <div class="d-flex align-items-start gap-3">
-                <div style="font-size:2.5rem; flex-shrink:0;">🧬</div>
-                <div>
-                  <h3 class="h5 fw-bold text-primary mb-2">ADHD Is a Neurological Condition — Not a Choice</h3>
-                  <p style="font-size:0.95rem; line-height:1.8; color:var(--text-muted); margin:0;">
-                    These models help parents and children understand that ADHD is caused by differences in brain structure and connectivity — particularly in the prefrontal cortex, which controls attention, impulse control, and decision-making. Children with ADHD are not being lazy or defiant; their brains are simply wired differently. Early understanding and the right support can transform outcomes.
-                  </p>
-                </div>
-              </div>
-            </div>
-          </div>
-        </div>
 
-        <div class="row g-4 mt-2">
-          <div class="col-md-4" data-aos="fade-up" data-aos-delay="0">
-            <div class="glass-card about-card h-100">
-              <div class="card-icon" style="background:linear-gradient(135deg,#7c3aed,#9333ea);">
-                <i class="fas fa-eye"></i>
-              </div>
-              <h4>Visual Learning</h4>
-              <p>LED lights make abstract neuroscience concepts immediately visible and understandable to parents, students, and teachers at a science fair.</p>
-            </div>
-          </div>
-          <div class="col-md-4" data-aos="fade-up" data-aos-delay="100">
-            <div class="glass-card about-card h-100">
-              <div class="card-icon" style="background:linear-gradient(135deg,#059669,#0d9488);">
-                <i class="fas fa-heart"></i>
-              </div>
-              <h4>Reduces Stigma</h4>
-              <p>When people see that ADHD is a brain-based difference — not laziness — it reduces stigma and encourages empathy and support for affected children.</p>
-            </div>
-          </div>
-          <div class="col-md-4" data-aos="fade-up" data-aos-delay="200">
-            <div class="glass-card about-card h-100">
-              <div class="card-icon" style="background:linear-gradient(135deg,#1a56db,#1341b0);">
-                <i class="fas fa-lightbulb"></i>
-              </div>
-              <h4>Conversation Starter</h4>
-              <p>The models spark meaningful conversations between parents, teachers, and healthcare professionals about seeking evaluation and support.</p>
-            </div>
-          </div>
-        </div>
-      </div>
-    </section>
-
-    <!-- BRAIN REGIONS EXPLAINED -->
-    <section class="module-section" aria-label="Brain regions">
-      <div class="container">
         <div class="text-center mb-5" data-aos="fade-up">
-          <span class="section-eyebrow"><i class="fas fa-microscope me-1"></i> Neuroscience</span>
-          <h2 class="section-title">Key Brain Regions Affected by ADHD</h2>
+          <span class="section-eyebrow"><i class="fas fa-microscope me-1"></i> Key Concepts</span>
+          <h2 class="section-title">What Are We Demonstrating?</h2>
+          <p class="section-subtitle" style="max-width:600px; margin:0 auto;">
+            Three concepts our models are designed to introduce in a simple, visual way.
+          </p>
         </div>
+
         <div class="row g-4">
-          <div class="col-md-6 col-lg-4" data-aos="fade-up" data-aos-delay="0">
-            <div class="glass-card h-100">
-              <h3 class="h6 fw-bold text-primary mb-2"><i class="fas fa-brain me-2"></i>Prefrontal Cortex</h3>
-              <p style="font-size:0.88rem; color:var(--text-muted); line-height:1.7; margin:0;">Controls planning, attention, impulse control, and decision-making. Reduced activity here leads to difficulty focusing, forgetfulness, and acting before thinking.</p>
+
+          <div class="col-md-4" data-aos="fade-up" data-aos-delay="0">
+            <div class="demo-card">
+              <div class="demo-icon-wrap" style="background:linear-gradient(135deg,rgba(26,86,219,0.12),rgba(6,182,212,0.12));">
+                <i class="fas fa-brain" style="color:var(--primary);"></i>
+              </div>
+              <h4>Prefrontal Cortex</h4>
+              <p>Helps with attention, planning, organising, decision-making and controlling impulses.</p>
             </div>
           </div>
-          <div class="col-md-6 col-lg-4" data-aos="fade-up" data-aos-delay="80">
-            <div class="glass-card h-100">
-              <h3 class="h6 fw-bold text-primary mb-2"><i class="fas fa-heart me-2"></i>Limbic System</h3>
-              <p style="font-size:0.88rem; color:var(--text-muted); line-height:1.7; margin:0;">Regulates emotions and motivation. Differences here contribute to emotional dysregulation — sudden frustration, low tolerance, and difficulty self-soothing.</p>
+
+          <div class="col-md-4" data-aos="fade-up" data-aos-delay="80">
+            <div class="demo-card">
+              <div class="demo-icon-wrap" style="background:linear-gradient(135deg,rgba(124,58,237,0.12),rgba(6,182,212,0.08));">
+                <i class="fas fa-bolt" style="color:#7c3aed;"></i>
+              </div>
+              <h4>Dopamine &amp; Motivation</h4>
+              <p>Dopamine is involved in motivation, reward, attention and learning. Differences in dopamine signalling may contribute to some ADHD-related difficulties.</p>
             </div>
           </div>
-          <div class="col-md-6 col-lg-4" data-aos="fade-up" data-aos-delay="160">
-            <div class="glass-card h-100">
-              <h3 class="h6 fw-bold text-primary mb-2"><i class="fas fa-cogs me-2"></i>Basal Ganglia</h3>
-              <p style="font-size:0.88rem; color:var(--text-muted); line-height:1.7; margin:0;">Involved in routine tasks, habit formation, and reward processing. When this region is underactive, children struggle to begin and complete everyday tasks automatically.</p>
+
+          <div class="col-md-4" data-aos="fade-up" data-aos-delay="160">
+            <div class="demo-card">
+              <div class="demo-icon-wrap" style="background:linear-gradient(135deg,rgba(5,150,105,0.12),rgba(6,182,212,0.08));">
+                <i class="fas fa-heart" style="color:#059669;"></i>
+              </div>
+              <h4>Emotion &amp; Self-Regulation</h4>
+              <p>Brain networks involved in managing emotions, responding to situations and regulating behaviour may function differently in people with ADHD.</p>
             </div>
           </div>
+
         </div>
       </div>
     </section>
 
-    <!-- CTA -->
-    <section class="module-section alt-bg" aria-label="Next steps">
+    <!-- ══════════════════════════════════════════════
+         SECTION 3 — LED LEGEND + ACCURACY NOTE
+         ══════════════════════════════════════════════ -->
+    <section class="module-section" aria-label="LED legend and scientific accuracy">
+      <div class="container">
+        <div class="row g-4 align-items-start">
+
+          <!-- LED legend -->
+          <div class="col-lg-5" data-aos="fade-up">
+            <div class="text-center text-lg-start mb-4">
+              <span class="section-eyebrow"><i class="fas fa-circle me-1"></i> LED Guide</span>
+              <h2 class="section-title" style="font-size:clamp(1.3rem,3vw,1.7rem);">What Do the LEDs Mean?</h2>
+            </div>
+            <div class="led-legend">
+              <div class="led-legend-row">
+                <span class="led-legend-dot" style="background:#4ade80; box-shadow:0 0 7px #4ade80;"></span>
+                <span class="led-legend-label"><strong>Green LEDs</strong> — represent comparatively higher dopamine activity in Typical Brain model.</span>
+              </div>
+              <div class="led-legend-row">
+                <span class="led-legend-dot" style="background:#f87171; box-shadow:0 0 7px #f87171;"></span>
+                <span class="led-legend-label"><strong>Red LEDs</strong> — represent comparatively lower dopamine activity in ADHD Brain model.</span>
+              </div>
+            </div>
+          </div>
+
+          <!-- Accuracy note -->
+          <div class="col-lg-7" data-aos="fade-up" data-aos-delay="80">
+            <div class="text-center text-lg-start mb-4">
+              <span class="section-eyebrow"><i class="fas fa-circle-info me-1"></i> Scientific Accuracy</span>
+              <h2 class="section-title" style="font-size:clamp(1.3rem,3vw,1.7rem);">Important to Know</h2>
+            </div>
+            <div class="accuracy-note mb-3">
+              <p class="mb-2">
+                <i class="fas fa-check-circle me-2 text-primary"></i>
+                ADHD-related brain differences are <strong>complex, vary between individuals</strong>, and involve development and brain network functioning.
+              </p>
+              <p class="mb-2">
+                <i class="fas fa-check-circle me-2 text-primary"></i>
+                Our models do <strong>not</strong> claim that all ADHD brains are smaller or that all ADHD brains have uniformly lower dopamine.
+              </p>
+              <p class="mb-0">
+                <i class="fas fa-check-circle me-2 text-primary"></i>
+                The red LEDs do <strong>not</strong> accurately measure reduced brain activity — they highlight selected regions to spark educational discussion.
+              </p>
+            </div>
+          </div>
+            <div class="glass-card" style="border-left:4px solid var(--cause-purple); padding:1.1rem 1.3rem;" data-aos="fade-up" data-aos-delay="120">
+              <div class="d-flex gap-3 align-items-start">
+                <span style="font-size:1.6rem; flex-shrink:0;">🧬</span>
+                <p style="font-size:0.88rem; color:var(--text-muted); line-height:1.75; margin:0;">
+                  These models help parents, students and teachers understand that ADHD is a <strong style="color:var(--text);">neurodevelopmental condition involving differences in brain development and connectivity</strong> — not a result of laziness or poor parenting. Early understanding and the right support can make a meaningful difference.
+                </p>
+              </div>
+            </div>
+
+        </div>
+      </div>
+    </section>
+
+    <!-- ══════════════════════════════════════════════
+         SECTION 4 — EXPLORE MORE
+         ══════════════════════════════════════════════ -->
+    <section class="module-section alt-bg" aria-label="Explore more modules">
       <div class="container text-center" data-aos="fade-up">
         <h2 class="section-title">Explore More Modules</h2>
         <p class="section-subtitle">This is one of six solutions designed to support children with ADHD.</p>
         <div class="d-flex flex-wrap justify-content-center gap-3 mt-4">
-          <a href="index.html#assessment" class="btn btn-hero-primary">
-            <i class="fas fa-clipboard-check me-2"></i>Take the Screening Assessment
+          <a href="about.html" class="btn btn-assess btn-assess-primary">
+            <i class="fas fa-book-open me-2"></i>About ADHD
           </a>
-          <a href="morning-routine-tracker.html" class="btn btn-hero-outline" style="color:var(--primary); border-color:var(--primary);">
-            <i class="fas fa-list-check me-2"></i>Morning Routine Tracker
+          <a href="assessment.html" class="btn btn-assess btn-assess-outline">
+            <i class="fas fa-clipboard-check me-2"></i>Screening Assessment
           </a>
-          <a href="index.html" class="btn btn-hero-outline" style="color:var(--primary); border-color:var(--primary);">
+          <a href="index.html" class="btn btn-assess btn-assess-outline">
             <i class="fas fa-home me-2"></i>Back to Home
           </a>
         </div>
@@ -299,8 +405,8 @@
         <div class="footer-links-group">
           <span class="footer-links-title">Modules</span>
           <a href="brain-models.html" class="footer-link">Brain Models</a>
-          <a href="index.html#about" class="footer-link">Educational Website</a>
-          <a href="index.html#assessment" class="footer-link">Screening Assessment</a>
+          <a href="about.html" class="footer-link">Educational Website</a>
+          <a href="assessment.html" class="footer-link">Screening Assessment</a>
           <a href="morning-routine-tracker.html" class="footer-link">Morning Routine Tracker</a>
           <a href="focus-smartwatch.html" class="footer-link">Focus Smartwatch</a>
           <a href="smart-bag-assistant.html" class="footer-link">Smart Bag Assistant</a>

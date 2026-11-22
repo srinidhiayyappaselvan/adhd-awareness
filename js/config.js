@@ -15,9 +15,9 @@ const APP_CONFIG = {
 
 /**
  * Assessment questions grouped by section.
- *   Section A — Inattention     : Q1–Q9   (9 questions)
- *   Section B — Hyperactivity   : Q10–Q15 (6 questions)
- *   Section C — Impulsivity      : Q16–Q18 (3 questions)
+ *   Section A  — Inattention            : Q1–Q9   (9 questions)
+ *   Section BC — Hyperactivity &        : Q10–Q18 (9 questions)
+ *               Impulsivity (merged)
  *
  * These are adapted, parent-friendly Yes/No questions. They are NOT the official
  * AIIMS INDT-ADHD tool, are not clinically validated, and cannot diagnose ADHD.
@@ -28,38 +28,65 @@ const ASSESSMENT_QUESTIONS = [
     sectionTitle: 'Inattention',
     description: 'These questions help parents observe difficulties with attention, concentration, organisation and memory.',
     items: [
-      "Does your child often miss details or make careless mistakes in schoolwork or other activities?",
-      "Does your child often find it difficult to concentrate on homework, lessons, conversations or games?",
-      "Does your child often seem not to listen when spoken to directly?",
-      "Does your child often have difficulty following instructions and completing tasks?",
-      "Does your child often find it difficult to organise tasks, materials or activities?",
-      "Does your child often avoid or delay tasks that require sustained mental effort, such as homework?",
-      "Does your child often lose things needed for tasks, such as books, pencils or school materials?",
-      "Is your child often easily distracted by sounds, movement or other things happening nearby?",
-      "Does your child often forget everyday activities or responsibilities?",
+      "Does your child often miss details or make careless mistakes in schoolwork or other activities?<br>Example: While doing a maths worksheet, your child may skip part of a question or overlook an instruction.",
+      "Does your child often find it difficult to concentrate on homework, lessons, conversations, or games?<br>Example: Your child may start homework but get distracted, lose track of a lesson while the teacher is speaking, miss parts of a conversation, or leave a game unfinished to do something else.",
+      "Does your child often find it difficult to pay attention when someone is speaking to them?<br>Example: When you explain something, ask a question, or give instructions, your child may seem distracted, miss parts of what you said, or need you to repeat it.",
+      "Even when your child understands what you ask them to do, do they often get distracted, struggle to follow through, or take longer to complete the task?<br>Example: You ask your child to get ready for school, but they get distracted between steps and take much longer than expected to finish getting ready.",
+      "Does your child need repeated guidance or reminders to complete an activity they have already started?<br>Example: Your child begins getting ready for school but leaves some steps unfinished, such as arranging books or putting on shoes.",
+      "Does your child tend to avoid or delay activities that require sustained attention and mental effort?<br>Example: Your child may repeatedly postpone reading, writing, puzzles, or homework that requires careful thought.",
+      "Does your child often lose or misplace things such as books, pencils, toys, or other belongings?",
+      "Does your child find it difficult to return to what they were doing after being distracted?<br>Example: During homework, a sound, another person, or something happening outside catches their attention, and they forget where they stopped.",
+      "Does your child often forget everyday activities or tasks and need reminders more frequently than other children of the same age?<br>Example: Your child may forget a familiar daily step, such as bringing an item, completing a routine task, or remembering what was planned for the day.",
     ],
   },
   {
     section: 'B',
-    sectionTitle: 'Hyperactivity',
-    description: 'These questions help parents observe excessive movement, restlessness and difficulty staying quiet.',
+    sectionTitle: 'Hyperactivity & Impulsivity',
+    description: 'These questions help parents observe excessive movement, restlessness, difficulty staying quiet, difficulty waiting, controlling responses and interrupting others.',
     items: [
-      "Does your child often fidget with their hands or feet, or squirm while seated?",
-      "Does your child often leave their seat when expected to remain seated?",
-      "Does your child often run around or climb when it is not appropriate?",
-      "Does your child often find it difficult to play or take part in activities quietly?",
-      "Does your child often seem constantly on the go, as if driven by a motor?",
-      "Does your child often talk excessively?",
+      "Does your child find it difficult to keep their hands, feet, or body still during activities?<br>Example: While listening to a story, eating, or attending a class, your child may keep moving, tapping, or shifting position.",
+      "Does your child frequently get up or move away during activities where remaining seated is expected?<br>Example: During a meal, classroom lesson, or family gathering, your child may leave their place several times.",
+      "Does your child find it difficult to adjust their movements according to the situation?<br>Example: At a library, shop, or indoor gathering, your child may run around or climb when walking calmly is expected.",
+      "Does your child find it challenging to participate in activities that require them to be quiet?<br>Example: During drawing, reading, a board game, or a quiet play activity, your child may make frequent noise or find it difficult to play quietly.",
+      "Is your child often on the go, running around most of the time, as if driven by a motor?<br>Example: Even when indoors or in places like a market, your child may keep running around or moving about continuously.",
+      "Does your child often talk excessively or find it difficult to stop talking according to the situation?<br>Example: Your child may continue talking while others are trying to finish a discussion, or talk throughout an activity that requires quietness.",
+      "Does your child sometimes respond before the other person has finished speaking?<br>Example: During a question and answer activity, your child may call out their answer before hearing the entire question.",
+      "Does your child find it difficult to wait for their turn during shared activities?<br>Example: During carrom, board games, sports, or while waiting in a queue, your child may struggle to wait while others take their turn.",
+      "Does your child frequently interrupt others conversations or games?<br>Example: Your child may jump into a conversation, interrupt a game being played by other children, or start talking while others are still interacting.",
+    ],
+  },
+];
+const PDF_QUESTIONS = [
+  {
+    section: 'A',
+    sectionTitle: 'Inattention',
+    description: 'These questions help parents observe difficulties with attention, concentration, organisation and memory.',
+    items: [
+      "Does your child often miss details or make careless mistakes in schoolwork or other activities? Example: While doing a maths worksheet, your child may skip part of a question or overlook an instruction.",
+      "Does your child often find it difficult to concentrate on homework, lessons, conversations, or games? Example: Your child may start homework but get distracted, lose track of a lesson while the teacher is speaking, miss parts of a conversation, or leave a game unfinished to do something else.",
+      "Does your child often find it difficult to pay attention when someone is speaking to them? Example: When you explain something, ask a question, or give instructions, your child may seem distracted, miss parts of what you said, or need you to repeat it.",
+      "Even when your child understands what you ask them to do, do they often get distracted, struggle to follow through, or take longer to complete the task? Example: You ask your child to get ready for school, but they get distracted between steps and take much longer than expected to finish getting ready.",
+      "Does your child need repeated guidance or reminders to complete an activity they have already started? Example: Your child begins getting ready for school but leaves some steps unfinished, such as arranging books or putting on shoes.",
+      "Does your child tend to avoid or delay activities that require sustained attention and mental effort? Example: Your child may repeatedly postpone reading, writing, puzzles, or homework that requires careful thought.",
+      "Does your child often lose or misplace things such as books, pencils, toys, or other belongings?",
+      "Does your child find it difficult to return to what they were doing after being distracted? Example: During homework, a sound, another person, or something happening outside catches their attention, and they forget where they stopped.",
+      "Does your child often forget everyday activities or tasks and need reminders more frequently than other children of the same age? Example: Your child may forget a familiar daily step, such as bringing an item, completing a routine task, or remembering what was planned for the day.",
     ],
   },
   {
-    section: 'C',
-    sectionTitle: 'Impulsivity',
-    description: 'These questions help parents observe difficulty waiting, controlling responses and interrupting others.',
+    section: 'B',
+    sectionTitle: 'Hyperactivity & Impulsivity',
+    description: 'These questions help parents observe excessive movement, restlessness, difficulty staying quiet, difficulty waiting, controlling responses and interrupting others.',
     items: [
-      "Does your child often call out answers before a question has been completed?",
-      "Does your child often find it difficult to wait for their turn?",
-      "Does your child often interrupt or intrude on other people's conversations or activities?",
+      "Does your child find it difficult to keep their hands, feet, or body still during activities?Example: While listening to a story, eating, or attending a class, your child may keep moving, tapping, or shifting position.",
+      "Does your child frequently get up or move away during activities where remaining seated is expected? Example: During a meal, classroom lesson, or family gathering, your child may leave their place several times.",
+      "Does your child find it difficult to adjust their movements according to the situation? Example: At a library, shop, or indoor gathering, your child may run around or climb when walking calmly is expected.",
+      "Does your child find it challenging to participate in activities that require them to be quiet? Example: During drawing, reading, a board game, or a quiet play activity, your child may make frequent noise or find it difficult to play quietly.",
+      "Is your child often on the go, running around most of the time, as if driven by a motor? Example: Even when indoors or in places like a market, your child may keep running around or moving about continuously.",
+      "Does your child often talk excessively or find it difficult to stop talking according to the situation? Example: Your child may continue talking while others are trying to finish a discussion, or talk throughout an activity that requires quietness.",
+      "Does your child sometimes respond before the other person has finished speaking? Example: During a question and answer activity, your child may call out their answer before hearing the entire question.",
+      "Does your child find it difficult to wait for their turn during shared activities? Example: During carrom, board games, sports, or while waiting in a queue, your child may struggle to wait while others take their turn.",
+      "Does your child frequently interrupt others conversations or games? Example: Your child may jump into a conversation, interrupt a game being played by other children, or start talking while others are still interacting.",
     ],
   },
 ];
@@ -115,13 +142,14 @@ const AIIMS_REFERENCE_NOTES = [
   'A threshold-based advisory encourages consulting a professional; it is not a medical diagnosis or a treatment recommendation.',
   'DSM-IV and DSM-5 diagnostic criteria are not mixed.',
   'The response percentage is not presented as an ADHD probability or severity score.',
+  'Hyperactivity and Impulsivity questions are presented as a single merged section (Section BC).',
 ];
 
 /**
  * Screening thresholds that prompt parents to seek professional attention.
  * These are NOT diagnostic cutoffs — they are prompts to consult a professional.
  *   Inattention (Section A, 9 questions): 6 or more "Yes" responses
- *   Combined Hyperactivity + Impulsivity (Sections B + C, 9 questions): more than 6 "Yes"
+ *   Hyperactivity & Impulsivity (Section BC, 9 questions): more than 6 "Yes"
  */
 const SEEK_ATTENTION_THRESHOLDS = {
   inattention: { count: 6, compare: '>=', label: '6 or more out of 9' },
@@ -130,9 +158,22 @@ const SEEK_ATTENTION_THRESHOLDS = {
 
 /** Advisory text shown when a screening threshold is met. */
 const SEEK_ATTENTION_ADVISORY = {
-  inattention: 'Your child received 6 or more \u201cYes\u201d responses in the Inattention section. This meets a commonly used screening threshold. You may wish to discuss these observations with a qualified paediatrician or child mental health professional.',
-  combined: 'Your child received more than 6 \u201cYes\u201d responses across the Hyperactivity and Impulsivity sections combined. This meets a commonly used screening threshold. You may wish to discuss these observations with a qualified paediatrician or child mental health professional.',
-  note: 'This is a prompt to seek professional evaluation \u2014 not a diagnosis. Only a qualified healthcare professional can determine whether your child has ADHD.',
+  inattentiveType: {
+    label:  'Predominantly Inattentive Presentation',
+    desc:   'The responses suggest a pattern that is predominantly in the Inattention area. This meets a commonly used screening threshold and may warrant a professional evaluation.',
+    detail: 'Your child received 6 or more \u201cYes\u201d responses in the Inattention section.',
+  },
+  hyperactiveType: {
+    label:  'Predominantly Hyperactive-Impulsive Presentation',
+    desc:   'The responses suggest a pattern that is predominantly in the Hyperactivity \u0026 Impulsivity area. This meets a commonly used screening threshold and may warrant a professional evaluation.',
+    detail: 'Your child received 6 or more \u201cYes\u201d responses in the Hyperactivity \u0026 Impulsivity section.',
+  },
+  combinedType: {
+    label:  'Combined Type Presentation',
+    desc:   'The responses suggest a pattern across both Inattention and Hyperactivity \u0026 Impulsivity areas. Both sections independently meet the screening threshold.',
+    detail: 'Your child received 6 or more \u201cYes\u201d responses in both the Inattention section (Section A) and the Hyperactivity \u0026 Impulsivity section.',
+  },
+  note: 'This is a prompt to seek professional evaluation \u2014 not a diagnosis. Only a qualified healthcare professional can determine whether your child has ADHD or identify its presentation type.',
 };
 
 /** Morning routine checklist items (used in Recommendations section) */

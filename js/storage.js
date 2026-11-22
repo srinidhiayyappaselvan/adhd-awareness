@@ -57,3 +57,9 @@ function clearAssessmentData() {
   localStorage.removeItem(STORAGE_KEYS.results);
   localStorage.removeItem(STORAGE_KEYS.childInfo);
 }
+
+/** Clear only the in-progress answers and child info, keeping the saved results intact. */
+function clearAnswersOnly() {
+  localStorage.removeItem(STORAGE_KEYS.responses);
+  localStorage.removeItem(STORAGE_KEYS.childInfo);
+}
