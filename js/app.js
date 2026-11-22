@@ -185,13 +185,18 @@ function bindGlobalEvents() {
   // Pre-assessment "Begin Assessment" (enters child's age, then starts the questions)
   document.getElementById('btn-begin-assessment')?.addEventListener('click', beginAssessment);
 
-  // Results buttons
-  document.getElementById('btn-reset')?.addEventListener('click', resetAssessment);
-  document.getElementById('btn-download-pdf')?.addEventListener('click', downloadPDFReport);
-  document.getElementById('btn-download-offline')?.addEventListener('click', downloadOfflineAssessmentPDF);
-  document.getElementById('btn-go-assessment')?.addEventListener('click', () => {
-    navigateToSection('assessment'); setActiveNav('assessment');
-  });
+  // ── Results buttons ──
+document.getElementById('btn-reset')?.addEventListener('click', resetAssessment);
+
+// Removed old Results PDF download binding
+// document.getElementById('btn-download-pdf')?.addEventListener('click', downloadPDFReport);
+
+document.getElementById('btn-download-offline')?.addEventListener('click', downloadOfflineAssessmentPDF);
+
+document.getElementById('btn-go-assessment')?.addEventListener('click', () => {
+  navigateToSection('assessment');
+  setActiveNav('assessment');
+});
 }
 
 // ── Entry point ───────────────────────────────────────────────────────────────
